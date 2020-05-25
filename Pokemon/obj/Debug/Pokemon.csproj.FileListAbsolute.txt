@@ -1,0 +1,15 @@
+C:\Users\tonyb\source\repos\Pokemon\Pokemon\obj\Debug\Pokemon.csprojAssemblyReference.cache
+C:\Users\tonyb\source\repos\Pokemon\Pokemon\obj\Debug\Pokemon.Form1.resources
+C:\Users\tonyb\source\repos\Pokemon\Pokemon\obj\Debug\Pokemon.Properties.Resources.resources
+C:\Users\tonyb\source\repos\Pokemon\Pokemon\obj\Debug\Pokemon.csproj.GenerateResource.cache
+C:\Users\tonyb\source\repos\Pokemon\Pokemon\obj\Debug\Pokemon.csproj.CoreCompileInputs.cache
+C:\Users\tonyb\source\repos\Pokemon\Pokemon\bin\Debug\Pokemon.exe.config
+C:\Users\tonyb\source\repos\Pokemon\Pokemon\bin\Debug\Pokemon.exe
+C:\Users\tonyb\source\repos\Pokemon\Pokemon\bin\Debug\Pokemon.pdb
+C:\Users\tonyb\source\repos\Pokemon\Pokemon\obj\Debug\Pokemon.exe
+C:\Users\tonyb\source\repos\Pokemon\Pokemon\obj\Debug\Pokemon.pdb
+C:\Users\tonyb\source\repos\Pokemon\Pokemon\bin\Debug\Interop.WMPLib.dll
+C:\Users\tonyb\source\repos\Pokemon\Pokemon\bin\Debug\AxInterop.WMPLib.dll
+C:\Users\tonyb\source\repos\Pokemon\Pokemon\obj\Debug\Interop.WMPLib.dll
+C:\Users\tonyb\source\repos\Pokemon\Pokemon\obj\Debug\AxInterop.WMPLib.dll
+C:\Users\tonyb\source\repos\Pokemon\Pokemon\obj\Debug\Pokemon.csproj.ResolveComReference.cache

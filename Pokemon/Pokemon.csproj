@@ -1,0 +1,220 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{589479DA-E0F4-483A-BF2B-FE7F93A4FC50}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Pokemon</RootNamespace>
+    <AssemblyName>Pokemon</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Card\Attack.cs" />
+    <Compile Include="Card\EnergyCost.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Card\Pokemon.cs" />
+    <Compile Include="Game_Zone\Active.cs" />
+    <Compile Include="Game_Zone\Bench.cs" />
+    <Compile Include="Game_Zone\Deck.cs" />
+    <Compile Include="Game_Zone\Discard.cs" />
+    <Compile Include="Game_Zone\Hand.cs" />
+    <Compile Include="Game_Zone\Prizes.cs" />
+    <Compile Include="Players\AI.cs" />
+    <Compile Include="Players\Player.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="AxWMPLib">
+      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>aximp</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+    <COMReference Include="WMPLib">
+      <Guid>{6BF52A50-394A-11D3-B153-00C04F79FAA6}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Actions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Img\BSPainted\BS_029.jpg" />
+    <Content Include="Img\BSPainted\BS_046.jpg" />
+    <Content Include="Img\BS\BS_001.jpg" />
+    <Content Include="Img\BS\BS_002.jpg" />
+    <Content Include="Img\BS\BS_003.jpg" />
+    <Content Include="Img\BS\BS_004.jpg" />
+    <Content Include="Img\BS\BS_006.jpg" />
+    <Content Include="Img\BS\BS_007.jpg" />
+    <Content Include="Img\BS\BS_009.jpg" />
+    <Content Include="Img\BS\BS_010.jpg" />
+    <Content Include="Img\BS\BS_012.jpg" />
+    <Content Include="Img\BS\BS_014.jpg" />
+    <Content Include="Img\BS\BS_015.jpg" />
+    <Content Include="Img\BS\BS_016.jpg" />
+    <Content Include="Img\BS\BS_017.jpg" />
+    <Content Include="Img\BS\BS_020.jpg" />
+    <Content Include="Img\BS\BS_021.jpg" />
+    <Content Include="Img\BS\BS_023.jpg" />
+    <Content Include="Img\BS\BS_024.jpg" />
+    <Content Include="Img\BS\BS_025.jpg" />
+    <Content Include="Img\BS\BS_027.jpg" />
+    <Content Include="Img\BS\BS_028.jpg" />
+    <Content Include="Img\BS\BS_029.jpg" />
+    <Content Include="Img\BS\BS_030.jpg" />
+    <Content Include="Img\BS\BS_031.jpg" />
+    <Content Include="Img\BS\BS_032.jpg" />
+    <Content Include="Img\BS\BS_033.jpg" />
+    <Content Include="Img\BS\BS_034.jpg" />
+    <Content Include="Img\BS\BS_035.jpg" />
+    <Content Include="Img\BS\BS_036.jpg" />
+    <Content Include="Img\BS\BS_038.jpg" />
+    <Content Include="Img\BS\BS_041.jpg" />
+    <Content Include="Img\BS\BS_042.jpg" />
+    <Content Include="Img\BS\BS_043.jpg" />
+    <Content Include="Img\BS\BS_044.jpg" />
+    <Content Include="Img\BS\BS_045.jpg" />
+    <Content Include="Img\BS\BS_046.jpg" />
+    <Content Include="Img\BS\BS_049.jpg" />
+    <Content Include="Img\BS\BS_050.jpg" />
+    <Content Include="Img\BS\BS_052.jpg" />
+    <Content Include="Img\BS\BS_053.jpg" />
+    <Content Include="Img\BS\BS_054.jpg" />
+    <Content Include="Img\BS\BS_055.jpg" />
+    <Content Include="Img\BS\BS_056.jpg" />
+    <Content Include="Img\BS\BS_058.jpg" />
+    <Content Include="Img\BS\BS_059.jpg" />
+    <Content Include="Img\BS\BS_060.jpg" />
+    <Content Include="Img\BS\BS_061.jpg" />
+    <Content Include="Img\BS\BS_062.jpg" />
+    <Content Include="Img\BS\BS_063.jpg" />
+    <Content Include="Img\BS\BS_064.jpg" />
+    <Content Include="Img\BS\BS_065.jpg" />
+    <Content Include="Img\BS\BS_066.jpg" />
+    <Content Include="Img\BS\BS_067.jpg" />
+    <Content Include="Img\BS\BS_068.jpg" />
+    <Content Include="Img\BS\BS_069.jpg" />
+    <Content Include="Img\BS\BS_071.jpg" />
+    <Content Include="Img\BS\BS_072.jpg" />
+    <Content Include="Img\BS\BS_074.jpg" />
+    <Content Include="Img\BS\BS_075.jpg" />
+    <Content Include="Img\BS\BS_076.jpg" />
+    <Content Include="Img\BS\BS_077.jpg" />
+    <Content Include="Img\BS\BS_078.jpg" />
+    <Content Include="Img\BS\BS_079.jpg" />
+    <Content Include="Img\BS\BS_080.jpg" />
+    <Content Include="Img\BS\BS_081.jpg" />
+    <Content Include="Img\BS\BS_082.jpg" />
+    <Content Include="Img\BS\BS_084.jpg" />
+    <Content Include="Img\BS\BS_085.jpg" />
+    <Content Include="Img\BS\BS_086.jpg" />
+    <Content Include="Img\BS\BS_087.jpg" />
+    <Content Include="Img\BS\BS_088.jpg" />
+    <Content Include="Img\BS\BS_089.jpg" />
+    <Content Include="Img\BS\BS_090.jpg" />
+    <Content Include="Img\BS\BS_091.jpg" />
+    <Content Include="Img\BS\BS_092.jpg" />
+    <Content Include="Img\BS\BS_093.jpg" />
+    <Content Include="Img\BS\BS_094.jpg" />
+    <Content Include="Img\BS\BS_095.jpg" />
+    <Content Include="Img\BS\BS_097.jpg" />
+    <Content Include="Img\BS\BS_098.jpg" />
+    <Content Include="Img\BS\BS_099.jpg" />
+    <Content Include="Img\BS\BS_100.jpg" />
+    <Content Include="Img\BS\BS_101.jpg" />
+    <Content Include="Img\BS\BS_102.jpg" />
+    <Content Include="Img\BS\Cardback.jpg" />
+    <Content Include="Img\EnergyBox\Colorless.gif" />
+    <Content Include="Img\EnergyBox\Fighting.gif" />
+    <Content Include="Img\EnergyBox\Fire.gif" />
+    <Content Include="Img\EnergyBox\Grass.gif" />
+    <Content Include="Img\EnergyBox\Lightning.gif" />
+    <Content Include="Img\EnergyBox\Psychic.gif" />
+    <Content Include="Img\EnergyBox\Water.gif" />
+    <Content Include="Img\N1\N1_053.jpg" />
+    <Content Include="Img\N1\N1_054.jpg" />
+    <Content Include="Resources\Fire.gif" />
+    <Content Include="Sounds\aquatic_ambience.wav" />
+    <Content Include="Sounds\draw.wav" />
+    <Content Include="Sounds\flipcoin.wav" />
+    <Content Include="Sounds\shuffle.wav" />
+    <Content Include="Sounds\turn.wav" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
