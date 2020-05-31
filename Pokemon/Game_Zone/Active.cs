@@ -116,6 +116,11 @@ namespace Pokemon.Game_Zone
             return Active_Pokemon.EnergyLoaded;
         }
 
+        public char GetEnergyLoadedAt(int x)
+        {
+            return Active_Pokemon.EnergyLoaded[x];
+        }
+
         public string ReturnEnergyLoadedImg(int x)
         {
             string Image_name = "";

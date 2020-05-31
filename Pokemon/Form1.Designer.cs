@@ -113,6 +113,9 @@
             this.ActiveEnergy3 = new System.Windows.Forms.PictureBox();
             this.ActiveEnergy4 = new System.Windows.Forms.PictureBox();
             this.ActiveEnergy5 = new System.Windows.Forms.PictureBox();
+            this.DiscardBox = new System.Windows.Forms.PictureBox();
+            this.RightClickDiscard = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.PictureZoom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureActive)).BeginInit();
             this.RightClickMenu3.SuspendLayout();
@@ -167,6 +170,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.ActiveEnergy3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ActiveEnergy4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ActiveEnergy5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DiscardBox)).BeginInit();
+            this.RightClickDiscard.SuspendLayout();
             this.SuspendLayout();
             // 
             // HpLabel2
@@ -984,6 +989,7 @@
             this.ActiveEnergy2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.ActiveEnergy2.TabIndex = 73;
             this.ActiveEnergy2.TabStop = false;
+            this.ActiveEnergy2.Click += new System.EventHandler(this.ActiveEnergy_Click);
             // 
             // ActiveEnergy3
             // 
@@ -994,6 +1000,7 @@
             this.ActiveEnergy3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.ActiveEnergy3.TabIndex = 74;
             this.ActiveEnergy3.TabStop = false;
+            this.ActiveEnergy3.Click += new System.EventHandler(this.ActiveEnergy_Click);
             // 
             // ActiveEnergy4
             // 
@@ -1004,6 +1011,7 @@
             this.ActiveEnergy4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.ActiveEnergy4.TabIndex = 75;
             this.ActiveEnergy4.TabStop = false;
+            this.ActiveEnergy4.Click += new System.EventHandler(this.ActiveEnergy_Click);
             // 
             // ActiveEnergy5
             // 
@@ -1014,6 +1022,32 @@
             this.ActiveEnergy5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.ActiveEnergy5.TabIndex = 76;
             this.ActiveEnergy5.TabStop = false;
+            this.ActiveEnergy5.Click += new System.EventHandler(this.ActiveEnergy_Click);
+            // 
+            // DiscardBox
+            // 
+            this.DiscardBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.DiscardBox.ContextMenuStrip = this.RightClickDiscard;
+            this.DiscardBox.Location = new System.Drawing.Point(1089, 411);
+            this.DiscardBox.Name = "DiscardBox";
+            this.DiscardBox.Size = new System.Drawing.Size(110, 154);
+            this.DiscardBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.DiscardBox.TabIndex = 77;
+            this.DiscardBox.TabStop = false;
+            this.DiscardBox.MouseEnter += new System.EventHandler(this.HoverOnDiscard_Click);
+            // 
+            // RightClickDiscard
+            // 
+            this.RightClickDiscard.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem2});
+            this.RightClickDiscard.Name = "RightClickMenu3";
+            this.RightClickDiscard.Size = new System.Drawing.Size(181, 48);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem2.Text = "Show";
             // 
             // Form1
             // 
@@ -1021,6 +1055,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(222)))), ((int)(((byte)(191)))));
             this.ClientSize = new System.Drawing.Size(1904, 1041);
+            this.ContextMenuStrip = this.DeckMenu;
+            this.Controls.Add(this.DiscardBox);
             this.Controls.Add(this.ActiveEnergy5);
             this.Controls.Add(this.ActiveEnergy4);
             this.Controls.Add(this.ActiveEnergy3);
@@ -1151,6 +1187,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.ActiveEnergy3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ActiveEnergy4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ActiveEnergy5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DiscardBox)).EndInit();
+            this.RightClickDiscard.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1242,6 +1280,9 @@
         private System.Windows.Forms.PictureBox ActiveEnergy3;
         private System.Windows.Forms.PictureBox ActiveEnergy4;
         private System.Windows.Forms.PictureBox ActiveEnergy5;
+        private System.Windows.Forms.PictureBox DiscardBox;
+        private System.Windows.Forms.ContextMenuStrip RightClickDiscard;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
     }
 }
 

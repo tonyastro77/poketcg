@@ -14,6 +14,25 @@ namespace Pokemon.Game_Zone
         {
             discard = new List<Pokemon>();
         }
-       
+        public void Add(Pokemon x)
+        {
+            discard.Add(x);
+        }
+        public int TotalNumber()
+        {
+            return discard.Count;
+        }
+
+        public string ShowName(int x)
+        {
+            return discard[x].Name;
+        }
+        
+        public string ShowTopImage()
+        {
+            int index = discard.Count - 1;
+            return discard[index].Img;
+        }
+
     }
 }

@@ -25,6 +25,7 @@ namespace Pokemon
         Discard discard = new Discard();
         Prizes prize = new Prizes();
         Active active_Pokemon = new Active();
+        Used player_used = new Used();
         bool playedEnergy = false;
         bool playedAttack = false;
         bool active_Pokemon_Retreat = false;
@@ -70,7 +71,7 @@ namespace Pokemon
             UpdateHandView();
             UpdateBenchView();
             UpdateActivePokemonView();
-
+            UpdateDiscardView();
 
         }
 
@@ -320,6 +321,27 @@ namespace Pokemon
             {
                 ActivePokemonZoomAllInvisible();
             }
+        }
+
+        private void HoverOnDiscard_Click(object sender, EventArgs e)
+        {
+           //erase all the menu
+           (RightClickDiscard.Items[0] as ToolStripMenuItem).DropDownItems.Clear();
+
+            //based on amount of cards in the discard pile then will soon show amount of cards
+            for (int i = 0; i < discard.TotalNumber(); i++)
+            {
+                if(discard.TotalNumber() == 0)
+                {
+                           //it does not show any cards
+                }
+                else
+                {
+                           //it shows as many cards as the ones that are in the discard
+                    (RightClickDiscard.Items[0] as ToolStripMenuItem).DropDownItems.Add(discard.ShowName(i)).Click += new EventHandler(PerformAttack);
+                }
+            }
+           
         }
 
         public void ActivePokemonZoomAllInvisible()
@@ -807,6 +829,19 @@ namespace Pokemon
             }
         }
 
+        public void UpdateDiscardView()
+        {
+            if(discard.TotalNumber() == 0)
+            {
+                DiscardBox.Visible = false;
+            }
+            else
+            {              
+                DiscardBox.Image = Image.FromFile(discard.ShowTopImage());
+                DiscardBox.Visible = true;
+            }           
+        }
+
         public void ZoomInfo(int num)
         {
             if (player_Hand.ShowType(num) == "trainer" || player_Hand.ShowType(num) == "energy" || player_Hand.ShowType(num) == "supporter")
@@ -1111,6 +1146,7 @@ namespace Pokemon
                                 bench.EnergyLoad(index, 'a');
                             }
                             gameMessage.Text = "You loaded a " + player_Hand.ShowName(num).ToLower() + " to " + bench.ShowName(index);
+                            player_used.Add(player_Hand.PlayCard(num));
                             player_Hand.RemoveFromHand(num);
                             
                             UpdateHandView();
@@ -1159,6 +1195,7 @@ namespace Pokemon
                                 active_Pokemon.EnergyLoad('a');
                             }
                             gameMessage.Text = "You loaded a " + player_Hand.ShowName(num).ToLower() + " to " + active_Pokemon.ShowName();
+                            player_used.Add(player_Hand.PlayCard(num));
                             player_Hand.RemoveFromHand(num);
 
                             UpdateHandView();
@@ -1186,6 +1223,7 @@ namespace Pokemon
                         {
                             int damage = bench.ShowHp(index) - bench.ShowRemHp(index);
                             List<char> inheritenergies = bench.GetEnergyLoaded(index);
+                            player_used.Add(bench.PlayCard(index));
                             gameMessage.Text = "You evolved " + bench.ShowName(index) + " into " + player_Hand.ShowName(num);
                             bench.PutInto(index, player_Hand.PlayCard(num));
                             bench.InheritDamage(index, damage);
@@ -1205,6 +1243,7 @@ namespace Pokemon
                         {
                             int damage = active_Pokemon.ShowHP() - active_Pokemon.ShowRemHP();
                             List<char> inheritenergies = active_Pokemon.GetEnergyLoaded();
+                            player_used.Add(active_Pokemon.GetActivePokemon());
                             gameMessage.Text = "You evolved " + active_Pokemon.ShowName() + " into " + player_Hand.ShowName(num);
                             active_Pokemon.Become(player_Hand.PlayCard(num));
                             active_Pokemon.InheritDamage(damage);
@@ -1283,65 +1322,75 @@ namespace Pokemon
 
         private void retreatToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            energydiscard = active_Pokemon.ShowRetreatCost();
-            if (energydiscard <= active_Pokemon.EnergyLoadedCount())
-            {
-                energytodiscard = true;
-                if(energydiscard == 1)
+            if(bench.Count() != 0) {
+                energydiscard = active_Pokemon.ShowRetreatCost();
+                if (energydiscard <= active_Pokemon.EnergyLoadedCount())
                 {
-                    gameMessage.Text = "Please choose " + energydiscard + " energy attached to " + active_Pokemon.ShowName() + " and discard them by clicking on them.";
+                    energytodiscard = true;
+                    if (energydiscard == 1)
+                    {
+                        gameMessage.Text = "Please choose " + energydiscard + " energy attached to " + active_Pokemon.ShowName() + " and discard them by clicking on them.";
+                    }
+                    else
+                    {
+                        gameMessage.Text = "Please choose " + energydiscard + " energies attached to " + active_Pokemon.ShowName() + " and discard them by clicking on them.";
+                    }
                 }
                 else
                 {
-                    gameMessage.Text = "Please choose " + energydiscard + " energies attached to " + active_Pokemon.ShowName() + " and discard them by clicking on them.";
+                    gameMessage.Text = "You do not have enough energies attached to " + active_Pokemon.ShowName() + " yet in order to retreat it";
                 }
             }
             else
             {
-                gameMessage.Text = "You do not have enough energies attached to " + active_Pokemon.ShowName() + " yet in order to retreat it";
-            }  
+                gameMessage.Text = "You do not have any Benched Pokémon to swap your Active one.";
+            }
            
         }
 
         private void PictureBench_Click(object sender, EventArgs e)
         {
-            if (energydiscard == 0)
+            if(active_Pokemon_Retreat == true)
             {
-                int num = 0;
-                PictureBox n = (PictureBox)sender;
-                switch (n.Name)
+                if (energydiscard == 0)
                 {
-                    case "PictureBench1":
-                        num = 0;
-                        break;
-                    case "PictureBench2":
-                        num = 1;
-                        break;
-                    case "PictureBench3":
-                        num = 2;
-                        break;
-                    case "PictureBench4":
-                        num = 3;
-                        break;
-                    case "PictureBench5":
-                        num = 4;
-                        break;
-                    default:
-                        break;
-                }
-                gameMessage.Text = "You replaced " + active_Pokemon.ShowName() + " with " + bench.ShowName(num) + ". Now " + bench.ShowName(num) + " is your new Active Pokémon.";
-                Pokemon ActivePokemonTemp = active_Pokemon.GetActivePokemon();
+                    int num = 0;
+                    PictureBox n = (PictureBox)sender;
+                    switch (n.Name)
+                    {
+                        case "PictureBench1":
+                            num = 0;
+                            break;
+                        case "PictureBench2":
+                            num = 1;
+                            break;
+                        case "PictureBench3":
+                            num = 2;
+                            break;
+                        case "PictureBench4":
+                            num = 3;
+                            break;
+                        case "PictureBench5":
+                            num = 4;
+                            break;
+                        default:
+                            break;
+                    }
+                    gameMessage.Text = "You replaced " + active_Pokemon.ShowName() + " with " + bench.ShowName(num) + ". Now " + bench.ShowName(num) + " is your new Active Pokémon.";
+                    Pokemon ActivePokemonTemp = active_Pokemon.GetActivePokemon();
 
-                active_Pokemon.Become(bench.PlayCard(num));
-                bench.PutInto(num, ActivePokemonTemp);
-                active_Pokemon_Retreat = false;
-                UpdateActivePokemonView();
-                UpdateBenchView();
+                    active_Pokemon.Become(bench.PlayCard(num));
+                    bench.PutInto(num, ActivePokemonTemp);
+                    active_Pokemon_Retreat = false;
+                    UpdateActivePokemonView();
+                    UpdateBenchView();
+                }
+                else
+                {
+                    gameMessage.Text = "You must first discard as many energy cards attached to " + active_Pokemon.ShowName() + " as the energy cost it requires in order to retreat.";
+                }
             }
-            else
-            {
-                gameMessage.Text = "You must first discard as many energy cards attached to " +  active_Pokemon.ShowName() +" as the energy cost it requires in order to retreat.";
-            }
+            
         }
 
         private void ActiveEnergy_Click(object sender, EventArgs e)
@@ -1371,9 +1420,50 @@ namespace Pokemon
                         break;
                 }
 
+                char x = active_Pokemon.GetEnergyLoadedAt(num);
+
+                int index = 0;
+
+                if (x == 'f')
+                {      
+                        while(player_used.GetName(index) != "Fire Energy")
+                        {
+                            index++;
+                        }
+                }
+                else if (x == 'w')
+                {
+                        while (player_used.GetName(index) != "Water Energy")
+                        {
+                            index++;
+                        }                    
+                }
+
+                Pokemon temp = player_used.GetCard(index);
+                discard.Add(temp);
+
+                int index2 = 0;
+                if (x == 'f')
+                {
+                    while (player_used.GetName(index2) != "Fire Energy")
+                    {
+                        index2++;
+                    }
+                }
+                else if (x == 'w')
+                {
+                    while (player_used.GetName(index2) != "Water Energy")
+                    {
+                        index2++;
+                    }
+                }
+                player_used.RemoveAt(index2);
+
                 active_Pokemon.DiscardEnergyAt(num);
+                
                 energydiscard -= 1;
                 UpdateActivePokemonView();
+                UpdateDiscardView();
                 if (energydiscard == 0)
                 {
                     gameMessage.Text = "Please choose now your Benched Pokémon to replace " + active_Pokemon.ShowName() + " by clicking on it.";
@@ -1388,5 +1478,6 @@ namespace Pokemon
             }
             
         }
+
     }
 }

@@ -61,6 +61,7 @@
     <Compile Include="Game_Zone\Discard.cs" />
     <Compile Include="Game_Zone\Hand.cs" />
     <Compile Include="Game_Zone\Prizes.cs" />
+    <Compile Include="Game_Zone\Used.cs" />
     <Compile Include="Players\AI.cs" />
     <Compile Include="Players\Player.cs" />
     <Compile Include="Program.cs" />

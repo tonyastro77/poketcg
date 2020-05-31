@@ -121,6 +121,11 @@ namespace Pokemon.Game_Zone
             bench.Insert(index, x);
         }
 
+        public int Count()
+        {
+            return bench.Count;
+        }
+
         public int InheritDamage(int index, int previous_damage)
         {
             return bench[index].Rem_Hp = bench[index].Hp - previous_damage;
