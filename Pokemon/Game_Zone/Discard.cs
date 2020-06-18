@@ -18,6 +18,11 @@ namespace Pokemon.Game_Zone
         {
             discard.Add(x);
         }
+
+        public string ShowCard(int x)
+        {
+            return discard[x].Img;
+        }
         public int TotalNumber()
         {
             return discard.Count;

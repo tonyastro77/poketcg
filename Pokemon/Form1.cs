@@ -3,15 +3,9 @@ using Pokemon.Game_Zone;
 using Pokemon.Players;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Media;
-using System.Reflection;
-using System.Runtime.Remoting.Channels;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Pokemon
@@ -20,17 +14,27 @@ namespace Pokemon
     {
 
         Deck player = new Deck();
+        Deck ai = new Deck();
         Hand player_Hand = new Hand();
+        Hand ai_Hand = new Hand();
         Bench bench = new Bench();
+        Bench aibench = new Bench();
         Discard discard = new Discard();
+        Discard ai_discard = new Discard();
         Prizes prize = new Prizes();
         Active active_Pokemon = new Active();
+        Active ai_Active_Pokemon = new Active();
         Used player_used = new Used();
+        bool isFirstTurn = true;
+        bool isOpponentFirstTurn = true;
         bool playedEnergy = false;
         bool playedAttack = false;
         bool active_Pokemon_Retreat = false;
         int energydiscard = 0;
         bool energytodiscard = false;
+        int playerPrizes = 4;
+        int aiPrizes = 4;
+
         public Form1()
         {
             InitializeComponent();   
@@ -39,40 +43,90 @@ namespace Pokemon
         public void Form1_Load(object sender, EventArgs e)
         {
             
-            player.AddToDeck(new Pokemon(69, "Charmander", "basic", 50, 10, 'f', 'w', 'n', 1, "Obviously prefers hot places. If it gets caught in the rain, steam is said to spout from the tip of its tail", "..\\..\\Img\\BSPainted\\BS_046.jpg", new Attack("Scratch", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(46, "Charmander", "basic", 50, 10, 'f', 'w', 'n', 1, "Obviously prefers hot places. If it gets caught in the rain, steam is said to spout from the tip of its tail", "..\\..\\Img\\BSPainted\\BS_046.jpg", new Attack("Scratch", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new List<char>()));
             player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", "..\\..\\Img\\BS\\BS_098.jpg"));
-            player.AddToDeck(new Pokemon(24, "Charmeleon", "second", "Charmander", 80, 80, 'f', 'w', 'n', 1, "It lashes about with its tail to knock down its foe. It then tears up the fallen opponent with sharp claws.", "..\\..\\Img\\BS\\BS_024.jpg", new Attack("Slash", "", 30, new EnergyCost(3, 0, 0, 0, 0, 0, 0)), new Attack("Flamethrower", "Discard 1 Fire Energy card attached to Charmeleon in order to use this attack.", 50, new EnergyCost(1, 0, 2, 0, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", "..\\..\\Img\\BS\\BS_098.jpg"));
+            player.AddToDeck(new Pokemon(44, "Bulbasaur", "basic", 40, 40, 'g', 'f', 'n', 1, "A strange seed was planted on its back at birth. Thus, a plant sprouted and now grows with this Pokémon.", "..\\..\\Img\\BS\\BS_044.jpg", new Attack("Leech Seed", "Unless all damage from this attack is prevented, you may remove 1 damage counter from Bulbasaur", 20, new EnergyCost(0, 0, 0, 4, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(69, "Weedle", "basic", 40, 40, 'g', 'f', 'n', 1, "Often found in forests, eating leaves. It has a sharp, venomous stinger on its head.", "..\\..\\Img\\BS\\BS_069.jpg", new Attack("Poison Sting", "Flip a coin. If heads, the Defending Pokémon is now Poisoned.", 10, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>()));
             player.AddToDeck(new Pokemon(102, "Water Energy", "energy", "..\\..\\Img\\BS\\BS_102.jpg"));
-            player.AddToDeck(new Pokemon(54, "Chikorita", "basic", 50, 50, 'g', 'f', 'n', 1, "Its pleasantly aromatic leaves have the ability to check the humidity and temperature.", "..\\..\\Img\\N1\\N1_054.jpg", new Attack("Growl","If the Defending Pokémon attacks Chikorita during your opponent\'s next turn, any damage done to Chikorita is reduced by 10 (before applying Weakness and Resistance).(Benching or evolving either Pokémon ends this effect.)", 0, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Razor Leaf", "", 20, new EnergyCost(1, 0, 0, 1, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(44, "Bulbasaur", "basic", 40, 40, 'g', 'f', 'n', 1, "A strange seed was planted on its back at birth. Thus, a plant sprouted and now grows with this Pokémon.", "..\\..\\Img\\BS\\BS_044.jpg", new Attack("Leech Seed", "Unless all damage from this attack is prevented, you may remove 1 damage counter from Bulbasaur", 20, new EnergyCost(0, 0, 0, 4, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(24, "Charmeleon", "second", "Charmander", 80, 80, 'f', 'w', 'n', 1, "It lashes about with its tail to knock down its foe. It then tears up the fallen opponent with sharp claws.", "..\\..\\Img\\BS\\BS_024.jpg", new Attack("Slash", "", 30, new EnergyCost(3, 0, 0, 0, 0, 0, 0)), new Attack("Flamethrower", "Discard 1 Fire Energy card attached to Charmeleon in order to use this attack.", 50, new EnergyCost(1, 0, 2, 0, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(54, "Chikorita", "basic", 50, 50, 'g', 'f', 'n', 1, "Its pleasantly aromatic leaves have the ability to check the humidity and temperature.", "..\\..\\Img\\N1\\N1_054.jpg", new Attack("Growl", "If the Defending Pokémon attacks Chikorita during your opponent\'s next turn, any damage done to Chikorita is reduced by 10 (before applying Weakness and Resistance).(Benching or evolving either Pokémon ends this effect.)", 0, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Razor Leaf", "", 20, new EnergyCost(1, 0, 0, 1, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(44, "Bulbasaur", "basic", 40, 40, 'g', 'f', 'n', 1, "A strange seed was planted on its back at birth. Thus, a plant sprouted and now grows with this Pokémon.", "..\\..\\Img\\BS\\BS_044.jpg", new Attack("Leech Seed", "Unless all damage from this attack is prevented, you may remove 1 damage counter from Bulbasaur", 20, new EnergyCost(0, 0, 0, 4, 0, 0, 0)), new List<char>()));
+
+            ai.AddToDeck(new Pokemon(58, "Pikachu", "basic", 40, 40, 'e', 'l', 'n', 1, "When several of these Pokémon gather, their electricity can cause lightning storms.", "..\\..\\Img\\BS\\BS_058.jpg", new Attack("Gnaw", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Thunder Jolt", "Flip a coin. If tails, Pikachu does 10 damage to itself.", 30, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(53, "Magnemite", "basic", 40, 40, 'e', 'l', 'n', 1, "Uses anti-gravity to stay suspended. Appears without warning and uses attacks like Thunder Wave.", "..\\..\\Img\\BS\\BS_053.jpg", new Attack("Thunder Wave", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 10, new EnergyCost(0, 0, 0, 0, 1, 0, 0)), new Attack("Self Destruct", "Does 10 damage to each Pokémon on each player's Bench. (Don't apply Weakness and Resistance for Benched Pokémon.) Magnemite does 40 damage to itself.", 40, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(43, "Abra", "basic", 30, 30, 'p', 'p', 'n', 0, "Using its ability to read minds, it will identify impending danger and teleport to safety.", "..\\..\\Img\\BS\\BS_043.jpg", new Attack("Psychock", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 10, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(32, "Kadabra", "second", "Abra", 60, 60, 'p', 'p', 'n', 3, "It emits special alpha waves from its body that induce headaches even to those just nearby.", "..\\..\\Img\\BS\\BS_032.jpg", new Attack("Recover", "Discard 1 Psychic Energy card attached to Kadabra in order to use this attack. Remove all damage counters from Kadabra.", 0, new EnergyCost(0, 0, 0, 0, 0, 2, 0)), new Attack("Super Psy", "", 50, new EnergyCost(1, 0, 0, 0, 0, 2, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(50, "Gastly", "basic", 30, 30, 'p', 'n', 'l', 0, "Almost invisible, this gaseous Pokémon cloaks the target and puts it to sleep without notice.", "..\\..\\Img\\BS\\BS_050.jpg", new Attack("Sleeping Gas", "Flip a coin. If heads, the Defending Pokémon is now Asleep.", 0, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Destiny Bond", "Discard 1 Psychic Energy card attached to Gastly in order to use this attack. If a Pokémon Knocks Out Gastly during your opponent's next turn, Knock Out that Pokémon.", 0, new EnergyCost(1, 0, 0, 0, 0, 1, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(29, "Haunter", "second", "Gastly", 60, 60, 'p', 'n', 'l', 1, "Because of its ability to slip through block walls, it is said to be from another dimension.", "..\\..\\Img\\BSPainted\\BS_029.jpg", new Attack("Hypnosis", "The Defending Pokémon is now Asleep.", 0, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Dream Eater", "You can't use this attack unless the Defending Pokémon is Asleep.", 50, new EnergyCost(0, 0, 0, 0, 0, 2, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(49, "Drowzee", "basic", 50, 50, 'p', 'p', 'n', 1, "Puts enemies to sleep, then eats their dreams. Occasionally gets sick from eating bad dreams.", "..\\..\\Img\\BS\\BS_049.jpg", new Attack("Pound", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Confuse Ray", "Flip a coin. If heads, the Defending Pokémon is now Confused.", 10, new EnergyCost(0, 0, 0, 0, 0, 2, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(31, "Jynx", "basic", 70, 70, 'p', 'p', 'n', 2, "Merely by meditating, the Pokémon launches a powerful psychic energy attack.", "..\\..\\Img\\BS\\BS_031.jpg", new Attack("Doubleslap", "Flip 2 coins. This attack does 10 damage times the number of heads.", 10, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Meditate", "Does 20 damage plus 10 more damage for each damage counter on the Defending Pokémon.", 20, new EnergyCost(1, 0, 0, 0, 0, 2, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(10, "Mewtwo", "basic", 60, 60, 'p', 'p', 'n', 3, "A scientist created this Pokémon after years of horrific gene-splicing and DNA engineering experiments.", "..\\..\\Img\\BS\\BS_010.jpg", new Attack("Psychic", "Does 10 damage plus 10 more damage for each Energy card attached to the Defending Pokémon.", 10, new EnergyCost(1, 0, 0, 0, 0, 1, 0)), new Attack("Barrier", "Discard 1 Psychic Energy card attached to Mewtwo in order to use this attack. During your opponent's next turn, prevent all effects of attacks, including damage, done to Mewtwo.", 0, new EnergyCost(0, 0, 0, 0, 0, 2, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", "..\\..\\Img\\BS\\BS_100.jpg"));
+            ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", "..\\..\\Img\\BS\\BS_100.jpg"));
+            ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", "..\\..\\Img\\BS\\BS_100.jpg"));
+            ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", "..\\..\\Img\\BS\\BS_100.jpg"));
+            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", "..\\..\\Img\\BS\\BS_101.jpg"));
+            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", "..\\..\\Img\\BS\\BS_101.jpg"));
+            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", "..\\..\\Img\\BS\\BS_101.jpg"));
+            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", "..\\..\\Img\\BS\\BS_101.jpg"));
+            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", "..\\..\\Img\\BS\\BS_101.jpg"));
 
             player.Shuffle();
-            player_Hand.DrawCard(player.DrawCard());
-            player_Hand.DrawCard(player.DrawCard());
+            ai.Shuffle();
 
-            DeckSize.Text = player.NumberOfCards().ToString();
+            
 
-            OpponentHpBar.Value = 60;
+
+            DeckSize.Text = "x" + player.NumberOfCards().ToString();
+            ODeckSize.Text = "x" + ai.NumberOfCards().ToString();
+
+            PlayerHpBar.Visible = false;
+            RemHp.Visible = false;
+            MaxHp.Visible = false;
+            HpLabel1.Visible = false;
+
+            OpponentHpBar.Visible = false;
+            OpCardName.Visible = false;
+            OMaxHp.Visible = false;
+            HpLabel2.Visible = false;
             OpponentDeck.Image = Image.FromFile("..\\..\\Img\\BS\\CardBack.jpg");
             Deck.Image = Image.FromFile("..\\..\\Img\\BS\\CardBack.jpg");
 
-            EnergyBox2.Image = Image.FromFile("..\\..\\Img\\EnergyBox\\Psychic.gif");
-            
+            EnergyBox2.Visible = false;
+            RightClickMenu.Enabled = false;
 
-            OMaxHp.Text = OpponentHpBar.Value.ToString();
+            
             //playBackgroundMusic();
             PictureZoom.Image = Image.FromFile("..\\..\\Img\\BS\\CardBack.jpg");
-            OpponentZoom.Image = Image.FromFile("..\\..\\Img\\BSPainted\\BS_029.jpg");
+            OpponentZoom.Image = Image.FromFile("..\\..\\Img\\BS\\CardBack.jpg");
 
-            gameMessage.Text = "Hello Tony, what are you thinking to do next?";
-
-
-            gameMessage.Text = "It is your turn now, you should draw a card";
+            gameMessage.Text = "Welcome to the game please start by drawing 7 cards";
 
             UpdateHandView();
             UpdateBenchView();
+            AIUpdateBenchView();
             UpdateActivePokemonView();
+            UpdateAIActivePokemonView();
             UpdateDiscardView();
+            UpdateAIDiscardView();
+        }
 
+        private bool GameOver()
+        {
+            if(player.NumberOfCards() <= 0 || playerPrizes == 0)
+            {
+                return true;
+            }
+            else if(ai.NumberOfCards() <= 0 || aiPrizes == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -121,6 +175,21 @@ namespace Pokemon
                     break;
                 case "Hand5":
                     num = 4;
+                    break;
+                case "Hand6":
+                    num = 5;
+                    break;
+                case "Hand7":
+                    num = 6;
+                    break;
+                case "Hand8":
+                    num = 7;
+                    break;
+                case "Hand9":
+                    num = 8;
+                    break;
+                case "Hand10":
+                    num = 9;
                     break;
                 default:
                     break;
@@ -196,6 +265,7 @@ namespace Pokemon
                             (RightClickMenu.Items[0] as ToolStripMenuItem).DropDownItems.Add(active_Pokemon.ShowName()).Click += new EventHandler(pokemonEnergyLoadClick);
                         }
                         break;
+                    
                 }
 
                 
@@ -248,6 +318,72 @@ namespace Pokemon
             ZoomBenchInfo(num);
         }
 
+        private void HoverOnAI_Bench_Click(object sender, EventArgs e)
+        {
+            int num = 0;
+            PictureBox n = (PictureBox)sender;
+            switch (n.Name)
+            {
+                case "OpponentBench1":
+                    num = 0;
+                    break;
+                case "OpponentBench2":
+                    num = 1;
+                    break;
+                case "OpponentBench3":
+                    num = 2;
+                    break;
+                case "OpponentBench4":
+                    num = 3;
+                    break;
+                case "OpponentBench5":
+                    num = 4;
+                    break;
+                default:
+                    break;
+            }
+
+            OpponentZoom.Image = Image.FromFile(aibench.ShowCard(num));
+            
+            OpCardName.Text = aibench.ShowName(num);
+            OMaxHp.Text = aibench.ShowHp(num).ToString();
+
+            OpCardName.Visible = true;
+            HpLabel2.Visible = true;
+            OMaxHp.Visible = true;
+            OpponentHpBar.Maximum = aibench.ShowHp(num);
+            OpponentHpBar.Value = aibench.ShowRemHp(num);
+            OpponentHpBar.Visible = true;
+            EnergyBox2.Visible = true;
+
+            switch (aibench.ShowEnergy(num))
+            {
+                case 'f':
+                    EnergyBox2.Image = Image.FromFile("..\\..\\Img\\EnergyBox\\Fire.gif");
+                    break;
+                case 'w':
+                    EnergyBox2.Image = Image.FromFile("..\\..\\Img\\EnergyBox\\Water.gif");
+                    break;
+                case 'g':
+                    EnergyBox2.Image = Image.FromFile("..\\..\\Img\\EnergyBox\\Grass.gif");
+                    break;
+                case 'p':
+                    EnergyBox2.Image = Image.FromFile("..\\..\\Img\\EnergyBox\\Psychic.gif");
+                    break;
+                case 'l':
+                    EnergyBox2.Image = Image.FromFile("..\\..\\Img\\EnergyBox\\Fighting.gif");
+                    break;
+                case 'e':
+                    EnergyBox2.Image = Image.FromFile("..\\..\\Img\\EnergyBox\\Lightning.gif");
+                    break;
+                case 'c':
+                    EnergyBox2.Image = Image.FromFile("..\\..\\Img\\EnergyBox\\Colorless.gif");
+                    break;
+                default:
+                    EnergyBox2.Visible = false;
+                    break;
+            }
+        }
         private void HoverOnActive_Click(object sender, EventArgs e)
         {
             if (active_Pokemon.ShowName() != "null")
@@ -323,6 +459,56 @@ namespace Pokemon
             }
         }
 
+        private void HoverOnAI_Active_Click(object sender, EventArgs e)
+        {
+            if (ai_Active_Pokemon.ShowName() != "null")
+            {
+                OpCardName.Text = ai_Active_Pokemon.ShowName();
+                OpponentHpBar.Maximum = ai_Active_Pokemon.ShowHP();
+                OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                OMaxHp.Text = ai_Active_Pokemon.ShowHP().ToString();
+
+                OpponentZoom.Image = Image.FromFile(ai_Active_Pokemon.ShowImage());
+
+                OpCardName.Visible = true;
+                HpLabel2.Visible = true;
+                OMaxHp.Visible = true;
+                OpponentHpBar.Visible = true;
+                EnergyBox2.Visible = true;
+
+                switch (ai_Active_Pokemon.ShowEnergy())
+                {
+                    case 'f':
+                        EnergyBox2.Image = Image.FromFile("..\\..\\Img\\EnergyBox\\Fire.gif");
+                        break;
+                    case 'w':
+                        EnergyBox2.Image = Image.FromFile("..\\..\\Img\\EnergyBox\\Water.gif");
+                        break;
+                    case 'g':
+                        EnergyBox2.Image = Image.FromFile("..\\..\\Img\\EnergyBox\\Grass.gif");
+                        break;
+                    case 'p':
+                        EnergyBox2.Image = Image.FromFile("..\\..\\Img\\EnergyBox\\Psychic.gif");
+                        break;
+                    case 'l':
+                        EnergyBox2.Image = Image.FromFile("..\\..\\Img\\EnergyBox\\Fighting.gif");
+                        break;
+                    case 'e':
+                        EnergyBox2.Image = Image.FromFile("..\\..\\Img\\EnergyBox\\Lightning.gif");
+                        break;
+                    case 'c':
+                        EnergyBox2.Image = Image.FromFile("..\\..\\Img\\EnergyBox\\Colorless.gif");
+                        break;
+                    default:
+                        EnergyBox2.Visible = false;
+                        break;
+                }
+            }
+            else
+            {
+                AIActivePokemonZoomAllInvisible();
+            }
+        }
         private void HoverOnDiscard_Click(object sender, EventArgs e)
         {
            //erase all the menu
@@ -338,10 +524,30 @@ namespace Pokemon
                 else
                 {
                            //it shows as many cards as the ones that are in the discard
-                    (RightClickDiscard.Items[0] as ToolStripMenuItem).DropDownItems.Add(discard.ShowName(i)).Click += new EventHandler(PerformAttack);
+                    (RightClickDiscard.Items[0] as ToolStripMenuItem).DropDownItems.Add(discard.ShowName(i)).MouseHover += new EventHandler(ShowDiscardCard);
                 }
             }
            
+        }
+
+        private void ShowDiscardCard(object sender, EventArgs e)
+        {
+            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            PlayerHpBar.Visible = false;
+            CardName.Visible = true;
+            HpLabel1.Visible = false;
+            MaxHp.Visible = false;
+            RemHp.Visible = false;
+            EnergyBox1.Visible = false;
+            
+            if (item != null)
+            {
+
+                int index = (item.OwnerItem as ToolStripMenuItem).DropDownItems.IndexOf(item);
+                PictureZoom.Image = Image.FromFile(discard.ShowCard(index));
+                CardName.Text = discard.ShowName(index);
+              
+            };
         }
 
         public void ActivePokemonZoomAllInvisible()
@@ -353,25 +559,80 @@ namespace Pokemon
             EnergyBox1.Visible = false;
             PlayerHpBar.Visible = false;
         }
+
+        public void AIActivePokemonZoomAllInvisible()
+        {
+            OpponentZoom.Visible = false;
+            OMaxHp.Visible = false;
+            OpCardName.Visible = false;
+            EnergyBox2.Visible = false;
+            OpponentHpBar.Visible = false;
+        }
         public void Draw_Click(object sender, EventArgs e)
         {
-            SoundPlayer simpleSound = new SoundPlayer("..\\..\\Sounds\\draw.wav");
-            simpleSound.Play();
-            Draw.Visible = false;
-            YourHand.Visible = true;
-            Check.Visible = true;
-            Attack.Visible = true;
-            Power.Visible = true;
-            Retreat.Visible = true;
-            Done.Visible = true;
-            player_Hand.DrawCard(player.DrawCard());
-            DeckSize.Text = player.NumberOfCards().ToString();
+            if(isFirstTurn == true)
+            {
+                SoundPlayer simpleSound = new SoundPlayer("..\\..\\Sounds\\draw.wav");
+                simpleSound.Play();
 
-            UpdateHandView();
-          
-            gameMessage.Text = "You drew a card from your Deck to your Hand";
+                Draw.Visible = false;
 
+
+                player_Hand.DrawCard(player.DrawCard());
+                player_Hand.DrawCard(player.DrawCard());
+                player_Hand.DrawCard(player.DrawCard());
+                player_Hand.DrawCard(player.DrawCard());
+                player_Hand.DrawCard(player.DrawCard());
+                player_Hand.DrawCard(player.DrawCard());
+                player_Hand.DrawCard(player.DrawCard());
+
+                ai_Hand.DrawCard(ai.DrawCard());
+                ai_Hand.DrawCard(ai.DrawCard());
+                ai_Hand.DrawCard(ai.DrawCard());
+                ai_Hand.DrawCard(ai.DrawCard());
+                ai_Hand.DrawCard(ai.DrawCard());
+                ai_Hand.DrawCard(ai.DrawCard());
+                ai_Hand.DrawCard(ai.DrawCard());
+
+                DeckSize.Text = "x" + player.NumberOfCards().ToString();
+                ODeckSize.Text = "x" + ai.NumberOfCards().ToString();
+                UpdateHandView();
+                if (player_Hand.NumOfBasicPokemon() == 0)
+                {
+                    gameMessage.Text = "As you do not have any Basic Pokémon, you should perform Mulligan and draw another 7 cards. Your opponent will draw 1 extra card.";
+
+                    Power.Visible = false;
+                    Mulligan.Visible = true;
+                    FlipCoin.Visible = false;
+                }
+                else
+                {
+                    RightClickMenu.Enabled = true;
+                    Power.Visible = false;
+                    Done.Visible = false;
+                    FlipCoin.Visible = false;
+                    gameMessage.Text = "You drew 7 cards from your Deck and your opponent also does. Please play Basic Pókemons";
+                }
+            }
+            else
+            {
+                player_Hand.DrawCard(player.DrawCard());
+                DeckSize.Text = "x" + player.NumberOfCards().ToString();
+                UpdateHandView();
+                if(active_Pokemon.ThereIsActivePokemon() == true)
+                {
+                    Power.Visible = true;
+                    Done.Visible = true;
+                }
+                else
+                {
+                    Power.Visible = false;
+                    Done.Visible = false;
+                }                
+            }
+       
         }
+
 
         public void UpdateActivePokemonView()
         {
@@ -458,49 +719,122 @@ namespace Pokemon
             }
         }
 
+        public void UpdateAIActivePokemonView()
+        {
+
+
+            if (ai_Active_Pokemon.ShowName() != "null")
+            {
+                OpponentActive.Image = Image.FromFile(ai_Active_Pokemon.ShowImage());
+                OpponentActive.Visible = true;
+
+                if (ai_Active_Pokemon.EnergyLoadedCount() == 0)
+                {
+                    OActiveEnergy1.Visible = false;
+                    OActiveEnergy2.Visible = false;
+                    OActiveEnergy3.Visible = false;
+                    OActiveEnergy4.Visible = false;
+                    OActiveEnergy5.Visible = false;
+                }
+                else if (ai_Active_Pokemon.EnergyLoadedCount() == 1)
+                {
+                    OActiveEnergy1.Visible = true;
+                    OActiveEnergy1.Image = Image.FromFile(ai_Active_Pokemon.ReturnEnergyLoadedImg(0));
+                    OActiveEnergy2.Visible = false;
+                    OActiveEnergy3.Visible = false;
+                    OActiveEnergy4.Visible = false;
+                    OActiveEnergy5.Visible = false;
+                }
+                else if (ai_Active_Pokemon.EnergyLoadedCount() == 2)
+                {
+                    OActiveEnergy1.Visible = true;
+                    OActiveEnergy1.Image = Image.FromFile(ai_Active_Pokemon.ReturnEnergyLoadedImg(0));
+                    OActiveEnergy2.Visible = true;
+                    OActiveEnergy2.Image = Image.FromFile(ai_Active_Pokemon.ReturnEnergyLoadedImg(1));
+                    OActiveEnergy3.Visible = false;
+                    OActiveEnergy4.Visible = false;
+                    OActiveEnergy5.Visible = false;
+                }
+                else if (ai_Active_Pokemon.EnergyLoadedCount() == 3)
+                {
+                    OActiveEnergy1.Visible = true;
+                    OActiveEnergy1.Image = Image.FromFile(ai_Active_Pokemon.ReturnEnergyLoadedImg(0));
+                    OActiveEnergy2.Visible = true;
+                    OActiveEnergy2.Image = Image.FromFile(ai_Active_Pokemon.ReturnEnergyLoadedImg(1));
+                    OActiveEnergy3.Visible = true;
+                    OActiveEnergy3.Image = Image.FromFile(ai_Active_Pokemon.ReturnEnergyLoadedImg(2));
+                    OActiveEnergy4.Visible = false;
+                    OActiveEnergy5.Visible = false;
+                }
+                else if (ai_Active_Pokemon.EnergyLoadedCount() == 4)
+                {
+                    OActiveEnergy1.Visible = true;
+                    OActiveEnergy1.Image = Image.FromFile(ai_Active_Pokemon.ReturnEnergyLoadedImg(0));
+                    OActiveEnergy2.Visible = true;
+                    OActiveEnergy2.Image = Image.FromFile(ai_Active_Pokemon.ReturnEnergyLoadedImg(1));
+                    OActiveEnergy3.Visible = true;
+                    OActiveEnergy3.Image = Image.FromFile(ai_Active_Pokemon.ReturnEnergyLoadedImg(2));
+                    OActiveEnergy4.Visible = true;
+                    OActiveEnergy4.Image = Image.FromFile(ai_Active_Pokemon.ReturnEnergyLoadedImg(3));
+                    OActiveEnergy5.Visible = false;
+                }
+                else if (ai_Active_Pokemon.EnergyLoadedCount() == 5)
+                {
+                    OActiveEnergy1.Visible = true;
+                    OActiveEnergy1.Image = Image.FromFile(ai_Active_Pokemon.ReturnEnergyLoadedImg(0));
+                    OActiveEnergy2.Visible = true;
+                    OActiveEnergy2.Image = Image.FromFile(ai_Active_Pokemon.ReturnEnergyLoadedImg(1));
+                    OActiveEnergy3.Visible = true;
+                    OActiveEnergy3.Image = Image.FromFile(ai_Active_Pokemon.ReturnEnergyLoadedImg(2));
+                    OActiveEnergy4.Visible = true;
+                    OActiveEnergy4.Image = Image.FromFile(ai_Active_Pokemon.ReturnEnergyLoadedImg(3));
+                    OActiveEnergy5.Visible = true;
+                    OActiveEnergy5.Image = Image.FromFile(ai_Active_Pokemon.ReturnEnergyLoadedImg(4));
+                }
+
+            }
+            else
+            {
+                OpponentActive.Visible = false;
+                OActiveEnergy1.Visible = false;
+                OActiveEnergy2.Visible = false;
+                OActiveEnergy3.Visible = false;
+                OActiveEnergy4.Visible = false;
+                OActiveEnergy5.Visible = false;
+            }
+        }
         public void UpdateHandView()
         {
             
             int hand_size = player_Hand.NumberOfCards();
 
+            Hand1.Visible = false;
+            Hand2.Visible = false;
+            Hand3.Visible = false;
+            Hand4.Visible = false;
+            Hand5.Visible = false;
             Hand6.Visible = false;
             Hand7.Visible = false;
             Hand8.Visible = false;
             Hand9.Visible = false;
             Hand10.Visible = false;
-            Hand11.Visible = false;
-            Hand12.Visible = false;
-            Hand13.Visible = false;
-            Hand14.Visible = false;
-            Hand15.Visible = false;
-            Hand16.Visible = false;
-            Hand17.Visible = false;
-    
             switch (hand_size)
             {
-                case 0:
-                    Hand1.Visible = false;
-                    Hand2.Visible = false;
-                    Hand3.Visible = false;
-                    Hand4.Visible = false;
-                    Hand5.Visible = false;
+                case 0:            
                     break;
+
                 case 1:
                     Hand1.Visible = true;
                     Hand1.Image = Image.FromFile(player_Hand.ShowCard(0));
-                    Hand2.Visible = false;
-                    Hand3.Visible = false;
-                    Hand4.Visible = false;
-                    Hand5.Visible = false;
+                    
                     break;
+
                 case 2:
                     Hand1.Visible = true;
                     Hand1.Image = Image.FromFile(player_Hand.ShowCard(0));
                     Hand2.Visible = true;
                     Hand2.Image = Image.FromFile(player_Hand.ShowCard(1));
-                    Hand3.Visible = false;
-                    Hand4.Visible = false;
-                    Hand5.Visible = false;
+           
                     break;
                 case 3:
                     Hand1.Visible = true;
@@ -509,8 +843,7 @@ namespace Pokemon
                     Hand2.Image = Image.FromFile(player_Hand.ShowCard(1));
                     Hand3.Visible = true;
                     Hand3.Image = Image.FromFile(player_Hand.ShowCard(2));
-                    Hand4.Visible = false;
-                    Hand5.Visible = false;
+
                     break;
                 case 4:
                     Hand1.Visible = true;
@@ -521,7 +854,7 @@ namespace Pokemon
                     Hand3.Image = Image.FromFile(player_Hand.ShowCard(2));
                     Hand4.Visible = true;
                     Hand4.Image = Image.FromFile(player_Hand.ShowCard(3));
-                    Hand5.Visible = false;
+
                     break;
                 case 5:
                     Hand1.Visible = true;
@@ -535,6 +868,102 @@ namespace Pokemon
                     Hand5.Visible = true;
                     Hand5.Image = Image.FromFile(player_Hand.ShowCard(4));
                     break;
+
+                case 6:
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(player_Hand.ShowCard(0));
+                    Hand2.Visible = true;
+                    Hand2.Image = Image.FromFile(player_Hand.ShowCard(1));
+                    Hand3.Visible = true;
+                    Hand3.Image = Image.FromFile(player_Hand.ShowCard(2));
+                    Hand4.Visible = true;
+                    Hand4.Image = Image.FromFile(player_Hand.ShowCard(3));
+                    Hand5.Visible = true;
+                    Hand5.Image = Image.FromFile(player_Hand.ShowCard(4));
+                    Hand6.Visible = true;
+                    Hand6.Image = Image.FromFile(player_Hand.ShowCard(5));
+                    break;
+
+                case 7:
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(player_Hand.ShowCard(0));
+                    Hand2.Visible = true;
+                    Hand2.Image = Image.FromFile(player_Hand.ShowCard(1));
+                    Hand3.Visible = true;
+                    Hand3.Image = Image.FromFile(player_Hand.ShowCard(2));
+                    Hand4.Visible = true;
+                    Hand4.Image = Image.FromFile(player_Hand.ShowCard(3));
+                    Hand5.Visible = true;
+                    Hand5.Image = Image.FromFile(player_Hand.ShowCard(4));
+                    Hand6.Visible = true;
+                    Hand6.Image = Image.FromFile(player_Hand.ShowCard(5));
+                    Hand7.Visible = true;
+                    Hand7.Image = Image.FromFile(player_Hand.ShowCard(6));
+                    break;
+
+                case 8:
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(player_Hand.ShowCard(0));
+                    Hand2.Visible = true;
+                    Hand2.Image = Image.FromFile(player_Hand.ShowCard(1));
+                    Hand3.Visible = true;
+                    Hand3.Image = Image.FromFile(player_Hand.ShowCard(2));
+                    Hand4.Visible = true;
+                    Hand4.Image = Image.FromFile(player_Hand.ShowCard(3));
+                    Hand5.Visible = true;
+                    Hand5.Image = Image.FromFile(player_Hand.ShowCard(4));
+                    Hand6.Visible = true;
+                    Hand6.Image = Image.FromFile(player_Hand.ShowCard(5));
+                    Hand7.Visible = true;
+                    Hand7.Image = Image.FromFile(player_Hand.ShowCard(6));
+                    Hand8.Visible = true;
+                    Hand8.Image = Image.FromFile(player_Hand.ShowCard(7));
+                    break;
+
+                case 9:
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(player_Hand.ShowCard(0));
+                    Hand2.Visible = true;
+                    Hand2.Image = Image.FromFile(player_Hand.ShowCard(1));
+                    Hand3.Visible = true;
+                    Hand3.Image = Image.FromFile(player_Hand.ShowCard(2));
+                    Hand4.Visible = true;
+                    Hand4.Image = Image.FromFile(player_Hand.ShowCard(3));
+                    Hand5.Visible = true;
+                    Hand5.Image = Image.FromFile(player_Hand.ShowCard(4));
+                    Hand6.Visible = true;
+                    Hand6.Image = Image.FromFile(player_Hand.ShowCard(5));
+                    Hand7.Visible = true;
+                    Hand7.Image = Image.FromFile(player_Hand.ShowCard(6));
+                    Hand8.Visible = true;
+                    Hand8.Image = Image.FromFile(player_Hand.ShowCard(7));
+                    Hand9.Visible = true;
+                    Hand9.Image = Image.FromFile(player_Hand.ShowCard(8));
+                    break;
+
+                case 10:
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(player_Hand.ShowCard(0));
+                    Hand2.Visible = true;
+                    Hand2.Image = Image.FromFile(player_Hand.ShowCard(1));
+                    Hand3.Visible = true;
+                    Hand3.Image = Image.FromFile(player_Hand.ShowCard(2));
+                    Hand4.Visible = true;
+                    Hand4.Image = Image.FromFile(player_Hand.ShowCard(3));
+                    Hand5.Visible = true;
+                    Hand5.Image = Image.FromFile(player_Hand.ShowCard(4));
+                    Hand6.Visible = true;
+                    Hand6.Image = Image.FromFile(player_Hand.ShowCard(5));
+                    Hand7.Visible = true;
+                    Hand7.Image = Image.FromFile(player_Hand.ShowCard(6));
+                    Hand8.Visible = true;
+                    Hand8.Image = Image.FromFile(player_Hand.ShowCard(7));
+                    Hand9.Visible = true;
+                    Hand9.Image = Image.FromFile(player_Hand.ShowCard(8));
+                    Hand10.Visible = true;
+                    Hand10.Image = Image.FromFile(player_Hand.ShowCard(9));
+                    break;
+
             }
         }
 
@@ -557,8 +986,26 @@ namespace Pokemon
             Bench2Energy5.Visible = false;
 
             PictureBench3.Visible = false;
+            Bench3Energy1.Visible = false;
+            Bench3Energy2.Visible = false;
+            Bench3Energy3.Visible = false;
+            Bench3Energy4.Visible = false;
+            Bench3Energy5.Visible = false;
+
             PictureBench4.Visible = false;
+            Bench4Energy1.Visible = false;
+            Bench4Energy2.Visible = false;
+            Bench4Energy3.Visible = false;
+            Bench4Energy4.Visible = false;
+            Bench4Energy5.Visible = false;
+
             PictureBench5.Visible = false;
+            Bench5Energy1.Visible = false;
+            Bench5Energy2.Visible = false;
+            Bench5Energy3.Visible = false;
+            Bench5Energy4.Visible = false;
+            Bench5Energy5.Visible = false;
+
             switch (bench_size)
             {
                 case 0:
@@ -778,53 +1225,1854 @@ namespace Pokemon
                 case 3:
                     PictureBench1.Visible = true;
                     PictureBench1.Image = Image.FromFile(bench.ShowCard(0));
-                    Bench1Energy1.Visible = true;
-                    Bench1Energy2.Visible = true;
-                    Bench1Energy3.Visible = true;
-                    Bench1Energy4.Visible = true;
-                    Bench1Energy5.Visible = true;
+                    if (bench.LoadedEnergyCount(0) == 0)
+                    {
+                        Bench1Energy1.Visible = false;
+                        Bench1Energy2.Visible = false;
+                        Bench1Energy3.Visible = false;
+                        Bench1Energy4.Visible = false;
+                        Bench1Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(0) == 1)
+                    {
+                        Bench1Energy1.Visible = true;
+                        Bench1Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 0));
+                        Bench1Energy2.Visible = false;
+                        Bench1Energy3.Visible = false;
+                        Bench1Energy4.Visible = false;
+                        Bench1Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(0) == 2)
+                    {
+                        Bench1Energy1.Visible = true;
+                        Bench1Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 0));
+                        Bench1Energy2.Visible = true;
+                        Bench1Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 1));
+                        Bench1Energy3.Visible = false;
+                        Bench1Energy4.Visible = false;
+                        Bench1Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(0) == 3)
+                    {
+                        Bench1Energy1.Visible = true;
+                        Bench1Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 0));
+                        Bench1Energy2.Visible = true;
+                        Bench1Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 1));
+                        Bench1Energy3.Visible = true;
+                        Bench1Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 2));
+                        Bench1Energy4.Visible = false;
+                        Bench1Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(0) == 4)
+                    {
+                        Bench1Energy1.Visible = true;
+                        Bench1Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 0));
+                        Bench1Energy2.Visible = true;
+                        Bench1Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 1));
+                        Bench1Energy3.Visible = true;
+                        Bench1Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 2));
+                        Bench1Energy4.Visible = true;
+                        Bench1Energy4.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 3));
+                        Bench1Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(0) == 5)
+                    {
+                        Bench1Energy1.Visible = true;
+                        Bench1Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 0));
+                        Bench1Energy2.Visible = true;
+                        Bench1Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 1));
+                        Bench1Energy3.Visible = true;
+                        Bench1Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 2));
+                        Bench1Energy4.Visible = true;
+                        Bench1Energy4.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 3));
+                        Bench1Energy5.Visible = true;
+                        Bench1Energy5.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 4));
+                    }
 
                     PictureBench2.Visible = true;
                     PictureBench2.Image = Image.FromFile(bench.ShowCard(1));
+                    if (bench.LoadedEnergyCount(1) == 0)
+                    {
+                        Bench2Energy1.Visible = false;
+                        Bench2Energy2.Visible = false;
+                        Bench2Energy3.Visible = false;
+                        Bench2Energy4.Visible = false;
+                        Bench2Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(1) == 1)
+                    {
+                        Bench2Energy1.Visible = true;
+                        Bench2Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 0));
+                        Bench2Energy2.Visible = false;
+                        Bench2Energy3.Visible = false;
+                        Bench2Energy4.Visible = false;
+                        Bench2Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(1) == 2)
+                    {
+                        Bench2Energy1.Visible = true;
+                        Bench2Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 0));
+                        Bench2Energy2.Visible = true;
+                        Bench2Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 1));
+                        Bench2Energy3.Visible = false;
+                        Bench2Energy4.Visible = false;
+                        Bench2Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(1) == 3)
+                    {
+                        Bench2Energy1.Visible = true;
+                        Bench2Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 0));
+                        Bench2Energy2.Visible = true;
+                        Bench2Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 1));
+                        Bench2Energy3.Visible = true;
+                        Bench2Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 2));
+                        Bench2Energy4.Visible = false;
+                        Bench2Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(1) == 4)
+                    {
+                        Bench2Energy1.Visible = true;
+                        Bench2Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 0));
+                        Bench2Energy2.Visible = true;
+                        Bench2Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 1));
+                        Bench2Energy3.Visible = true;
+                        Bench2Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 2));
+                        Bench2Energy4.Visible = true;
+                        Bench2Energy4.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 3));
+                        Bench2Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(1) == 5)
+                    {
+                        Bench2Energy1.Visible = true;
+                        Bench2Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 0));
+                        Bench2Energy2.Visible = true;
+                        Bench2Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 1));
+                        Bench2Energy3.Visible = true;
+                        Bench2Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 2));
+                        Bench2Energy4.Visible = true;
+                        Bench2Energy4.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 3));
+                        Bench2Energy5.Visible = true;
+                        Bench2Energy5.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 4));
+                    }
                     PictureBench3.Visible = true;
                     PictureBench3.Image = Image.FromFile(bench.ShowCard(2));
+                    if (bench.LoadedEnergyCount(2) == 0)
+                    {
+                        Bench3Energy1.Visible = false;
+                        Bench3Energy2.Visible = false;
+                        Bench3Energy3.Visible = false;
+                        Bench3Energy4.Visible = false;
+                        Bench3Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(2) == 1)
+                    {
+                        Bench3Energy1.Visible = true;
+                        Bench3Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 0));
+                        Bench3Energy2.Visible = false;
+                        Bench3Energy3.Visible = false;
+                        Bench3Energy4.Visible = false;
+                        Bench3Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(2) == 2)
+                    {
+                        Bench3Energy1.Visible = true;
+                        Bench3Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 0));
+                        Bench3Energy2.Visible = true;
+                        Bench3Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 1));
+                        Bench3Energy3.Visible = false;
+                        Bench3Energy4.Visible = false;
+                        Bench3Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(2) == 3)
+                    {
+                        Bench3Energy1.Visible = true;
+                        Bench3Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 0));
+                        Bench3Energy2.Visible = true;
+                        Bench3Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 1));
+                        Bench3Energy3.Visible = true;
+                        Bench3Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 2));
+                        Bench3Energy4.Visible = false;
+                        Bench3Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(2) == 4)
+                    {
+                        Bench3Energy1.Visible = true;
+                        Bench3Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 0));
+                        Bench3Energy2.Visible = true;
+                        Bench3Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 1));
+                        Bench3Energy3.Visible = true;
+                        Bench3Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 2));
+                        Bench3Energy4.Visible = true;
+                        Bench3Energy4.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 3));
+                        Bench3Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(2) == 5)
+                    {
+                        Bench3Energy1.Visible = true;
+                        Bench3Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 0));
+                        Bench3Energy2.Visible = true;
+                        Bench3Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 1));
+                        Bench3Energy3.Visible = true;
+                        Bench3Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 2));
+                        Bench3Energy4.Visible = true;
+                        Bench3Energy4.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 3));
+                        Bench3Energy5.Visible = true;
+                        Bench3Energy5.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 4));
+                    }
+
                     PictureBench4.Visible = false;
                     PictureBench5.Visible = false;
                     break;
                 case 4:
                     PictureBench1.Visible = true;
                     PictureBench1.Image = Image.FromFile(bench.ShowCard(0));
-                    Bench1Energy1.Visible = true;
-                    Bench1Energy2.Visible = true;
-                    Bench1Energy3.Visible = true;
-                    Bench1Energy4.Visible = true;
-                    Bench1Energy5.Visible = true;
+                    if (bench.LoadedEnergyCount(0) == 0)
+                    {
+                        Bench1Energy1.Visible = false;
+                        Bench1Energy2.Visible = false;
+                        Bench1Energy3.Visible = false;
+                        Bench1Energy4.Visible = false;
+                        Bench1Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(0) == 1)
+                    {
+                        Bench1Energy1.Visible = true;
+                        Bench1Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 0));
+                        Bench1Energy2.Visible = false;
+                        Bench1Energy3.Visible = false;
+                        Bench1Energy4.Visible = false;
+                        Bench1Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(0) == 2)
+                    {
+                        Bench1Energy1.Visible = true;
+                        Bench1Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 0));
+                        Bench1Energy2.Visible = true;
+                        Bench1Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 1));
+                        Bench1Energy3.Visible = false;
+                        Bench1Energy4.Visible = false;
+                        Bench1Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(0) == 3)
+                    {
+                        Bench1Energy1.Visible = true;
+                        Bench1Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 0));
+                        Bench1Energy2.Visible = true;
+                        Bench1Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 1));
+                        Bench1Energy3.Visible = true;
+                        Bench1Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 2));
+                        Bench1Energy4.Visible = false;
+                        Bench1Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(0) == 4)
+                    {
+                        Bench1Energy1.Visible = true;
+                        Bench1Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 0));
+                        Bench1Energy2.Visible = true;
+                        Bench1Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 1));
+                        Bench1Energy3.Visible = true;
+                        Bench1Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 2));
+                        Bench1Energy4.Visible = true;
+                        Bench1Energy4.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 3));
+                        Bench1Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(0) == 5)
+                    {
+                        Bench1Energy1.Visible = true;
+                        Bench1Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 0));
+                        Bench1Energy2.Visible = true;
+                        Bench1Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 1));
+                        Bench1Energy3.Visible = true;
+                        Bench1Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 2));
+                        Bench1Energy4.Visible = true;
+                        Bench1Energy4.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 3));
+                        Bench1Energy5.Visible = true;
+                        Bench1Energy5.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 4));
+                    }
 
                     PictureBench2.Visible = true;
                     PictureBench2.Image = Image.FromFile(bench.ShowCard(1));
+                    if (bench.LoadedEnergyCount(1) == 0)
+                    {
+                        Bench2Energy1.Visible = false;
+                        Bench2Energy2.Visible = false;
+                        Bench2Energy3.Visible = false;
+                        Bench2Energy4.Visible = false;
+                        Bench2Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(1) == 1)
+                    {
+                        Bench2Energy1.Visible = true;
+                        Bench2Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 0));
+                        Bench2Energy2.Visible = false;
+                        Bench2Energy3.Visible = false;
+                        Bench2Energy4.Visible = false;
+                        Bench2Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(1) == 2)
+                    {
+                        Bench2Energy1.Visible = true;
+                        Bench2Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 0));
+                        Bench2Energy2.Visible = true;
+                        Bench2Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 1));
+                        Bench2Energy3.Visible = false;
+                        Bench2Energy4.Visible = false;
+                        Bench2Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(1) == 3)
+                    {
+                        Bench2Energy1.Visible = true;
+                        Bench2Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 0));
+                        Bench2Energy2.Visible = true;
+                        Bench2Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 1));
+                        Bench2Energy3.Visible = true;
+                        Bench2Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 2));
+                        Bench2Energy4.Visible = false;
+                        Bench2Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(1) == 4)
+                    {
+                        Bench2Energy1.Visible = true;
+                        Bench2Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 0));
+                        Bench2Energy2.Visible = true;
+                        Bench2Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 1));
+                        Bench2Energy3.Visible = true;
+                        Bench2Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 2));
+                        Bench2Energy4.Visible = true;
+                        Bench2Energy4.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 3));
+                        Bench2Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(1) == 5)
+                    {
+                        Bench2Energy1.Visible = true;
+                        Bench2Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 0));
+                        Bench2Energy2.Visible = true;
+                        Bench2Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 1));
+                        Bench2Energy3.Visible = true;
+                        Bench2Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 2));
+                        Bench2Energy4.Visible = true;
+                        Bench2Energy4.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 3));
+                        Bench2Energy5.Visible = true;
+                        Bench2Energy5.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 4));
+                    }
                     PictureBench3.Visible = true;
                     PictureBench3.Image = Image.FromFile(bench.ShowCard(2));
+                    if (bench.LoadedEnergyCount(2) == 0)
+                    {
+                        Bench3Energy1.Visible = false;
+                        Bench3Energy2.Visible = false;
+                        Bench3Energy3.Visible = false;
+                        Bench3Energy4.Visible = false;
+                        Bench3Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(2) == 1)
+                    {
+                        Bench3Energy1.Visible = true;
+                        Bench3Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 0));
+                        Bench3Energy2.Visible = false;
+                        Bench3Energy3.Visible = false;
+                        Bench3Energy4.Visible = false;
+                        Bench3Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(2) == 2)
+                    {
+                        Bench3Energy1.Visible = true;
+                        Bench3Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 0));
+                        Bench3Energy2.Visible = true;
+                        Bench3Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 1));
+                        Bench3Energy3.Visible = false;
+                        Bench3Energy4.Visible = false;
+                        Bench3Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(2) == 3)
+                    {
+                        Bench3Energy1.Visible = true;
+                        Bench3Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 0));
+                        Bench3Energy2.Visible = true;
+                        Bench3Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 1));
+                        Bench3Energy3.Visible = true;
+                        Bench3Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 2));
+                        Bench3Energy4.Visible = false;
+                        Bench3Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(2) == 4)
+                    {
+                        Bench3Energy1.Visible = true;
+                        Bench3Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 0));
+                        Bench3Energy2.Visible = true;
+                        Bench3Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 1));
+                        Bench3Energy3.Visible = true;
+                        Bench3Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 2));
+                        Bench3Energy4.Visible = true;
+                        Bench3Energy4.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 3));
+                        Bench3Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(2) == 5)
+                    {
+                        Bench3Energy1.Visible = true;
+                        Bench3Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 0));
+                        Bench3Energy2.Visible = true;
+                        Bench3Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 1));
+                        Bench3Energy3.Visible = true;
+                        Bench3Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 2));
+                        Bench3Energy4.Visible = true;
+                        Bench3Energy4.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 3));
+                        Bench3Energy5.Visible = true;
+                        Bench3Energy5.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 4));
+                    }
+
                     PictureBench4.Visible = true;
                     PictureBench4.Image = Image.FromFile(bench.ShowCard(3));
-                    PictureBench5.Visible = false;
+                    if (bench.LoadedEnergyCount(3) == 0)
+                    {
+                        Bench4Energy1.Visible = false;
+                        Bench4Energy2.Visible = false;
+                        Bench4Energy3.Visible = false;
+                        Bench4Energy4.Visible = false;
+                        Bench4Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(3) == 1)
+                    {
+                        Bench4Energy1.Visible = true;
+                        Bench4Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 0));
+                        Bench4Energy2.Visible = false;
+                        Bench4Energy3.Visible = false;
+                        Bench4Energy4.Visible = false;
+                        Bench4Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(3) == 2)
+                    {
+                        Bench4Energy1.Visible = true;
+                        Bench4Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 0));
+                        Bench4Energy2.Visible = true;
+                        Bench4Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 1));
+                        Bench4Energy3.Visible = false;
+                        Bench4Energy4.Visible = false;
+                        Bench4Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(3) == 3)
+                    {
+                        Bench4Energy1.Visible = true;
+                        Bench4Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 0));
+                        Bench4Energy2.Visible = true;
+                        Bench4Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 1));
+                        Bench4Energy3.Visible = true;
+                        Bench4Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 2));
+                        Bench4Energy4.Visible = false;
+                        Bench4Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(3) == 4)
+                    {
+                        Bench4Energy1.Visible = true;
+                        Bench4Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 0));
+                        Bench4Energy2.Visible = true;
+                        Bench4Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 1));
+                        Bench4Energy3.Visible = true;
+                        Bench4Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 2));
+                        Bench4Energy4.Visible = true;
+                        Bench4Energy4.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 3));
+                        Bench4Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(3) == 5)
+                    {
+                        Bench4Energy1.Visible = true;
+                        Bench4Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 0));
+                        Bench4Energy2.Visible = true;
+                        Bench4Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 1));
+                        Bench4Energy3.Visible = true;
+                        Bench4Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 2));
+                        Bench4Energy4.Visible = true;
+                        Bench4Energy4.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 3));
+                        Bench4Energy5.Visible = true;
+                        Bench4Energy5.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 4));
+                    }
+                    PictureBench5.Visible = false;                  
                     break;
                 case 5:
                     PictureBench1.Visible = true;
                     PictureBench1.Image = Image.FromFile(bench.ShowCard(0));
-                    Bench1Energy1.Visible = true;
-                    Bench1Energy2.Visible = true;
-                    Bench1Energy3.Visible = true;
-                    Bench1Energy4.Visible = true;
-                    Bench1Energy5.Visible = true;
+                    if (bench.LoadedEnergyCount(0) == 0)
+                    {
+                        Bench1Energy1.Visible = false;
+                        Bench1Energy2.Visible = false;
+                        Bench1Energy3.Visible = false;
+                        Bench1Energy4.Visible = false;
+                        Bench1Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(0) == 1)
+                    {
+                        Bench1Energy1.Visible = true;
+                        Bench1Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 0));
+                        Bench1Energy2.Visible = false;
+                        Bench1Energy3.Visible = false;
+                        Bench1Energy4.Visible = false;
+                        Bench1Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(0) == 2)
+                    {
+                        Bench1Energy1.Visible = true;
+                        Bench1Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 0));
+                        Bench1Energy2.Visible = true;
+                        Bench1Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 1));
+                        Bench1Energy3.Visible = false;
+                        Bench1Energy4.Visible = false;
+                        Bench1Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(0) == 3)
+                    {
+                        Bench1Energy1.Visible = true;
+                        Bench1Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 0));
+                        Bench1Energy2.Visible = true;
+                        Bench1Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 1));
+                        Bench1Energy3.Visible = true;
+                        Bench1Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 2));
+                        Bench1Energy4.Visible = false;
+                        Bench1Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(0) == 4)
+                    {
+                        Bench1Energy1.Visible = true;
+                        Bench1Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 0));
+                        Bench1Energy2.Visible = true;
+                        Bench1Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 1));
+                        Bench1Energy3.Visible = true;
+                        Bench1Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 2));
+                        Bench1Energy4.Visible = true;
+                        Bench1Energy4.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 3));
+                        Bench1Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(0) == 5)
+                    {
+                        Bench1Energy1.Visible = true;
+                        Bench1Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 0));
+                        Bench1Energy2.Visible = true;
+                        Bench1Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 1));
+                        Bench1Energy3.Visible = true;
+                        Bench1Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 2));
+                        Bench1Energy4.Visible = true;
+                        Bench1Energy4.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 3));
+                        Bench1Energy5.Visible = true;
+                        Bench1Energy5.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(0, 4));
+                    }
 
                     PictureBench2.Visible = true;
                     PictureBench2.Image = Image.FromFile(bench.ShowCard(1));
+                    if (bench.LoadedEnergyCount(1) == 0)
+                    {
+                        Bench2Energy1.Visible = false;
+                        Bench2Energy2.Visible = false;
+                        Bench2Energy3.Visible = false;
+                        Bench2Energy4.Visible = false;
+                        Bench2Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(1) == 1)
+                    {
+                        Bench2Energy1.Visible = true;
+                        Bench2Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 0));
+                        Bench2Energy2.Visible = false;
+                        Bench2Energy3.Visible = false;
+                        Bench2Energy4.Visible = false;
+                        Bench2Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(1) == 2)
+                    {
+                        Bench2Energy1.Visible = true;
+                        Bench2Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 0));
+                        Bench2Energy2.Visible = true;
+                        Bench2Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 1));
+                        Bench2Energy3.Visible = false;
+                        Bench2Energy4.Visible = false;
+                        Bench2Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(1) == 3)
+                    {
+                        Bench2Energy1.Visible = true;
+                        Bench2Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 0));
+                        Bench2Energy2.Visible = true;
+                        Bench2Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 1));
+                        Bench2Energy3.Visible = true;
+                        Bench2Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 2));
+                        Bench2Energy4.Visible = false;
+                        Bench2Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(1) == 4)
+                    {
+                        Bench2Energy1.Visible = true;
+                        Bench2Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 0));
+                        Bench2Energy2.Visible = true;
+                        Bench2Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 1));
+                        Bench2Energy3.Visible = true;
+                        Bench2Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 2));
+                        Bench2Energy4.Visible = true;
+                        Bench2Energy4.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 3));
+                        Bench2Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(1) == 5)
+                    {
+                        Bench2Energy1.Visible = true;
+                        Bench2Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 0));
+                        Bench2Energy2.Visible = true;
+                        Bench2Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 1));
+                        Bench2Energy3.Visible = true;
+                        Bench2Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 2));
+                        Bench2Energy4.Visible = true;
+                        Bench2Energy4.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 3));
+                        Bench2Energy5.Visible = true;
+                        Bench2Energy5.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(1, 4));
+                    }
                     PictureBench3.Visible = true;
                     PictureBench3.Image = Image.FromFile(bench.ShowCard(2));
+                    if (bench.LoadedEnergyCount(2) == 0)
+                    {
+                        Bench3Energy1.Visible = false;
+                        Bench3Energy2.Visible = false;
+                        Bench3Energy3.Visible = false;
+                        Bench3Energy4.Visible = false;
+                        Bench3Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(2) == 1)
+                    {
+                        Bench3Energy1.Visible = true;
+                        Bench3Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 0));
+                        Bench3Energy2.Visible = false;
+                        Bench3Energy3.Visible = false;
+                        Bench3Energy4.Visible = false;
+                        Bench3Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(2) == 2)
+                    {
+                        Bench3Energy1.Visible = true;
+                        Bench3Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 0));
+                        Bench3Energy2.Visible = true;
+                        Bench3Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 1));
+                        Bench3Energy3.Visible = false;
+                        Bench3Energy4.Visible = false;
+                        Bench3Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(2) == 3)
+                    {
+                        Bench3Energy1.Visible = true;
+                        Bench3Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 0));
+                        Bench3Energy2.Visible = true;
+                        Bench3Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 1));
+                        Bench3Energy3.Visible = true;
+                        Bench3Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 2));
+                        Bench3Energy4.Visible = false;
+                        Bench3Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(2) == 4)
+                    {
+                        Bench3Energy1.Visible = true;
+                        Bench3Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 0));
+                        Bench3Energy2.Visible = true;
+                        Bench3Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 1));
+                        Bench3Energy3.Visible = true;
+                        Bench3Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 2));
+                        Bench3Energy4.Visible = true;
+                        Bench3Energy4.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 3));
+                        Bench3Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(2) == 5)
+                    {
+                        Bench3Energy1.Visible = true;
+                        Bench3Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 0));
+                        Bench3Energy2.Visible = true;
+                        Bench3Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 1));
+                        Bench3Energy3.Visible = true;
+                        Bench3Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 2));
+                        Bench3Energy4.Visible = true;
+                        Bench3Energy4.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 3));
+                        Bench3Energy5.Visible = true;
+                        Bench3Energy5.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(2, 4));
+                    }
+
                     PictureBench4.Visible = true;
                     PictureBench4.Image = Image.FromFile(bench.ShowCard(3));
+                    if (bench.LoadedEnergyCount(3) == 0)
+                    {
+                        Bench4Energy1.Visible = false;
+                        Bench4Energy2.Visible = false;
+                        Bench4Energy3.Visible = false;
+                        Bench4Energy4.Visible = false;
+                        Bench4Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(3) == 1)
+                    {
+                        Bench4Energy1.Visible = true;
+                        Bench4Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 0));
+                        Bench4Energy2.Visible = false;
+                        Bench4Energy3.Visible = false;
+                        Bench4Energy4.Visible = false;
+                        Bench4Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(3) == 2)
+                    {
+                        Bench4Energy1.Visible = true;
+                        Bench4Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 0));
+                        Bench4Energy2.Visible = true;
+                        Bench4Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 1));
+                        Bench4Energy3.Visible = false;
+                        Bench4Energy4.Visible = false;
+                        Bench4Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(3) == 3)
+                    {
+                        Bench4Energy1.Visible = true;
+                        Bench4Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 0));
+                        Bench4Energy2.Visible = true;
+                        Bench4Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 1));
+                        Bench4Energy3.Visible = true;
+                        Bench4Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 2));
+                        Bench4Energy4.Visible = false;
+                        Bench4Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(3) == 4)
+                    {
+                        Bench4Energy1.Visible = true;
+                        Bench4Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 0));
+                        Bench4Energy2.Visible = true;
+                        Bench4Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 1));
+                        Bench4Energy3.Visible = true;
+                        Bench4Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 2));
+                        Bench4Energy4.Visible = true;
+                        Bench4Energy4.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 3));
+                        Bench4Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(3) == 5)
+                    {
+                        Bench4Energy1.Visible = true;
+                        Bench4Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 0));
+                        Bench4Energy2.Visible = true;
+                        Bench4Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 1));
+                        Bench4Energy3.Visible = true;
+                        Bench4Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 2));
+                        Bench4Energy4.Visible = true;
+                        Bench4Energy4.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 3));
+                        Bench4Energy5.Visible = true;
+                        Bench4Energy5.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(3, 4));
+                    }
                     PictureBench5.Visible = true;
                     PictureBench5.Image = Image.FromFile(bench.ShowCard(4));
+                    if (bench.LoadedEnergyCount(4) == 0)
+                    {
+                        Bench5Energy1.Visible = false;
+                        Bench5Energy2.Visible = false;
+                        Bench5Energy3.Visible = false;
+                        Bench5Energy4.Visible = false;
+                        Bench5Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(4) == 1)
+                    {
+                        Bench5Energy1.Visible = true;
+                        Bench5Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(4, 0));
+                        Bench5Energy2.Visible = false;
+                        Bench5Energy3.Visible = false;
+                        Bench5Energy4.Visible = false;
+                        Bench5Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(4) == 2)
+                    {
+                        Bench5Energy1.Visible = true;
+                        Bench5Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(4, 0));
+                        Bench5Energy2.Visible = true;
+                        Bench5Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(4, 1));
+                        Bench5Energy3.Visible = false;
+                        Bench5Energy4.Visible = false;
+                        Bench5Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(4) == 3)
+                    {
+                        Bench5Energy1.Visible = true;
+                        Bench5Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(4, 0));
+                        Bench5Energy2.Visible = true;
+                        Bench5Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(4, 1));
+                        Bench5Energy3.Visible = true;
+                        Bench5Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(4, 2));
+                        Bench5Energy4.Visible = false;
+                        Bench5Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(4) == 4)
+                    {
+                        Bench5Energy1.Visible = true;
+                        Bench5Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(4, 0));
+                        Bench5Energy2.Visible = true;
+                        Bench5Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(4, 1));
+                        Bench5Energy3.Visible = true;
+                        Bench5Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(4, 2));
+                        Bench5Energy4.Visible = true;
+                        Bench5Energy4.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(4, 3));
+                        Bench5Energy5.Visible = false;
+                    }
+                    else if (bench.LoadedEnergyCount(4) == 5)
+                    {
+                        Bench5Energy1.Visible = true;
+                        Bench5Energy1.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(4, 0));
+                        Bench5Energy2.Visible = true;
+                        Bench5Energy2.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(4, 1));
+                        Bench5Energy3.Visible = true;
+                        Bench5Energy3.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(4, 2));
+                        Bench5Energy4.Visible = true;
+                        Bench5Energy4.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(4, 3));
+                        Bench5Energy5.Visible = true;
+                        Bench5Energy5.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(4, 4));
+                    }
+                    break;
+            }
+        }
+        public void AIUpdateBenchView()
+        {
+            int bench_size = aibench.NumberOfCards();
+
+            OpponentBench1.Visible = false;
+            OBench1Energy1.Visible = false;
+            OBench1Energy2.Visible = false;
+            OBench1Energy3.Visible = false;
+            OBench1Energy4.Visible = false;
+            OBench1Energy5.Visible = false;
+
+            OpponentBench2.Visible = false;
+            OBench2Energy1.Visible = false;
+            OBench2Energy2.Visible = false;
+            OBench2Energy3.Visible = false;
+            OBench2Energy4.Visible = false;
+            OBench2Energy5.Visible = false;
+
+            OpponentBench3.Visible = false;
+            OBench3Energy1.Visible = false;
+            OBench3Energy2.Visible = false;
+            OBench3Energy3.Visible = false;
+            OBench3Energy4.Visible = false;
+            OBench3Energy5.Visible = false;
+
+            OpponentBench4.Visible = false;
+            OBench4Energy1.Visible = false;
+            OBench4Energy2.Visible = false;
+            OBench4Energy3.Visible = false;
+            OBench4Energy4.Visible = false;
+            OBench4Energy5.Visible = false;
+
+            OpponentBench5.Visible = false;
+            OBench5Energy1.Visible = false;
+            OBench5Energy2.Visible = false;
+            OBench5Energy3.Visible = false;
+            OBench5Energy4.Visible = false;
+            OBench5Energy5.Visible = false;
+
+            switch (bench_size)
+            {
+                case 0:
+
+                    break;
+                case 1:
+                    OpponentBench1.Visible = true;
+                    OpponentBench1.Image = Image.FromFile(aibench.ShowCard(0));
+                    if (aibench.LoadedEnergyCount(0) == 0)
+                    {
+                        OBench1Energy1.Visible = false;
+                        OBench1Energy2.Visible = false;
+                        OBench1Energy3.Visible = false;
+                        OBench1Energy4.Visible = false;
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 1)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = false;
+                        OBench1Energy3.Visible = false;
+                        OBench1Energy4.Visible = false;
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 2)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = true;
+                        OBench1Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 1));
+                        OBench1Energy3.Visible = false;
+                        OBench1Energy4.Visible = false;
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 3)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = true;
+                        OBench1Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 1));
+                        OBench1Energy3.Visible = true;
+                        OBench1Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 2));
+                        OBench1Energy4.Visible = false;
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 4)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = true;
+                        OBench1Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 1));
+                        OBench1Energy3.Visible = true;
+                        OBench1Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 2));
+                        OBench1Energy4.Visible = true;
+                        OBench1Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 3));
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 5)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = true;
+                        OBench1Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 1));
+                        OBench1Energy3.Visible = true;
+                        OBench1Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 2));
+                        OBench1Energy4.Visible = true;
+                        OBench1Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 3));
+                        OBench1Energy5.Visible = true;
+                        OBench1Energy5.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 4));
+                    }
+
+                    OpponentBench2.Visible = false;
+                    OpponentBench3.Visible = false;
+                    OpponentBench4.Visible = false;
+                    OpponentBench5.Visible = false;
+                    break;
+                case 2:
+                    OpponentBench1.Visible = true;
+                    OpponentBench1.Image = Image.FromFile(aibench.ShowCard(0));
+                    if (aibench.LoadedEnergyCount(0) == 0)
+                    {
+                        OBench1Energy1.Visible = false;
+                        OBench1Energy2.Visible = false;
+                        OBench1Energy3.Visible = false;
+                        OBench1Energy4.Visible = false;
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 1)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = false;
+                        OBench1Energy3.Visible = false;
+                        OBench1Energy4.Visible = false;
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 2)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = true;
+                        OBench1Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 1));
+                        OBench1Energy3.Visible = false;
+                        OBench1Energy4.Visible = false;
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 3)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = true;
+                        OBench1Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 1));
+                        OBench1Energy3.Visible = true;
+                        OBench1Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 2));
+                        OBench1Energy4.Visible = false;
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 4)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = true;
+                        OBench1Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 1));
+                        OBench1Energy3.Visible = true;
+                        OBench1Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 2));
+                        OBench1Energy4.Visible = true;
+                        OBench1Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 3));
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 5)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = true;
+                        OBench1Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 1));
+                        OBench1Energy3.Visible = true;
+                        OBench1Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 2));
+                        OBench1Energy4.Visible = true;
+                        OBench1Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 3));
+                        OBench1Energy5.Visible = true;
+                        OBench1Energy5.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 4));
+                    }
+
+                    OpponentBench2.Visible = true;
+                    OpponentBench2.Image = Image.FromFile(aibench.ShowCard(1));
+
+                    if (aibench.LoadedEnergyCount(1) == 0)
+                    {
+                        OBench2Energy1.Visible = false;
+                        OBench2Energy2.Visible = false;
+                        OBench2Energy3.Visible = false;
+                        OBench2Energy4.Visible = false;
+                        OBench2Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(1) == 1)
+                    {
+                        OBench2Energy1.Visible = true;
+                        OBench2Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 0));
+                        OBench2Energy2.Visible = false;
+                        OBench2Energy3.Visible = false;
+                        OBench2Energy4.Visible = false;
+                        OBench2Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(1) == 2)
+                    {
+                        OBench2Energy1.Visible = true;
+                        OBench2Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 0));
+                        OBench2Energy2.Visible = true;
+                        OBench2Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 1));
+                        OBench2Energy3.Visible = false;
+                        OBench2Energy4.Visible = false;
+                        OBench2Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(1) == 3)
+                    {
+                        OBench2Energy1.Visible = true;
+                        OBench2Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 0));
+                        OBench2Energy2.Visible = true;
+                        OBench2Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 1));
+                        OBench2Energy3.Visible = true;
+                        OBench2Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 2));
+                        OBench2Energy4.Visible = false;
+                        OBench2Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(1) == 4)
+                    {
+                        OBench2Energy1.Visible = true;
+                        OBench2Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 0));
+                        OBench2Energy2.Visible = true;
+                        OBench2Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 1));
+                        OBench2Energy3.Visible = true;
+                        OBench2Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 2));
+                        OBench2Energy4.Visible = true;
+                        OBench2Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 3));
+                        OBench2Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(1) == 5)
+                    {
+                        OBench2Energy1.Visible = true;
+                        OBench2Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 0));
+                        OBench2Energy2.Visible = true;
+                        OBench2Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 1));
+                        OBench2Energy3.Visible = true;
+                        OBench2Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 2));
+                        OBench2Energy4.Visible = true;
+                        OBench2Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 3));
+                        OBench2Energy5.Visible = true;
+                        OBench2Energy5.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 4));
+                    }
+
+                    OpponentBench3.Visible = false;
+                    OpponentBench4.Visible = false;
+                    OpponentBench5.Visible = false;
+                    break;
+                case 3:
+                    OpponentBench1.Visible = true;
+                    OpponentBench1.Image = Image.FromFile(aibench.ShowCard(0));
+                    if (aibench.LoadedEnergyCount(0) == 0)
+                    {
+                        OBench1Energy1.Visible = false;
+                        OBench1Energy2.Visible = false;
+                        OBench1Energy3.Visible = false;
+                        OBench1Energy4.Visible = false;
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 1)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = false;
+                        OBench1Energy3.Visible = false;
+                        OBench1Energy4.Visible = false;
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 2)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = true;
+                        OBench1Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 1));
+                        OBench1Energy3.Visible = false;
+                        OBench1Energy4.Visible = false;
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 3)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = true;
+                        OBench1Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 1));
+                        OBench1Energy3.Visible = true;
+                        OBench1Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 2));
+                        OBench1Energy4.Visible = false;
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 4)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = true;
+                        OBench1Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 1));
+                        OBench1Energy3.Visible = true;
+                        OBench1Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 2));
+                        OBench1Energy4.Visible = true;
+                        OBench1Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 3));
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 5)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = true;
+                        OBench1Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 1));
+                        OBench1Energy3.Visible = true;
+                        OBench1Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 2));
+                        OBench1Energy4.Visible = true;
+                        OBench1Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 3));
+                        OBench1Energy5.Visible = true;
+                        OBench1Energy5.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 4));
+                    }
+
+                    OpponentBench2.Visible = true;
+                    OpponentBench2.Image = Image.FromFile(aibench.ShowCard(1));
+
+                    if (aibench.LoadedEnergyCount(1) == 0)
+                    {
+                        OBench2Energy1.Visible = false;
+                        OBench2Energy2.Visible = false;
+                        OBench2Energy3.Visible = false;
+                        OBench2Energy4.Visible = false;
+                        OBench2Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(1) == 1)
+                    {
+                        OBench2Energy1.Visible = true;
+                        OBench2Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 0));
+                        OBench2Energy2.Visible = false;
+                        OBench2Energy3.Visible = false;
+                        OBench2Energy4.Visible = false;
+                        OBench2Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(1) == 2)
+                    {
+                        OBench2Energy1.Visible = true;
+                        OBench2Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 0));
+                        OBench2Energy2.Visible = true;
+                        OBench2Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 1));
+                        OBench2Energy3.Visible = false;
+                        OBench2Energy4.Visible = false;
+                        OBench2Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(1) == 3)
+                    {
+                        OBench2Energy1.Visible = true;
+                        OBench2Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 0));
+                        OBench2Energy2.Visible = true;
+                        OBench2Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 1));
+                        OBench2Energy3.Visible = true;
+                        OBench2Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 2));
+                        OBench2Energy4.Visible = false;
+                        OBench2Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(1) == 4)
+                    {
+                        OBench2Energy1.Visible = true;
+                        OBench2Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 0));
+                        OBench2Energy2.Visible = true;
+                        OBench2Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 1));
+                        OBench2Energy3.Visible = true;
+                        OBench2Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 2));
+                        OBench2Energy4.Visible = true;
+                        OBench2Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 3));
+                        OBench2Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(1) == 5)
+                    {
+                        OBench2Energy1.Visible = true;
+                        OBench2Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 0));
+                        OBench2Energy2.Visible = true;
+                        OBench2Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 1));
+                        OBench2Energy3.Visible = true;
+                        OBench2Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 2));
+                        OBench2Energy4.Visible = true;
+                        OBench2Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 3));
+                        OBench2Energy5.Visible = true;
+                        OBench2Energy5.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 4));
+                    }
+
+                    OpponentBench3.Visible = true;
+                    OpponentBench3.Image = Image.FromFile(aibench.ShowCard(2));
+                    if (aibench.LoadedEnergyCount(2) == 0)
+                    {
+                        OBench3Energy1.Visible = false;
+                        OBench3Energy2.Visible = false;
+                        OBench3Energy3.Visible = false;
+                        OBench3Energy4.Visible = false;
+                        OBench3Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(2) == 1)
+                    {
+                        OBench3Energy1.Visible = true;
+                        OBench3Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 0));
+                        OBench3Energy2.Visible = false;
+                        OBench3Energy3.Visible = false;
+                        OBench3Energy4.Visible = false;
+                        OBench3Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(2) == 2)
+                    {
+                        OBench3Energy1.Visible = true;
+                        OBench3Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 0));
+                        OBench3Energy2.Visible = true;
+                        OBench3Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 1));
+                        OBench3Energy3.Visible = false;
+                        OBench3Energy4.Visible = false;
+                        OBench3Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(2) == 3)
+                    {
+                        OBench3Energy1.Visible = true;
+                        OBench3Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 0));
+                        OBench3Energy2.Visible = true;
+                        OBench3Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 1));
+                        OBench3Energy3.Visible = true;
+                        OBench3Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 2));
+                        OBench3Energy4.Visible = false;
+                        OBench3Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(2) == 4)
+                    {
+                        OBench3Energy1.Visible = true;
+                        OBench3Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 0));
+                        OBench3Energy2.Visible = true;
+                        OBench3Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 1));
+                        OBench3Energy3.Visible = true;
+                        OBench3Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 2));
+                        OBench3Energy4.Visible = true;
+                        OBench3Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 3));
+                        OBench3Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(2) == 5)
+                    {
+                        OBench3Energy1.Visible = true;
+                        OBench3Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 0));
+                        OBench3Energy2.Visible = true;
+                        OBench3Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 1));
+                        OBench3Energy3.Visible = true;
+                        OBench3Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 2));
+                        OBench3Energy4.Visible = true;
+                        OBench3Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 3));
+                        OBench3Energy5.Visible = true;
+                        OBench3Energy5.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 4));
+                    }
+
+                    OpponentBench4.Visible = false;
+                    OpponentBench5.Visible = false;
+                    break;
+                case 4:
+                    OpponentBench1.Visible = true;
+                    OpponentBench1.Image = Image.FromFile(aibench.ShowCard(0));
+                    if (aibench.LoadedEnergyCount(0) == 0)
+                    {
+                        OBench1Energy1.Visible = false;
+                        OBench1Energy2.Visible = false;
+                        OBench1Energy3.Visible = false;
+                        OBench1Energy4.Visible = false;
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 1)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = false;
+                        OBench1Energy3.Visible = false;
+                        OBench1Energy4.Visible = false;
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 2)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = true;
+                        OBench1Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 1));
+                        OBench1Energy3.Visible = false;
+                        OBench1Energy4.Visible = false;
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 3)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = true;
+                        OBench1Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 1));
+                        OBench1Energy3.Visible = true;
+                        OBench1Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 2));
+                        OBench1Energy4.Visible = false;
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 4)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = true;
+                        OBench1Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 1));
+                        OBench1Energy3.Visible = true;
+                        OBench1Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 2));
+                        OBench1Energy4.Visible = true;
+                        OBench1Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 3));
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 5)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = true;
+                        OBench1Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 1));
+                        OBench1Energy3.Visible = true;
+                        OBench1Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 2));
+                        OBench1Energy4.Visible = true;
+                        OBench1Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 3));
+                        OBench1Energy5.Visible = true;
+                        OBench1Energy5.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 4));
+                    }
+
+                    OpponentBench2.Visible = true;
+                    OpponentBench2.Image = Image.FromFile(aibench.ShowCard(1));
+
+                    if (aibench.LoadedEnergyCount(1) == 0)
+                    {
+                        OBench2Energy1.Visible = false;
+                        OBench2Energy2.Visible = false;
+                        OBench2Energy3.Visible = false;
+                        OBench2Energy4.Visible = false;
+                        OBench2Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(1) == 1)
+                    {
+                        OBench2Energy1.Visible = true;
+                        OBench2Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 0));
+                        OBench2Energy2.Visible = false;
+                        OBench2Energy3.Visible = false;
+                        OBench2Energy4.Visible = false;
+                        OBench2Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(1) == 2)
+                    {
+                        OBench2Energy1.Visible = true;
+                        OBench2Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 0));
+                        OBench2Energy2.Visible = true;
+                        OBench2Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 1));
+                        OBench2Energy3.Visible = false;
+                        OBench2Energy4.Visible = false;
+                        OBench2Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(1) == 3)
+                    {
+                        OBench2Energy1.Visible = true;
+                        OBench2Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 0));
+                        OBench2Energy2.Visible = true;
+                        OBench2Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 1));
+                        OBench2Energy3.Visible = true;
+                        OBench2Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 2));
+                        OBench2Energy4.Visible = false;
+                        OBench2Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(1) == 4)
+                    {
+                        OBench2Energy1.Visible = true;
+                        OBench2Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 0));
+                        OBench2Energy2.Visible = true;
+                        OBench2Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 1));
+                        OBench2Energy3.Visible = true;
+                        OBench2Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 2));
+                        OBench2Energy4.Visible = true;
+                        OBench2Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 3));
+                        OBench2Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(1) == 5)
+                    {
+                        OBench2Energy1.Visible = true;
+                        OBench2Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 0));
+                        OBench2Energy2.Visible = true;
+                        OBench2Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 1));
+                        OBench2Energy3.Visible = true;
+                        OBench2Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 2));
+                        OBench2Energy4.Visible = true;
+                        OBench2Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 3));
+                        OBench2Energy5.Visible = true;
+                        OBench2Energy5.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 4));
+                    }
+
+                    OpponentBench3.Visible = true;
+                    OpponentBench3.Image = Image.FromFile(aibench.ShowCard(2));
+                    if (aibench.LoadedEnergyCount(2) == 0)
+                    {
+                        OBench3Energy1.Visible = false;
+                        OBench3Energy2.Visible = false;
+                        OBench3Energy3.Visible = false;
+                        OBench3Energy4.Visible = false;
+                        OBench3Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(2) == 1)
+                    {
+                        OBench3Energy1.Visible = true;
+                        OBench3Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 0));
+                        OBench3Energy2.Visible = false;
+                        OBench3Energy3.Visible = false;
+                        OBench3Energy4.Visible = false;
+                        OBench3Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(2) == 2)
+                    {
+                        OBench3Energy1.Visible = true;
+                        OBench3Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 0));
+                        OBench3Energy2.Visible = true;
+                        OBench3Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 1));
+                        OBench3Energy3.Visible = false;
+                        OBench3Energy4.Visible = false;
+                        OBench3Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(2) == 3)
+                    {
+                        OBench3Energy1.Visible = true;
+                        OBench3Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 0));
+                        OBench3Energy2.Visible = true;
+                        OBench3Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 1));
+                        OBench3Energy3.Visible = true;
+                        OBench3Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 2));
+                        OBench3Energy4.Visible = false;
+                        OBench3Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(2) == 4)
+                    {
+                        OBench3Energy1.Visible = true;
+                        OBench3Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 0));
+                        OBench3Energy2.Visible = true;
+                        OBench3Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 1));
+                        OBench3Energy3.Visible = true;
+                        OBench3Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 2));
+                        OBench3Energy4.Visible = true;
+                        OBench3Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 3));
+                        OBench3Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(2) == 5)
+                    {
+                        OBench3Energy1.Visible = true;
+                        OBench3Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 0));
+                        OBench3Energy2.Visible = true;
+                        OBench3Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 1));
+                        OBench3Energy3.Visible = true;
+                        OBench3Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 2));
+                        OBench3Energy4.Visible = true;
+                        OBench3Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 3));
+                        OBench3Energy5.Visible = true;
+                        OBench3Energy5.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 4));
+                    }
+
+                    OpponentBench4.Visible = true;
+                    OpponentBench4.Image = Image.FromFile(aibench.ShowCard(3));
+                    if (aibench.LoadedEnergyCount(3) == 0)
+                    {
+                        OBench4Energy1.Visible = false;
+                        OBench4Energy2.Visible = false;
+                        OBench4Energy3.Visible = false;
+                        OBench4Energy4.Visible = false;
+                        OBench4Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(3) == 1)
+                    {
+                        OBench4Energy1.Visible = true;
+                        OBench4Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 0));
+                        OBench4Energy2.Visible = false;
+                        OBench4Energy3.Visible = false;
+                        OBench4Energy4.Visible = false;
+                        OBench4Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(3) == 2)
+                    {
+                        OBench4Energy1.Visible = true;
+                        OBench4Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 0));
+                        OBench4Energy2.Visible = true;
+                        OBench4Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 1));
+                        OBench4Energy3.Visible = false;
+                        OBench4Energy4.Visible = false;
+                        OBench4Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(3) == 3)
+                    {
+                        OBench4Energy1.Visible = true;
+                        OBench4Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 0));
+                        OBench4Energy2.Visible = true;
+                        OBench4Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 1));
+                        OBench4Energy3.Visible = true;
+                        OBench4Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 2));
+                        OBench4Energy4.Visible = false;
+                        OBench4Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(3) == 4)
+                    {
+                        OBench4Energy1.Visible = true;
+                        OBench4Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 0));
+                        OBench4Energy2.Visible = true;
+                        OBench4Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 1));
+                        OBench4Energy3.Visible = true;
+                        OBench4Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 2));
+                        OBench4Energy4.Visible = true;
+                        OBench4Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 3));
+                        OBench4Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(3) == 5)
+                    {
+                        OBench4Energy1.Visible = true;
+                        OBench4Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 0));
+                        OBench4Energy2.Visible = true;
+                        OBench4Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 1));
+                        OBench4Energy3.Visible = true;
+                        OBench4Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 2));
+                        OBench4Energy4.Visible = true;
+                        OBench4Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 3));
+                        OBench4Energy5.Visible = true;
+                        OBench4Energy5.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 4));
+                    }
+                    OpponentBench5.Visible = false;
+                    break;
+                case 5:
+                    OpponentBench1.Visible = true;
+                    OpponentBench1.Image = Image.FromFile(aibench.ShowCard(0));
+                    if (aibench.LoadedEnergyCount(0) == 0)
+                    {
+                        OBench1Energy1.Visible = false;
+                        OBench1Energy2.Visible = false;
+                        OBench1Energy3.Visible = false;
+                        OBench1Energy4.Visible = false;
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 1)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = false;
+                        OBench1Energy3.Visible = false;
+                        OBench1Energy4.Visible = false;
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 2)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = true;
+                        OBench1Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 1));
+                        OBench1Energy3.Visible = false;
+                        OBench1Energy4.Visible = false;
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 3)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = true;
+                        OBench1Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 1));
+                        OBench1Energy3.Visible = true;
+                        OBench1Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 2));
+                        OBench1Energy4.Visible = false;
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 4)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = true;
+                        OBench1Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 1));
+                        OBench1Energy3.Visible = true;
+                        OBench1Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 2));
+                        OBench1Energy4.Visible = true;
+                        OBench1Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 3));
+                        OBench1Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(0) == 5)
+                    {
+                        OBench1Energy1.Visible = true;
+                        OBench1Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 0));
+                        OBench1Energy2.Visible = true;
+                        OBench1Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 1));
+                        OBench1Energy3.Visible = true;
+                        OBench1Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 2));
+                        OBench1Energy4.Visible = true;
+                        OBench1Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 3));
+                        OBench1Energy5.Visible = true;
+                        OBench1Energy5.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(0, 4));
+                    }
+
+                    OpponentBench2.Visible = true;
+                    OpponentBench2.Image = Image.FromFile(aibench.ShowCard(1));
+
+                    if (aibench.LoadedEnergyCount(1) == 0)
+                    {
+                        OBench2Energy1.Visible = false;
+                        OBench2Energy2.Visible = false;
+                        OBench2Energy3.Visible = false;
+                        OBench2Energy4.Visible = false;
+                        OBench2Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(1) == 1)
+                    {
+                        OBench2Energy1.Visible = true;
+                        OBench2Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 0));
+                        OBench2Energy2.Visible = false;
+                        OBench2Energy3.Visible = false;
+                        OBench2Energy4.Visible = false;
+                        OBench2Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(1) == 2)
+                    {
+                        OBench2Energy1.Visible = true;
+                        OBench2Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 0));
+                        OBench2Energy2.Visible = true;
+                        OBench2Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 1));
+                        OBench2Energy3.Visible = false;
+                        OBench2Energy4.Visible = false;
+                        OBench2Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(1) == 3)
+                    {
+                        OBench2Energy1.Visible = true;
+                        OBench2Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 0));
+                        OBench2Energy2.Visible = true;
+                        OBench2Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 1));
+                        OBench2Energy3.Visible = true;
+                        OBench2Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 2));
+                        OBench2Energy4.Visible = false;
+                        OBench2Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(1) == 4)
+                    {
+                        OBench2Energy1.Visible = true;
+                        OBench2Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 0));
+                        OBench2Energy2.Visible = true;
+                        OBench2Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 1));
+                        OBench2Energy3.Visible = true;
+                        OBench2Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 2));
+                        OBench2Energy4.Visible = true;
+                        OBench2Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 3));
+                        OBench2Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(1) == 5)
+                    {
+                        OBench2Energy1.Visible = true;
+                        OBench2Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 0));
+                        OBench2Energy2.Visible = true;
+                        OBench2Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 1));
+                        OBench2Energy3.Visible = true;
+                        OBench2Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 2));
+                        OBench2Energy4.Visible = true;
+                        OBench2Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 3));
+                        OBench2Energy5.Visible = true;
+                        OBench2Energy5.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(1, 4));
+                    }
+
+                    OpponentBench3.Visible = true;
+                    OpponentBench3.Image = Image.FromFile(aibench.ShowCard(2));
+                    if (aibench.LoadedEnergyCount(2) == 0)
+                    {
+                        OBench3Energy1.Visible = false;
+                        OBench3Energy2.Visible = false;
+                        OBench3Energy3.Visible = false;
+                        OBench3Energy4.Visible = false;
+                        OBench3Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(2) == 1)
+                    {
+                        OBench3Energy1.Visible = true;
+                        OBench3Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 0));
+                        OBench3Energy2.Visible = false;
+                        OBench3Energy3.Visible = false;
+                        OBench3Energy4.Visible = false;
+                        OBench3Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(2) == 2)
+                    {
+                        OBench3Energy1.Visible = true;
+                        OBench3Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 0));
+                        OBench3Energy2.Visible = true;
+                        OBench3Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 1));
+                        OBench3Energy3.Visible = false;
+                        OBench3Energy4.Visible = false;
+                        OBench3Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(2) == 3)
+                    {
+                        OBench3Energy1.Visible = true;
+                        OBench3Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 0));
+                        OBench3Energy2.Visible = true;
+                        OBench3Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 1));
+                        OBench3Energy3.Visible = true;
+                        OBench3Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 2));
+                        OBench3Energy4.Visible = false;
+                        OBench3Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(2) == 4)
+                    {
+                        OBench3Energy1.Visible = true;
+                        OBench3Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 0));
+                        OBench3Energy2.Visible = true;
+                        OBench3Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 1));
+                        OBench3Energy3.Visible = true;
+                        OBench3Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 2));
+                        OBench3Energy4.Visible = true;
+                        OBench3Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 3));
+                        OBench3Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(2) == 5)
+                    {
+                        OBench3Energy1.Visible = true;
+                        OBench3Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 0));
+                        OBench3Energy2.Visible = true;
+                        OBench3Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 1));
+                        OBench3Energy3.Visible = true;
+                        OBench3Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 2));
+                        OBench3Energy4.Visible = true;
+                        OBench3Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 3));
+                        OBench3Energy5.Visible = true;
+                        OBench3Energy5.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(2, 4));
+                    }
+
+                    OpponentBench4.Visible = true;
+                    OpponentBench4.Image = Image.FromFile(aibench.ShowCard(3));
+                    if (aibench.LoadedEnergyCount(3) == 0)
+                    {
+                        OBench4Energy1.Visible = false;
+                        OBench4Energy2.Visible = false;
+                        OBench4Energy3.Visible = false;
+                        OBench4Energy4.Visible = false;
+                        OBench4Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(3) == 1)
+                    {
+                        OBench4Energy1.Visible = true;
+                        OBench4Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 0));
+                        OBench4Energy2.Visible = false;
+                        OBench4Energy3.Visible = false;
+                        OBench4Energy4.Visible = false;
+                        OBench4Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(3) == 2)
+                    {
+                        OBench4Energy1.Visible = true;
+                        OBench4Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 0));
+                        OBench4Energy2.Visible = true;
+                        OBench4Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 1));
+                        OBench4Energy3.Visible = false;
+                        OBench4Energy4.Visible = false;
+                        OBench4Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(3) == 3)
+                    {
+                        OBench4Energy1.Visible = true;
+                        OBench4Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 0));
+                        OBench4Energy2.Visible = true;
+                        OBench4Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 1));
+                        OBench4Energy3.Visible = true;
+                        OBench4Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 2));
+                        OBench4Energy4.Visible = false;
+                        OBench4Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(3) == 4)
+                    {
+                        OBench4Energy1.Visible = true;
+                        OBench4Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 0));
+                        OBench4Energy2.Visible = true;
+                        OBench4Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 1));
+                        OBench4Energy3.Visible = true;
+                        OBench4Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 2));
+                        OBench4Energy4.Visible = true;
+                        OBench4Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 3));
+                        OBench4Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(3) == 5)
+                    {
+                        OBench4Energy1.Visible = true;
+                        OBench4Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 0));
+                        OBench4Energy2.Visible = true;
+                        OBench4Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 1));
+                        OBench4Energy3.Visible = true;
+                        OBench4Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 2));
+                        OBench4Energy4.Visible = true;
+                        OBench4Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 3));
+                        OBench4Energy5.Visible = true;
+                        OBench4Energy5.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(3, 4));
+                    }
+                    OpponentBench5.Visible = true;
+                    OpponentBench5.Image = Image.FromFile(aibench.ShowCard(4));
+                    if (aibench.LoadedEnergyCount(4) == 0)
+                    {
+                        OBench5Energy1.Visible = false;
+                        OBench5Energy2.Visible = false;
+                        OBench5Energy3.Visible = false;
+                        OBench5Energy4.Visible = false;
+                        OBench5Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(4) == 1)
+                    {
+                        OBench5Energy1.Visible = true;
+                        OBench5Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(4, 0));
+                        OBench5Energy2.Visible = false;
+                        OBench5Energy3.Visible = false;
+                        OBench5Energy4.Visible = false;
+                        OBench5Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(4) == 2)
+                    {
+                        OBench5Energy1.Visible = true;
+                        OBench5Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(4, 0));
+                        OBench5Energy2.Visible = true;
+                        OBench5Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(4, 1));
+                        OBench5Energy3.Visible = false;
+                        OBench5Energy4.Visible = false;
+                        OBench5Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(4) == 3)
+                    {
+                        OBench5Energy1.Visible = true;
+                        OBench5Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(4, 0));
+                        OBench5Energy2.Visible = true;
+                        OBench5Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(4, 1));
+                        OBench5Energy3.Visible = true;
+                        OBench5Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(4, 2));
+                        OBench5Energy4.Visible = false;
+                        OBench5Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(4) == 4)
+                    {
+                        OBench5Energy1.Visible = true;
+                        OBench5Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(4, 0));
+                        OBench5Energy2.Visible = true;
+                        OBench5Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(4, 1));
+                        OBench5Energy3.Visible = true;
+                        OBench5Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(4, 2));
+                        OBench5Energy4.Visible = true;
+                        OBench5Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(4, 3));
+                        OBench5Energy5.Visible = false;
+                    }
+                    else if (aibench.LoadedEnergyCount(4) == 5)
+                    {
+                        OBench5Energy1.Visible = true;
+                        OBench5Energy1.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(4, 0));
+                        OBench5Energy2.Visible = true;
+                        OBench5Energy2.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(4, 1));
+                        OBench5Energy3.Visible = true;
+                        OBench5Energy3.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(4, 2));
+                        OBench5Energy4.Visible = true;
+                        OBench5Energy4.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(4, 3));
+                        OBench5Energy5.Visible = true;
+                        OBench5Energy5.Image = Image.FromFile(aibench.ReturnEnergyLoadedImg(4, 4));
+                    }
                     break;
             }
         }
@@ -840,6 +3088,19 @@ namespace Pokemon
                 DiscardBox.Image = Image.FromFile(discard.ShowTopImage());
                 DiscardBox.Visible = true;
             }           
+        }
+
+        public void UpdateAIDiscardView()
+        {
+            if (ai_discard.TotalNumber() == 0)
+            {
+                OpponentDiscardBox.Visible = false;
+            }
+            else
+            {
+                OpponentDiscardBox.Image = Image.FromFile(ai_discard.ShowTopImage());
+                OpponentDiscardBox.Visible = true;
+            }
         }
 
         public void ZoomInfo(int num)
@@ -959,56 +3220,134 @@ namespace Pokemon
 
         private void Play_Click(object sender, EventArgs e)
         {
-            int num = 0;
-     
-            switch (RightClickMenu.SourceControl.Name.ToString())
+            if(isFirstTurn == true)
             {
-                case "Hand1":
-                    num = 0;
-                    break;
-                case "Hand2":
-                    num = 1;
-                    break;
-                case "Hand3":
-                    num = 2;
-                    break;
-                case "Hand4":
-                    num = 3;
-                    break;
-                case "Hand5":
-                    num = 4;
-                    break;
-                default:
-                    break;
-            }
-            if (player_Hand.ShowType(num) == "basic")
-            {
-               
-                if (bench.NumberOfCards() < 6)
+                int num = GetHandBoxIndex();
+                if (player_Hand.ShowType(num) == "basic")
                 {
-                    gameMessage.Text = "You played " + player_Hand.ShowName(num) + " from your hand to your bench";
-                    bench.Add(player_Hand.PlayCard(num));
-                    player_Hand.RemoveFromHand(num);
-                    UpdateBenchView();
-                    UpdateHandView();                   
-                }
 
-                else
-                {
-                    gameMessage.Text = "Your bench is full!";
+                    if (bench.NumberOfCards() < 6)
+                    {
+                        gameMessage.Text = "You played " + player_Hand.ShowName(num) + " from your hand to your bench";
+                        bench.Add(player_Hand.PlayCard(num));
+                        player_Hand.RemoveFromHand(num);
+                        UpdateBenchView();
+                        UpdateHandView();
+                        AIPlaysCards();
+                        
+                    }
+
+                    else
+                    {
+                        gameMessage.Text = "Your bench is full!";
+                    }
                 }
-            }
-            else if (player_Hand.ShowType(num) == "energy")
-            {
-                
-                
-               
-            }
-            else if (player_Hand.ShowType(num) == "second")
-            {
-                //Nothing unless the user clicks on the next options so let us just leave this like this.
+                else if (player_Hand.ShowType(num) == "energy")
+                {
+                    gameMessage.Text = "Please choose instead the Pokémon to load the energy into from the menu.";
+                }
+                else if (player_Hand.ShowType(num) == "second")
+                {
+                    if (bench.NumberOfCards() == 0)
+                    {
+                        gameMessage.Text = "You cannot evolve on your first turn.";
+                    }
+                    else
+                    {
+                        gameMessage.Text = "You cannot evolve on your first turn.";
+                    }
+                }
             }
 
+            else
+            {
+                int num = GetHandBoxIndex();
+                if (player_Hand.ShowType(num) == "basic")
+                {
+
+                    if (bench.NumberOfCards() < 6)
+                    {
+                        gameMessage.Text = "You played " + player_Hand.ShowName(num) + " from your hand to your bench";
+                        bench.Add(player_Hand.PlayCard(num));
+                        player_Hand.RemoveFromHand(num);
+                        UpdateBenchView();
+                        UpdateHandView();
+                    }
+
+                    else
+                    {
+                        gameMessage.Text = "Your bench is full!";
+                    }
+                }
+                else if (player_Hand.ShowType(num) == "energy")
+                {
+
+
+
+                }
+                else if (player_Hand.ShowType(num) == "second")
+                {
+                    if (bench.NumberOfCards() == 0)
+                    {
+                        gameMessage.Text = "You do not have any Basic Pokémon on your bench to evolve from.";
+                    }
+                    else
+                    {
+                        gameMessage.Text = "Please choose instead the Pokémon to evolve from in the menu.";
+                    }
+                }
+            }
+            
+
+        }
+
+        private void AIPlaysCards()
+        {
+            if(isOpponentFirstTurn == true)
+            {
+                while(ai_Hand.NumOfBasicPokemon() >0 && aibench.NumberOfCards() < 6)
+                {
+                    for(int i = 0; i < ai_Hand.NumberOfCards(); i++)
+                    {
+                        if(ai_Hand.ShowType(i) == "basic")
+                        {
+                            aibench.Add(ai_Hand.PlayCard(i));
+                            ai_Hand.RemoveFromHand(i);
+                            AIUpdateBenchView();
+                        }
+                    }
+                    
+                }
+            }
+            else
+            {
+
+            }
+        }
+
+        private void AIChoosesActivePokemon()
+        {
+            if(isOpponentFirstTurn == true)
+            {
+                Random random = new Random();
+                int i = random.Next(0, aibench.NumberOfCards());
+
+                ai_Active_Pokemon.Become(aibench.PlayCard(i));
+                
+                UpdateAIActivePokemonView();
+                ai_Hand.RemoveFromHand(i);
+                aibench.RemoveFromBench(i);
+                AIUpdateBenchView();
+            }
+        }
+
+        //Returns the integer index of the picturebox when the user rightcliks on it to then use it to apply it to other functions
+        private int GetHandBoxIndex() {
+
+            string name = RightClickMenu.SourceControl.Name.ToString();
+            string cut = name.Remove(0, 4);
+            int newint = Convert.ToInt32(cut);
+            return newint-1;
         }
 
         //Takes place when user clicks on the chosen attack from the menu
@@ -1271,7 +3610,7 @@ namespace Pokemon
             simpleSound.Play();
    
             player_Hand.DrawCard(player.DrawCard());
-            DeckSize.Text = player.NumberOfCards().ToString();
+            DeckSize.Text = "x" + player.NumberOfCards().ToString();
 
             UpdateHandView();
             gameMessage.Text = "You drew a card from your Deck to your Hand";
@@ -1279,43 +3618,89 @@ namespace Pokemon
 
         private void playAsAttackerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int num = 0;
-            UpdateBenchView(); 
-            UpdateActivePokemonView();
-            switch (RightClickMenu2.SourceControl.Name.ToString())
+            if(isFirstTurn == true)
             {
-                case "PictureBench1":
-                    num = 0;
-                    break;
-                case "PictureBench2":
-                    num = 1;
-                    break;
-                case "PictureBench3":
-                    num = 2;
-                    break;
-                case "PictureBench4":
-                    num = 3;
-                    break;
-                case "PictureBench5":
-                    num = 4;
-                    break;
-                default:
-                    break;
+                int num = 0;
+                UpdateBenchView();
+                UpdateActivePokemonView();
+                switch (RightClickMenu2.SourceControl.Name.ToString())
+                {
+                    case "PictureBench1":
+                        num = 0;
+                        break;
+                    case "PictureBench2":
+                        num = 1;
+                        break;
+                    case "PictureBench3":
+                        num = 2;
+                        break;
+                    case "PictureBench4":
+                        num = 3;
+                        break;
+                    case "PictureBench5":
+                        num = 4;
+                        break;
+                    default:
+                        break;
+                }
+
+                if (active_Pokemon.ShowName() == "null")
+                {
+                    active_Pokemon.Become(bench.PlayCard(num));
+                    UpdateActivePokemonView();
+                    gameMessage.Text = active_Pokemon.ShowName() + " is your new Active Pokémon.";
+                    bench.RemoveFromBench(num);
+                    UpdateBenchView();
+                    AIChoosesActivePokemon();
+                    Done.Visible = true;
+                    
+                }
+                else
+                {
+                    gameMessage.Text = "You can't perform this action. You can either, retreat your Active Pokémon or switch it with a Trainer Card";
+                }
             }
 
-            if(active_Pokemon.ShowName() == "null")
-            {
-                active_Pokemon.Become(bench.PlayCard(num));
-                UpdateActivePokemonView();
-                gameMessage.Text = active_Pokemon.ShowName() + " is your new Active Pokémon.";
-                bench.RemoveFromBench(num);
-                UpdateBenchView();
-            }
             else
             {
-                gameMessage.Text = "You can't perform this action. You can either, retreat your Active Pokémon or switch it with a Trainer Card";
-            }
-               
+                int num = 0;
+                UpdateBenchView();
+                UpdateActivePokemonView();
+                switch (RightClickMenu2.SourceControl.Name.ToString())
+                {
+                    case "PictureBench1":
+                        num = 0;
+                        break;
+                    case "PictureBench2":
+                        num = 1;
+                        break;
+                    case "PictureBench3":
+                        num = 2;
+                        break;
+                    case "PictureBench4":
+                        num = 3;
+                        break;
+                    case "PictureBench5":
+                        num = 4;
+                        break;
+                    default:
+                        break;
+                }
+
+                if (active_Pokemon.ShowName() == "null")
+                {
+                    active_Pokemon.Become(bench.PlayCard(num));
+                    UpdateActivePokemonView();
+                    gameMessage.Text = active_Pokemon.ShowName() + " is your new Active Pokémon.";
+                    bench.RemoveFromBench(num);
+                    UpdateBenchView();
+                    Done.Visible = true;
+                }
+                else
+                {
+                    gameMessage.Text = "You can't perform this action. You can either, retreat your Active Pokémon or switch it with a Trainer Card";
+                }
+            }  
             
             
         }
@@ -1354,36 +3739,50 @@ namespace Pokemon
             {
                 if (energydiscard == 0)
                 {
-                    int num = 0;
+                    int num;
+                    Pokemon ActivePokemonTemp;
                     PictureBox n = (PictureBox)sender;
                     switch (n.Name)
-                    {
+                    {                       
                         case "PictureBench1":
                             num = 0;
+                            gameMessage.Text = "You replaced " + active_Pokemon.ShowName() + " with " + bench.ShowName(num) + ". Now " + bench.ShowName(num) + " is your new Active Pokémon.";
+                            ActivePokemonTemp = active_Pokemon.GetActivePokemon();
+                            active_Pokemon.Become(bench.PlayCard(num));
+                            bench.PutInto(num, ActivePokemonTemp);
                             break;
                         case "PictureBench2":
                             num = 1;
+                            gameMessage.Text = "You replaced " + active_Pokemon.ShowName() + " with " + bench.ShowName(num) + ". Now " + bench.ShowName(num) + " is your new Active Pokémon.";
+                            ActivePokemonTemp = active_Pokemon.GetActivePokemon();
+                            active_Pokemon.Become(bench.PlayCard(num));
+                            bench.PutInto(num, ActivePokemonTemp);
                             break;
                         case "PictureBench3":
                             num = 2;
+                            ActivePokemonTemp = active_Pokemon.GetActivePokemon();
+                            active_Pokemon.Become(bench.PlayCard(num));
+                            bench.PutInto(num, ActivePokemonTemp);
                             break;
                         case "PictureBench4":
                             num = 3;
+                            ActivePokemonTemp = active_Pokemon.GetActivePokemon();
+                            active_Pokemon.Become(bench.PlayCard(num));
+                            bench.PutInto(num, ActivePokemonTemp);
                             break;
                         case "PictureBench5":
                             num = 4;
+                            ActivePokemonTemp = active_Pokemon.GetActivePokemon();
+                            active_Pokemon.Become(bench.PlayCard(num));
+                            bench.PutInto(num, ActivePokemonTemp);
                             break;
                         default:
-                            break;
+                            break;                            
                     }
-                    gameMessage.Text = "You replaced " + active_Pokemon.ShowName() + " with " + bench.ShowName(num) + ". Now " + bench.ShowName(num) + " is your new Active Pokémon.";
-                    Pokemon ActivePokemonTemp = active_Pokemon.GetActivePokemon();
-
-                    active_Pokemon.Become(bench.PlayCard(num));
-                    bench.PutInto(num, ActivePokemonTemp);
                     active_Pokemon_Retreat = false;
                     UpdateActivePokemonView();
                     UpdateBenchView();
+
                 }
                 else
                 {
@@ -1479,5 +3878,29 @@ namespace Pokemon
             
         }
 
+        private void FlipCoin_Click(object sender, EventArgs e)
+        {
+            SoundPlayer simpleSound = new SoundPlayer("..\\..\\Sounds\\flipcoin.wav");
+            simpleSound.Play();
+            gameMessage.Visible = false;
+            CoinResult.Visible = false;
+            Thread.Sleep(2000);
+            Random random = new Random();
+            int result = random.Next(0,2);
+            if(result == 0)
+            {
+                CoinResult.Image = Image.FromFile("..\\..\\Img\\Coins\\Wizards_Silver_Chansey_Coin.png");
+                CoinResult.Visible = true;
+                gameMessage.Text = "You flip the coin and get Heads.";
+                gameMessage.Visible = true;
+            }
+            else
+            {
+                CoinResult.Image = Image.FromFile("..\\..\\Img\\Coins\\tails.gif");
+                CoinResult.Visible = true;
+                gameMessage.Text = "You flip the coin and get Tails.";
+                gameMessage.Visible = true;
+            }
+        }
     }
 }

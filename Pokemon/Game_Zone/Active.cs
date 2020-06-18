@@ -16,9 +16,9 @@ namespace Pokemon.Game_Zone
             Active_Pokemon = new Pokemon(0, "null", "", ""); 
         }
 
-        public bool NoActive()
+        public bool ThereIsActivePokemon()
         {
-            bool existance = false;
+            bool existance;
             if(Active_Pokemon != null)
             {
                 existance = true;

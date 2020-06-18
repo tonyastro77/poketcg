@@ -91,5 +91,18 @@ namespace Pokemon.Game_Zone
             hand[x].LoadEnergy('c');
             MessageBox.Show("You loaded an energy");
         }
+
+        public int NumOfBasicPokemon()
+        {
+            int count = 0;
+            for(int i = 0; i < hand.Count; i++)
+            {
+                if(hand[i].Type == "basic")
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
     }
 }
