@@ -13,7 +13,7 @@ namespace Pokemon.Game_Zone
 
         public Active()
         {
-            Active_Pokemon = new Pokemon(0, "null", "", ""); 
+            Active_Pokemon = new Pokemon(0, "null", "", 'u', ""); 
         }
 
         public bool ThereIsActivePokemon()

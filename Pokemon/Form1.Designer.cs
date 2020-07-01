@@ -33,7 +33,7 @@
             this.OMaxHp = new System.Windows.Forms.Label();
             this.PictureZoom = new System.Windows.Forms.PictureBox();
             this.Mulligan = new System.Windows.Forms.Button();
-            this.Power = new System.Windows.Forms.Button();
+            this.StartCheck = new System.Windows.Forms.Button();
             this.Done = new System.Windows.Forms.Button();
             this.OpponentHpBar = new System.Windows.Forms.ProgressBar();
             this.PictureActive = new System.Windows.Forms.PictureBox();
@@ -152,6 +152,18 @@
             this.OBench5Energy5 = new System.Windows.Forms.PictureBox();
             this.FlipCoin = new System.Windows.Forms.Button();
             this.CoinResult = new System.Windows.Forms.PictureBox();
+            this.Heads = new System.Windows.Forms.Button();
+            this.Tails = new System.Windows.Forms.Button();
+            this.Next1 = new System.Windows.Forms.Button();
+            this.Draw2 = new System.Windows.Forms.Button();
+            this.HandIcon1 = new System.Windows.Forms.PictureBox();
+            this.HandIcon2 = new System.Windows.Forms.PictureBox();
+            this.HandIcon3 = new System.Windows.Forms.PictureBox();
+            this.OHandNumber = new System.Windows.Forms.Label();
+            this.Next2 = new System.Windows.Forms.Button();
+            this.Mulligan2 = new System.Windows.Forms.Button();
+            this.Mulligan3 = new System.Windows.Forms.Button();
+            this.Next3 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.PictureZoom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureActive)).BeginInit();
             this.RightClickMenu3.SuspendLayout();
@@ -247,6 +259,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.OBench5Energy4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.OBench5Energy5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CoinResult)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.HandIcon1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.HandIcon2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.HandIcon3)).BeginInit();
             this.SuspendLayout();
             // 
             // HpLabel2
@@ -291,16 +306,18 @@
             this.Mulligan.Text = "MULLIGAN";
             this.Mulligan.UseVisualStyleBackColor = true;
             this.Mulligan.Visible = false;
+            this.Mulligan.Click += new System.EventHandler(this.Mulligan_Click);
             // 
-            // Power
+            // StartCheck
             // 
-            this.Power.Location = new System.Drawing.Point(576, 986);
-            this.Power.Name = "Power";
-            this.Power.Size = new System.Drawing.Size(75, 23);
-            this.Power.TabIndex = 6;
-            this.Power.Text = "POK POW";
-            this.Power.UseVisualStyleBackColor = true;
-            this.Power.Visible = false;
+            this.StartCheck.Location = new System.Drawing.Point(576, 988);
+            this.StartCheck.Name = "StartCheck";
+            this.StartCheck.Size = new System.Drawing.Size(75, 23);
+            this.StartCheck.TabIndex = 6;
+            this.StartCheck.Text = "DONE";
+            this.StartCheck.UseVisualStyleBackColor = true;
+            this.StartCheck.Visible = false;
+            this.StartCheck.Click += new System.EventHandler(this.StartCheck_Click);
             // 
             // Done
             // 
@@ -1506,12 +1523,154 @@
             this.CoinResult.TabStop = false;
             this.CoinResult.Visible = false;
             // 
+            // Heads
+            // 
+            this.Heads.Location = new System.Drawing.Point(683, 986);
+            this.Heads.Name = "Heads";
+            this.Heads.Size = new System.Drawing.Size(75, 23);
+            this.Heads.TabIndex = 134;
+            this.Heads.Text = "HEADS";
+            this.Heads.UseVisualStyleBackColor = true;
+            this.Heads.Visible = false;
+            this.Heads.Click += new System.EventHandler(this.Heads_Click);
+            // 
+            // Tails
+            // 
+            this.Tails.Location = new System.Drawing.Point(789, 988);
+            this.Tails.Name = "Tails";
+            this.Tails.Size = new System.Drawing.Size(75, 23);
+            this.Tails.TabIndex = 135;
+            this.Tails.Text = "TAILS";
+            this.Tails.UseVisualStyleBackColor = true;
+            this.Tails.Visible = false;
+            this.Tails.Click += new System.EventHandler(this.Tails_Click);
+            // 
+            // Next1
+            // 
+            this.Next1.Location = new System.Drawing.Point(576, 1017);
+            this.Next1.Name = "Next1";
+            this.Next1.Size = new System.Drawing.Size(75, 23);
+            this.Next1.TabIndex = 136;
+            this.Next1.Text = "NEXT>";
+            this.Next1.UseVisualStyleBackColor = true;
+            this.Next1.Visible = false;
+            this.Next1.Click += new System.EventHandler(this.Next1_Click);
+            // 
+            // Draw2
+            // 
+            this.Draw2.Location = new System.Drawing.Point(471, 1006);
+            this.Draw2.Name = "Draw2";
+            this.Draw2.Size = new System.Drawing.Size(75, 23);
+            this.Draw2.TabIndex = 137;
+            this.Draw2.Text = "DRAW";
+            this.Draw2.UseVisualStyleBackColor = true;
+            this.Draw2.Visible = false;
+            this.Draw2.Click += new System.EventHandler(this.Draw2_Click);
+            // 
+            // HandIcon1
+            // 
+            this.HandIcon1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.HandIcon1.Location = new System.Drawing.Point(1319, 282);
+            this.HandIcon1.Name = "HandIcon1";
+            this.HandIcon1.Size = new System.Drawing.Size(35, 52);
+            this.HandIcon1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.HandIcon1.TabIndex = 138;
+            this.HandIcon1.TabStop = false;
+            // 
+            // HandIcon2
+            // 
+            this.HandIcon2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.HandIcon2.Location = new System.Drawing.Point(1332, 295);
+            this.HandIcon2.Name = "HandIcon2";
+            this.HandIcon2.Size = new System.Drawing.Size(35, 52);
+            this.HandIcon2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.HandIcon2.TabIndex = 139;
+            this.HandIcon2.TabStop = false;
+            // 
+            // HandIcon3
+            // 
+            this.HandIcon3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.HandIcon3.Location = new System.Drawing.Point(1342, 309);
+            this.HandIcon3.Name = "HandIcon3";
+            this.HandIcon3.Size = new System.Drawing.Size(35, 52);
+            this.HandIcon3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.HandIcon3.TabIndex = 140;
+            this.HandIcon3.TabStop = false;
+            // 
+            // OHandNumber
+            // 
+            this.OHandNumber.AutoSize = true;
+            this.OHandNumber.Font = new System.Drawing.Font("Arial", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OHandNumber.Location = new System.Drawing.Point(1383, 318);
+            this.OHandNumber.Name = "OHandNumber";
+            this.OHandNumber.Size = new System.Drawing.Size(39, 29);
+            this.OHandNumber.TabIndex = 141;
+            this.OHandNumber.Text = "60";
+            // 
+            // Next2
+            // 
+            this.Next2.Location = new System.Drawing.Point(683, 1015);
+            this.Next2.Name = "Next2";
+            this.Next2.Size = new System.Drawing.Size(75, 23);
+            this.Next2.TabIndex = 142;
+            this.Next2.Text = "NEXT>>";
+            this.Next2.UseVisualStyleBackColor = true;
+            this.Next2.Visible = false;
+            this.Next2.Click += new System.EventHandler(this.Next2_Click);
+            // 
+            // Mulligan2
+            // 
+            this.Mulligan2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Mulligan2.Location = new System.Drawing.Point(886, 1015);
+            this.Mulligan2.Name = "Mulligan2";
+            this.Mulligan2.Size = new System.Drawing.Size(75, 23);
+            this.Mulligan2.TabIndex = 143;
+            this.Mulligan2.Text = "MULLIGAN";
+            this.Mulligan2.UseVisualStyleBackColor = true;
+            this.Mulligan2.Visible = false;
+            this.Mulligan2.Click += new System.EventHandler(this.Mulligan2_Click);
+            // 
+            // Mulligan3
+            // 
+            this.Mulligan3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Mulligan3.Location = new System.Drawing.Point(973, 1015);
+            this.Mulligan3.Name = "Mulligan3";
+            this.Mulligan3.Size = new System.Drawing.Size(75, 23);
+            this.Mulligan3.TabIndex = 144;
+            this.Mulligan3.Text = "MULLIGAN";
+            this.Mulligan3.UseVisualStyleBackColor = true;
+            this.Mulligan3.Visible = false;
+            this.Mulligan3.Click += new System.EventHandler(this.Mulligan3_Click);
+            // 
+            // Next3
+            // 
+            this.Next3.Location = new System.Drawing.Point(789, 1015);
+            this.Next3.Name = "Next3";
+            this.Next3.Size = new System.Drawing.Size(75, 23);
+            this.Next3.TabIndex = 145;
+            this.Next3.Text = "NEXT>>>";
+            this.Next3.UseVisualStyleBackColor = true;
+            this.Next3.Visible = false;
+            this.Next3.Click += new System.EventHandler(this.Next3_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(222)))), ((int)(((byte)(191)))));
             this.ClientSize = new System.Drawing.Size(1904, 1041);
+            this.Controls.Add(this.Next3);
+            this.Controls.Add(this.Mulligan3);
+            this.Controls.Add(this.Mulligan2);
+            this.Controls.Add(this.Next2);
+            this.Controls.Add(this.OHandNumber);
+            this.Controls.Add(this.HandIcon3);
+            this.Controls.Add(this.HandIcon2);
+            this.Controls.Add(this.HandIcon1);
+            this.Controls.Add(this.Draw2);
+            this.Controls.Add(this.Next1);
+            this.Controls.Add(this.Tails);
+            this.Controls.Add(this.Heads);
             this.Controls.Add(this.CoinResult);
             this.Controls.Add(this.FlipCoin);
             this.Controls.Add(this.OBench5Energy1);
@@ -1618,7 +1777,7 @@
             this.Controls.Add(this.PictureActive);
             this.Controls.Add(this.OpponentHpBar);
             this.Controls.Add(this.Done);
-            this.Controls.Add(this.Power);
+            this.Controls.Add(this.StartCheck);
             this.Controls.Add(this.Mulligan);
             this.Controls.Add(this.PictureZoom);
             this.Controls.Add(this.OMaxHp);
@@ -1722,6 +1881,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.OBench5Energy4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.OBench5Energy5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.CoinResult)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.HandIcon1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.HandIcon2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.HandIcon3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1733,7 +1895,7 @@
         private System.Windows.Forms.Label OMaxHp;
         private System.Windows.Forms.PictureBox PictureZoom;
         private System.Windows.Forms.Button Mulligan;
-        private System.Windows.Forms.Button Power;
+        private System.Windows.Forms.Button StartCheck;
         private System.Windows.Forms.Button Done;
         private System.Windows.Forms.ProgressBar OpponentHpBar;
         private System.Windows.Forms.PictureBox PictureActive;
@@ -1852,6 +2014,18 @@
         private System.Windows.Forms.PictureBox OBench5Energy5;
         private System.Windows.Forms.Button FlipCoin;
         private System.Windows.Forms.PictureBox CoinResult;
+        private System.Windows.Forms.Button Heads;
+        private System.Windows.Forms.Button Tails;
+        private System.Windows.Forms.Button Next1;
+        private System.Windows.Forms.Button Draw2;
+        private System.Windows.Forms.PictureBox HandIcon1;
+        private System.Windows.Forms.PictureBox HandIcon2;
+        private System.Windows.Forms.PictureBox HandIcon3;
+        private System.Windows.Forms.Label OHandNumber;
+        private System.Windows.Forms.Button Next2;
+        private System.Windows.Forms.Button Mulligan2;
+        private System.Windows.Forms.Button Mulligan3;
+        private System.Windows.Forms.Button Next3;
     }
 }
 

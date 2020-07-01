@@ -10,6 +10,7 @@ namespace Pokemon
         public int Id { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
+        public string Effect { get; set; }
         public string Stage_1 {get; set;}
         public string Stage_2 { get; set;}
         public int Hp { get; set; }
@@ -31,13 +32,23 @@ namespace Pokemon
         }
 
         // Any card that is not a pokemon, can be an energy or trainer card
-        public Pokemon(int id, string name, string type, string Img)
+        public Pokemon(int id, string name, string type, char energy, string Img)
         {
             this.Id = id;
             this.Name = name;
             this.Type = type;
             this.Img = Img;
   
+        }
+
+        public Pokemon(int id, string name, string type, char energy, string effect, string Img)
+        {
+            this.Id = id;
+            this.Name = name;
+            this.Type = type;
+            this.Effect = effect;
+            this.Img = Img;
+
         }
 
         // A basic pokemon with one attack or pokemon power

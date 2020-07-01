@@ -104,5 +104,17 @@ namespace Pokemon.Game_Zone
             }
             return count;
         }
+        public int NumOfBasicEnergies()
+        {
+            int count = 0;
+            for (int i = 0; i < hand.Count; i++)
+            {
+                if (hand[i].Type == "energy")
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
     }
 }

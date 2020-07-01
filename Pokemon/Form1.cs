@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Media;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -22,11 +23,15 @@ namespace Pokemon
         Discard discard = new Discard();
         Discard ai_discard = new Discard();
         Prizes prize = new Prizes();
+        Prizes aiprize = new Prizes();
         Active active_Pokemon = new Active();
         Active ai_Active_Pokemon = new Active();
         Used player_used = new Used();
+        Used ai_used = new Used();
         bool isFirstTurn = true;
-        bool isOpponentFirstTurn = true;
+        bool isPreGameTurn = true;
+        bool isOpponentFirstTurn = false;
+
         bool playedEnergy = false;
         bool playedAttack = false;
         bool active_Pokemon_Retreat = false;
@@ -42,36 +47,129 @@ namespace Pokemon
 
         public void Form1_Load(object sender, EventArgs e)
         {
-            
-            player.AddToDeck(new Pokemon(46, "Charmander", "basic", 50, 10, 'f', 'w', 'n', 1, "Obviously prefers hot places. If it gets caught in the rain, steam is said to spout from the tip of its tail", "..\\..\\Img\\BSPainted\\BS_046.jpg", new Attack("Scratch", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", "..\\..\\Img\\BS\\BS_098.jpg"));
-            player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", "..\\..\\Img\\BS\\BS_098.jpg"));
-            player.AddToDeck(new Pokemon(44, "Bulbasaur", "basic", 40, 40, 'g', 'f', 'n', 1, "A strange seed was planted on its back at birth. Thus, a plant sprouted and now grows with this Pokémon.", "..\\..\\Img\\BS\\BS_044.jpg", new Attack("Leech Seed", "Unless all damage from this attack is prevented, you may remove 1 damage counter from Bulbasaur", 20, new EnergyCost(0, 0, 0, 4, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(69, "Weedle", "basic", 40, 40, 'g', 'f', 'n', 1, "Often found in forests, eating leaves. It has a sharp, venomous stinger on its head.", "..\\..\\Img\\BS\\BS_069.jpg", new Attack("Poison Sting", "Flip a coin. If heads, the Defending Pokémon is now Poisoned.", 10, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(102, "Water Energy", "energy", "..\\..\\Img\\BS\\BS_102.jpg"));
-            player.AddToDeck(new Pokemon(44, "Bulbasaur", "basic", 40, 40, 'g', 'f', 'n', 1, "A strange seed was planted on its back at birth. Thus, a plant sprouted and now grows with this Pokémon.", "..\\..\\Img\\BS\\BS_044.jpg", new Attack("Leech Seed", "Unless all damage from this attack is prevented, you may remove 1 damage counter from Bulbasaur", 20, new EnergyCost(0, 0, 0, 4, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(24, "Charmeleon", "second", "Charmander", 80, 80, 'f', 'w', 'n', 1, "It lashes about with its tail to knock down its foe. It then tears up the fallen opponent with sharp claws.", "..\\..\\Img\\BS\\BS_024.jpg", new Attack("Slash", "", 30, new EnergyCost(3, 0, 0, 0, 0, 0, 0)), new Attack("Flamethrower", "Discard 1 Fire Energy card attached to Charmeleon in order to use this attack.", 50, new EnergyCost(1, 0, 2, 0, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(54, "Chikorita", "basic", 50, 50, 'g', 'f', 'n', 1, "Its pleasantly aromatic leaves have the ability to check the humidity and temperature.", "..\\..\\Img\\N1\\N1_054.jpg", new Attack("Growl", "If the Defending Pokémon attacks Chikorita during your opponent\'s next turn, any damage done to Chikorita is reduced by 10 (before applying Weakness and Resistance).(Benching or evolving either Pokémon ends this effect.)", 0, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Razor Leaf", "", 20, new EnergyCost(1, 0, 0, 1, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(44, "Bulbasaur", "basic", 40, 40, 'g', 'f', 'n', 1, "A strange seed was planted on its back at birth. Thus, a plant sprouted and now grows with this Pokémon.", "..\\..\\Img\\BS\\BS_044.jpg", new Attack("Leech Seed", "Unless all damage from this attack is prevented, you may remove 1 damage counter from Bulbasaur", 20, new EnergyCost(0, 0, 0, 4, 0, 0, 0)), new List<char>()));
 
-            ai.AddToDeck(new Pokemon(58, "Pikachu", "basic", 40, 40, 'e', 'l', 'n', 1, "When several of these Pokémon gather, their electricity can cause lightning storms.", "..\\..\\Img\\BS\\BS_058.jpg", new Attack("Gnaw", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Thunder Jolt", "Flip a coin. If tails, Pikachu does 10 damage to itself.", 30, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(46, "Charmander", "basic", 50, 50, 'f', 'w', 'n', 1, "Obviously prefers hot places. If it gets caught in the rain, steam is said to spout from the tip of its tail.", "..\\..\\Img\\BSPainted\\BS_046.jpg", new Attack("Scratch", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Ember", "Discard 1 Fire Energy card attached to Charmander in order to use this attack.", 30, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(46, "Charmander", "basic", 50, 50, 'f', 'w', 'n', 1, "Obviously prefers hot places. If it gets caught in the rain, steam is said to spout from the tip of its tail.", "..\\..\\Img\\BSPainted\\BS_046.jpg", new Attack("Scratch", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Ember", "Discard 1 Fire Energy card attached to Charmander in order to use this attack.", 30, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(46, "Charmander", "basic", 50, 50, 'f', 'w', 'n', 1, "Obviously prefers hot places. If it gets caught in the rain, steam is said to spout from the tip of its tail.", "..\\..\\Img\\BSPainted\\BS_046.jpg", new Attack("Scratch", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Ember", "Discard 1 Fire Energy card attached to Charmander in order to use this attack.", 30, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(46, "Charmander", "basic", 50, 50, 'f', 'w', 'n', 1, "Obviously prefers hot places. If it gets caught in the rain, steam is said to spout from the tip of its tail.", "..\\..\\Img\\BSPainted\\BS_046.jpg", new Attack("Scratch", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Ember", "Discard 1 Fire Energy card attached to Charmander in order to use this attack.", 30, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(24, "Charmeleon", "second", "Charmander", 80, 80, 'f', 'w', 'n', 1, "It lashes about with its tail to knock down its foe. It then tears up the fallen opponent with sharp claws.", "..\\..\\Img\\BS\\BS_024.jpg", new Attack("Slash", "", 30, new EnergyCost(3, 0, 0, 0, 0, 0, 0)), new Attack("Flamethrower", "Discard 1 Fire Energy card attached to Charmeleon in order to use this attack.", 50, new EnergyCost(1, 0, 2, 0, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(24, "Charmeleon", "second", "Charmander", 80, 80, 'f', 'w', 'n', 1, "It lashes about with its tail to knock down its foe. It then tears up the fallen opponent with sharp claws.", "..\\..\\Img\\BS\\BS_024.jpg", new Attack("Slash", "", 30, new EnergyCost(3, 0, 0, 0, 0, 0, 0)), new Attack("Flamethrower", "Discard 1 Fire Energy card attached to Charmeleon in order to use this attack.", 50, new EnergyCost(1, 0, 2, 0, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(68, "Vulpix", "basic", 50, 50, 'f', 'w', 'n', 1, "At the time of birth, it has just one tail. Its tail splits from the tip as it grows older.", "..\\..\\Img\\BS\\BS_068.jpg", new Attack("Confuse Ray", "Flip a coin. If heads, the Defending Pokémon is now Confused.", 10, new EnergyCost(0, 0, 2, 0, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(68, "Vulpix", "basic", 50, 50, 'f', 'w', 'n', 1, "At the time of birth, it has just one tail. Its tail splits from the tip as it grows older.", "..\\..\\Img\\BS\\BS_068.jpg", new Attack("Confuse Ray", "Flip a coin. If heads, the Defending Pokémon is now Confused.", 10, new EnergyCost(0, 0, 2, 0, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(12, "Ninetales", "second", "Vulpix", 80, 80, 'f', 'w', 'n', 1, "If your opponent has any Benched Pokémon, choose 1 of them and switch it with the Defending Pokémon.", "..\\..\\Img\\BS\\BS_012.jpg", new Attack("Lure", "If your opponent has any Benched Pokémon, choose 1 of them and switch it with the Defending Pokémon.", 0, new EnergyCost(2, 0, 0, 0, 0, 0, 0)), new Attack("Fire Blast", "Discard 1 Fire Energy card attached to Ninetales in order to use this attack.", 80, new EnergyCost(0, 0, 4, 0, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(28, "Growlithe", "basic", 60, 60, 'f', 'w', 'n', 1, "Very protective of its territory. It will bark and bite to repel intruders from its space.", "..\\..\\Img\\BS\\BS_028.jpg", new Attack("Flare", "", 20, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(28, "Growlithe", "basic", 60, 60, 'f', 'w', 'n', 1, "Very protective of its territory. It will bark and bite to repel intruders from its space.", "..\\..\\Img\\BS\\BS_028.jpg", new Attack("Flare", "", 20, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(23, "Arcanine", "second", "Growlithe", 100, 100, 'f', 'w', 'n', 3, "A Pokémon that has been long admired for its beauty. It runs gracefully, as if on wings.", "..\\..\\Img\\BS\\BS_023.jpg", new Attack("Flamethrower", "Discard 1 Fire Energy card attached to Arcanine in order to use this attack.", 50, new EnergyCost(1, 0, 2, 0, 0, 0, 0)), new Attack("Take Down", "Arcanine does 30 damage to itself.", 80, new EnergyCost(2, 0, 2, 0, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(69, "Weedle", "basic", 40, 40, 'g', 'f', 'n', 1, "Often found in forests, eating leaves. It has a sharp, venomous stinger on its head.", "..\\..\\Img\\BSPainted\\BS_069.jpg", new Attack("Poison Sting", "Flip a coin. If heads, the Defending Pokémon is now Poisoned.", 10, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(69, "Weedle", "basic", 40, 40, 'g', 'f', 'n', 1, "Often found in forests, eating leaves. It has a sharp, venomous stinger on its head.", "..\\..\\Img\\BSPainted\\BS_069.jpg", new Attack("Poison Sting", "Flip a coin. If heads, the Defending Pokémon is now Poisoned.", 10, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(69, "Weedle", "basic", 40, 40, 'g', 'f', 'n', 1, "Often found in forests, eating leaves. It has a sharp, venomous stinger on its head.", "..\\..\\Img\\BSPainted\\BS_069.jpg", new Attack("Poison Sting", "Flip a coin. If heads, the Defending Pokémon is now Poisoned.", 10, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(69, "Weedle", "basic", 40, 40, 'g', 'f', 'n', 1, "Often found in forests, eating leaves. It has a sharp, venomous stinger on its head.", "..\\..\\Img\\BSPainted\\BS_069.jpg", new Attack("Poison Sting", "Flip a coin. If heads, the Defending Pokémon is now Poisoned.", 10, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(55, "Nidoran Male", "basic", 40, 40, 'g', 'p', 'n', 1, "Stiffens its ears to sense danger. The larger, more powerful of its horns secretes venom.", "..\\..\\Img\\BS\\BS_055.jpg", new Attack("Horn Hazard", "Flip a coin. If tails, this attack does nothing.", 30, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(55, "Nidoran Male", "basic", 40, 40, 'g', 'p', 'n', 1, "Stiffens its ears to sense danger. The larger, more powerful of its horns secretes venom.", "..\\..\\Img\\BS\\BS_055.jpg", new Attack("Horn Hazard", "Flip a coin. If tails, this attack does nothing.", 30, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(55, "Nidoran Male", "basic", 40, 40, 'g', 'p', 'n', 1, "Stiffens its ears to sense danger. The larger, more powerful of its horns secretes venom.", "..\\..\\Img\\BS\\BS_055.jpg", new Attack("Horn Hazard", "Flip a coin. If tails, this attack does nothing.", 30, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(55, "Nidoran Male", "basic", 40, 40, 'g', 'p', 'n', 1, "Stiffens its ears to sense danger. The larger, more powerful of its horns secretes venom.", "..\\..\\Img\\BS\\BS_055.jpg", new Attack("Horn Hazard", "Flip a coin. If tails, this attack does nothing.", 30, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(66, "Tangela", "basic", 50, 50, 'g', 'f', 'n', 2, "Its whole body is swathed with wide vines that are similar to seaweed. These vines shake as it walks.", "..\\..\\Img\\BS\\BS_066.jpg", new Attack("Bind", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 20, new EnergyCost(1, 0, 0, 1, 0, 0, 0)), new Attack("Poisonpowder", "The Defending Pokémon is now Poisoned.", 20, new EnergyCost(0, 0, 0, 3, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(66, "Tangela", "basic", 50, 50, 'g', 'f', 'n', 2, "Its whole body is swathed with wide vines that are similar to seaweed. These vines shake as it walks.", "..\\..\\Img\\BS\\BS_066.jpg", new Attack("Bind", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 20, new EnergyCost(1, 0, 0, 1, 0, 0, 0)), new Attack("Poisonpowder", "The Defending Pokémon is now Poisoned.", 20, new EnergyCost(0, 0, 0, 3, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(92, "Energy Removal", "trainer", 't', "Choose 1 Energy card attached to 1 of your opponent's Pokémon and discard it.", "..\\..\\Img\\BS\\BS_092.jpg"));
+            player.AddToDeck(new Pokemon(81, "Energy Retrieval", "trainer", 't', "Trade 1 of the other cards in your hand for up to 2 basic Energy cards from your discard pile.", "..\\..\\Img\\BS\\BS_081.jpg"));
+            player.AddToDeck(new Pokemon(81, "Energy Retrieval", "trainer", 't', "Trade 1 of the other cards in your hand for up to 2 basic Energy cards from your discard pile.", "..\\..\\Img\\BS\\BS_081.jpg"));
+            player.AddToDeck(new Pokemon(93, "Gust of Wind", "trainer", 't', "Choose 1 of your opponent's Benched Pokémon and switch it with his or her Active Pokémon.", "..\\..\\Img\\BS\\BS_093.jpg"));
+            player.AddToDeck(new Pokemon(75, "Lass", "trainer", 't', "You and your opponent show each other your hands, then shuffle all the Trainer cards from your hands into your decks.", "..\\..\\Img\\BS\\BS_075.jpg"));
+            player.AddToDeck(new Pokemon(84, "PlusPower", "trainer", 't', "Attach PlusPower to your Active Pokémon. At the end of your turn, discard PlusPower. If this Pokémon's attack does damage to the Defending Pokémon (after applying Weakness and Resistance), the attack does 10 more damage to the Defending Pokémon.", "..\\..\\Img\\BS\\BS_084.jpg"));
+            player.AddToDeck(new Pokemon(94, "Potion", "trainer", 't', "Remove up to 2 damage counters from 1 of your Pokémon.", "..\\..\\Img\\BS\\BS_094.jpg"));
+            player.AddToDeck(new Pokemon(94, "Potion", "trainer", 't', "Remove up to 2 damage counters from 1 of your Pokémon.", "..\\..\\Img\\BS\\BS_094.jpg"));
+            player.AddToDeck(new Pokemon(94, "Potion", "trainer", 't', "Remove up to 2 damage counters from 1 of your Pokémon.", "..\\..\\Img\\BS\\BS_094.jpg"));
+            player.AddToDeck(new Pokemon(95, "Switch", "trainer", 't', "Switch 1 of your Benched Pokémon with your Active Pokémon.", "..\\..\\Img\\BS\\BS_095.jpg"));
+            player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", 'f', "..\\..\\Img\\BS\\BS_098.jpg"));
+            player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", 'f', "..\\..\\Img\\BS\\BS_098.jpg"));
+            player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", 'f', "..\\..\\Img\\BS\\BS_098.jpg"));
+            player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", 'f', "..\\..\\Img\\BS\\BS_098.jpg"));
+            player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", 'f', "..\\..\\Img\\BS\\BS_098.jpg"));
+            player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", 'f', "..\\..\\Img\\BS\\BS_098.jpg"));
+            player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", 'f', "..\\..\\Img\\BS\\BS_098.jpg"));
+            player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", 'f', "..\\..\\Img\\BS\\BS_098.jpg"));
+            player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", 'f', "..\\..\\Img\\BS\\BS_098.jpg"));
+            player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", 'f', "..\\..\\Img\\BS\\BS_098.jpg"));
+            player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", 'f', "..\\..\\Img\\BS\\BS_098.jpg"));
+            player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", 'f', "..\\..\\Img\\BS\\BS_098.jpg"));
+            player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", 'f', "..\\..\\Img\\BS\\BS_098.jpg"));
+            player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", 'f', "..\\..\\Img\\BS\\BS_098.jpg"));
+            player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", 'f', "..\\..\\Img\\BS\\BS_098.jpg"));
+            player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", 'f', "..\\..\\Img\\BS\\BS_098.jpg"));
+            player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", 'f', "..\\..\\Img\\BS\\BS_098.jpg"));
+            player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", 'f', "..\\..\\Img\\BS\\BS_098.jpg"));
+            player.AddToDeck(new Pokemon(99, "Grass Energy", "energy", 'g', "..\\..\\Img\\BS\\BS_099.jpg"));
+            player.AddToDeck(new Pokemon(99, "Grass Energy", "energy", 'g', "..\\..\\Img\\BS\\BS_099.jpg"));
+            player.AddToDeck(new Pokemon(99, "Grass Energy", "energy", 'g', "..\\..\\Img\\BS\\BS_099.jpg"));
+            player.AddToDeck(new Pokemon(99, "Grass Energy", "energy", 'g', "..\\..\\Img\\BS\\BS_099.jpg"));
+            player.AddToDeck(new Pokemon(99, "Grass Energy", "energy", 'g', "..\\..\\Img\\BS\\BS_099.jpg"));
+            player.AddToDeck(new Pokemon(99, "Grass Energy", "energy", 'g', "..\\..\\Img\\BS\\BS_099.jpg"));
+            player.AddToDeck(new Pokemon(99, "Grass Energy", "energy", 'g', "..\\..\\Img\\BS\\BS_099.jpg"));
+            player.AddToDeck(new Pokemon(99, "Grass Energy", "energy", 'g', "..\\..\\Img\\BS\\BS_099.jpg"));
+            player.AddToDeck(new Pokemon(99, "Grass Energy", "energy", 'g', "..\\..\\Img\\BS\\BS_099.jpg"));
+            player.AddToDeck(new Pokemon(99, "Grass Energy", "energy", 'g', "..\\..\\Img\\BS\\BS_099.jpg"));
+
+
+            ai.AddToDeck(new Pokemon(58, "Pikachu", "basic", 40, 40, 'e', 'l', 'n', 1, "When several of these Pokémon gather, their electricity can cause lightning storms.", "..\\..\\Img\\BSPainted\\BS_058.jpg", new Attack("Gnaw", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Thunder Jolt", "Flip a coin. If tails, Pikachu does 10 damage to itself.", 30, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(58, "Pikachu", "basic", 40, 40, 'e', 'l', 'n', 1, "When several of these Pokémon gather, their electricity can cause lightning storms.", "..\\..\\Img\\BSPainted\\BS_058.jpg", new Attack("Gnaw", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Thunder Jolt", "Flip a coin. If tails, Pikachu does 10 damage to itself.", 30, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(58, "Pikachu", "basic", 40, 40, 'e', 'l', 'n', 1, "When several of these Pokémon gather, their electricity can cause lightning storms.", "..\\..\\Img\\BSPainted\\BS_058.jpg", new Attack("Gnaw", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Thunder Jolt", "Flip a coin. If tails, Pikachu does 10 damage to itself.", 30, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(58, "Pikachu", "basic", 40, 40, 'e', 'l', 'n', 1, "When several of these Pokémon gather, their electricity can cause lightning storms.", "..\\..\\Img\\BSPainted\\BS_058.jpg", new Attack("Gnaw", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Thunder Jolt", "Flip a coin. If tails, Pikachu does 10 damage to itself.", 30, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>()));
             ai.AddToDeck(new Pokemon(53, "Magnemite", "basic", 40, 40, 'e', 'l', 'n', 1, "Uses anti-gravity to stay suspended. Appears without warning and uses attacks like Thunder Wave.", "..\\..\\Img\\BS\\BS_053.jpg", new Attack("Thunder Wave", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 10, new EnergyCost(0, 0, 0, 0, 1, 0, 0)), new Attack("Self Destruct", "Does 10 damage to each Pokémon on each player's Bench. (Don't apply Weakness and Resistance for Benched Pokémon.) Magnemite does 40 damage to itself.", 40, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(43, "Abra", "basic", 30, 30, 'p', 'p', 'n', 0, "Using its ability to read minds, it will identify impending danger and teleport to safety.", "..\\..\\Img\\BS\\BS_043.jpg", new Attack("Psychock", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 10, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(53, "Magnemite", "basic", 40, 40, 'e', 'l', 'n', 1, "Uses anti-gravity to stay suspended. Appears without warning and uses attacks like Thunder Wave.", "..\\..\\Img\\BS\\BS_053.jpg", new Attack("Thunder Wave", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 10, new EnergyCost(0, 0, 0, 0, 1, 0, 0)), new Attack("Self Destruct", "Does 10 damage to each Pokémon on each player's Bench. (Don't apply Weakness and Resistance for Benched Pokémon.) Magnemite does 40 damage to itself.", 40, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(53, "Magnemite", "basic", 40, 40, 'e', 'l', 'n', 1, "Uses anti-gravity to stay suspended. Appears without warning and uses attacks like Thunder Wave.", "..\\..\\Img\\BS\\BS_053.jpg", new Attack("Thunder Wave", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 10, new EnergyCost(0, 0, 0, 0, 1, 0, 0)), new Attack("Self Destruct", "Does 10 damage to each Pokémon on each player's Bench. (Don't apply Weakness and Resistance for Benched Pokémon.) Magnemite does 40 damage to itself.", 40, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(43, "Abra", "basic", 30, 30, 'p', 'p', 'n', 0, "Using its ability to read minds, it will identify impending danger and teleport to safety.", "..\\..\\Img\\BSPainted\\BS_043.jpg", new Attack("Psychock", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 10, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(43, "Abra", "basic", 30, 30, 'p', 'p', 'n', 0, "Using its ability to read minds, it will identify impending danger and teleport to safety.", "..\\..\\Img\\BSPainted\\BS_043.jpg", new Attack("Psychock", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 10, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(43, "Abra", "basic", 30, 30, 'p', 'p', 'n', 0, "Using its ability to read minds, it will identify impending danger and teleport to safety.", "..\\..\\Img\\BSPainted\\BS_043.jpg", new Attack("Psychock", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 10, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new List<char>()));
             ai.AddToDeck(new Pokemon(32, "Kadabra", "second", "Abra", 60, 60, 'p', 'p', 'n', 3, "It emits special alpha waves from its body that induce headaches even to those just nearby.", "..\\..\\Img\\BS\\BS_032.jpg", new Attack("Recover", "Discard 1 Psychic Energy card attached to Kadabra in order to use this attack. Remove all damage counters from Kadabra.", 0, new EnergyCost(0, 0, 0, 0, 0, 2, 0)), new Attack("Super Psy", "", 50, new EnergyCost(1, 0, 0, 0, 0, 2, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(50, "Gastly", "basic", 30, 30, 'p', 'n', 'l', 0, "Almost invisible, this gaseous Pokémon cloaks the target and puts it to sleep without notice.", "..\\..\\Img\\BS\\BS_050.jpg", new Attack("Sleeping Gas", "Flip a coin. If heads, the Defending Pokémon is now Asleep.", 0, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Destiny Bond", "Discard 1 Psychic Energy card attached to Gastly in order to use this attack. If a Pokémon Knocks Out Gastly during your opponent's next turn, Knock Out that Pokémon.", 0, new EnergyCost(1, 0, 0, 0, 0, 1, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(50, "Gastly", "basic", 30, 30, 'p', 'n', 'l', 0, "Almost invisible, this gaseous Pokémon cloaks the target and puts it to sleep without notice.", "..\\..\\Img\\BSPainted\\BS_050.jpg", new Attack("Sleeping Gas", "Flip a coin. If heads, the Defending Pokémon is now Asleep.", 0, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Destiny Bond", "Discard 1 Psychic Energy card attached to Gastly in order to use this attack. If a Pokémon Knocks Out Gastly during your opponent's next turn, Knock Out that Pokémon.", 0, new EnergyCost(1, 0, 0, 0, 0, 1, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(50, "Gastly", "basic", 30, 30, 'p', 'n', 'l', 0, "Almost invisible, this gaseous Pokémon cloaks the target and puts it to sleep without notice.", "..\\..\\Img\\BSPainted\\BS_050.jpg", new Attack("Sleeping Gas", "Flip a coin. If heads, the Defending Pokémon is now Asleep.", 0, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Destiny Bond", "Discard 1 Psychic Energy card attached to Gastly in order to use this attack. If a Pokémon Knocks Out Gastly during your opponent's next turn, Knock Out that Pokémon.", 0, new EnergyCost(1, 0, 0, 0, 0, 1, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(50, "Gastly", "basic", 30, 30, 'p', 'n', 'l', 0, "Almost invisible, this gaseous Pokémon cloaks the target and puts it to sleep without notice.", "..\\..\\Img\\BSPainted\\BS_050.jpg", new Attack("Sleeping Gas", "Flip a coin. If heads, the Defending Pokémon is now Asleep.", 0, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Destiny Bond", "Discard 1 Psychic Energy card attached to Gastly in order to use this attack. If a Pokémon Knocks Out Gastly during your opponent's next turn, Knock Out that Pokémon.", 0, new EnergyCost(1, 0, 0, 0, 0, 1, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(29, "Haunter", "second", "Gastly", 60, 60, 'p', 'n', 'l', 1, "Because of its ability to slip through block walls, it is said to be from another dimension.", "..\\..\\Img\\BSPainted\\BS_029.jpg", new Attack("Hypnosis", "The Defending Pokémon is now Asleep.", 0, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Dream Eater", "You can't use this attack unless the Defending Pokémon is Asleep.", 50, new EnergyCost(0, 0, 0, 0, 0, 2, 0)), new List<char>()));
             ai.AddToDeck(new Pokemon(29, "Haunter", "second", "Gastly", 60, 60, 'p', 'n', 'l', 1, "Because of its ability to slip through block walls, it is said to be from another dimension.", "..\\..\\Img\\BSPainted\\BS_029.jpg", new Attack("Hypnosis", "The Defending Pokémon is now Asleep.", 0, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Dream Eater", "You can't use this attack unless the Defending Pokémon is Asleep.", 50, new EnergyCost(0, 0, 0, 0, 0, 2, 0)), new List<char>()));
             ai.AddToDeck(new Pokemon(49, "Drowzee", "basic", 50, 50, 'p', 'p', 'n', 1, "Puts enemies to sleep, then eats their dreams. Occasionally gets sick from eating bad dreams.", "..\\..\\Img\\BS\\BS_049.jpg", new Attack("Pound", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Confuse Ray", "Flip a coin. If heads, the Defending Pokémon is now Confused.", 10, new EnergyCost(0, 0, 0, 0, 0, 2, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(31, "Jynx", "basic", 70, 70, 'p', 'p', 'n', 2, "Merely by meditating, the Pokémon launches a powerful psychic energy attack.", "..\\..\\Img\\BS\\BS_031.jpg", new Attack("Doubleslap", "Flip 2 coins. This attack does 10 damage times the number of heads.", 10, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Meditate", "Does 20 damage plus 10 more damage for each damage counter on the Defending Pokémon.", 20, new EnergyCost(1, 0, 0, 0, 0, 2, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(10, "Mewtwo", "basic", 60, 60, 'p', 'p', 'n', 3, "A scientist created this Pokémon after years of horrific gene-splicing and DNA engineering experiments.", "..\\..\\Img\\BS\\BS_010.jpg", new Attack("Psychic", "Does 10 damage plus 10 more damage for each Energy card attached to the Defending Pokémon.", 10, new EnergyCost(1, 0, 0, 0, 0, 1, 0)), new Attack("Barrier", "Discard 1 Psychic Energy card attached to Mewtwo in order to use this attack. During your opponent's next turn, prevent all effects of attacks, including damage, done to Mewtwo.", 0, new EnergyCost(0, 0, 0, 0, 0, 2, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", "..\\..\\Img\\BS\\BS_100.jpg"));
-            ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", "..\\..\\Img\\BS\\BS_100.jpg"));
-            ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", "..\\..\\Img\\BS\\BS_100.jpg"));
-            ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", "..\\..\\Img\\BS\\BS_100.jpg"));
-            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", "..\\..\\Img\\BS\\BS_101.jpg"));
-            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", "..\\..\\Img\\BS\\BS_101.jpg"));
-            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", "..\\..\\Img\\BS\\BS_101.jpg"));
-            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", "..\\..\\Img\\BS\\BS_101.jpg"));
-            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", "..\\..\\Img\\BS\\BS_101.jpg"));
+            ai.AddToDeck(new Pokemon(49, "Drowzee", "basic", 50, 50, 'p', 'p', 'n', 1, "Puts enemies to sleep, then eats their dreams. Occasionally gets sick from eating bad dreams.", "..\\..\\Img\\BS\\BS_049.jpg", new Attack("Pound", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Confuse Ray", "Flip a coin. If heads, the Defending Pokémon is now Confused.", 10, new EnergyCost(0, 0, 0, 0, 0, 2, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(31, "Jynx", "basic", 70, 70, 'p', 'p', 'n', 2, "Merely by meditating, the Pokémon launches a powerful psychic energy attack.", "..\\..\\Img\\BSPainted\\BS_031.jpg", new Attack("Doubleslap", "Flip 2 coins. This attack does 10 damage times the number of heads.", 10, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Meditate", "Does 20 damage plus 10 more damage for each damage counter on the Defending Pokémon.", 20, new EnergyCost(1, 0, 0, 0, 0, 2, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(31, "Jynx", "basic", 70, 70, 'p', 'p', 'n', 2, "Merely by meditating, the Pokémon launches a powerful psychic energy attack.", "..\\..\\Img\\BSPainted\\BS_031.jpg", new Attack("Doubleslap", "Flip 2 coins. This attack does 10 damage times the number of heads.", 10, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Meditate", "Does 20 damage plus 10 more damage for each damage counter on the Defending Pokémon.", 20, new EnergyCost(1, 0, 0, 0, 0, 2, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(10, "Mewtwo", "basic", 60, 60, 'p', 'p', 'n', 3, "A scientist created this Pokémon after years of horrific gene-splicing and DNA engineering experiments.", "..\\..\\Img\\BSPainted\\BS_010.jpg", new Attack("Psychic", "Does 10 damage plus 10 more damage for each Energy card attached to the Defending Pokémon.", 10, new EnergyCost(1, 0, 0, 0, 0, 1, 0)), new Attack("Barrier", "Discard 1 Psychic Energy card attached to Mewtwo in order to use this attack. During your opponent's next turn, prevent all effects of attacks, including damage, done to Mewtwo.", 0, new EnergyCost(0, 0, 0, 0, 0, 2, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(91, "Bill", "trainer", 't', "Draw 2 cards.", "..\\..\\Img\\BS\\BS_091.jpg"));
+            ai.AddToDeck(new Pokemon(91, "Bill", "trainer", 't', "Draw 2 cards.", "..\\..\\Img\\BS\\BS_091.jpg"));
+            ai.AddToDeck(new Pokemon(71, "Computer Search", "trainer", 't', "Discard 2 of the other cards from your hand in order to search your deck for any card and put it into your hand. Shuffle your deck afterward.", "..\\..\\Img\\BS\\BS_071.jpg"));
+            ai.AddToDeck(new Pokemon(80, "Defender", "trainer", 't', "Attach Defender to 1 of your Pokémon. At the end of your opponent's next turn, discard Defender. Damage done to that Pokémon by attacks is reduced by 20 (after applying Weakness and Resistance).", "..\\..\\Img\\BS\\BS_080.jpg"));
+            ai.AddToDeck(new Pokemon(93, "Gust of Wind", "trainer", 't', "Choose 1 of your opponent's Benched Pokémon and switch it with his or her Active Pokémon.", "..\\..\\Img\\BS\\BS_093.jpg"));
+            ai.AddToDeck(new Pokemon(93, "Gust of Wind", "trainer", 't', "Choose 1 of your opponent's Benched Pokémon and switch it with his or her Active Pokémon.", "..\\..\\Img\\BS\\BS_093.jpg"));
+            ai.AddToDeck(new Pokemon(94, "Potion", "trainer", 't', "Remove up to 2 damage counters from 1 of your Pokémon.", "..\\..\\Img\\BS\\BS_094.jpg"));
+            ai.AddToDeck(new Pokemon(88, "Professor Oak", "trainer", 't', "Discard your hand, then draw 7 cards.", "..\\..\\Img\\BS\\BS_088.jpg"));
+            ai.AddToDeck(new Pokemon(90, "Super Potion", "trainer", 't', "Discard 1 Energy card attached to 1 of your own Pokémon in order to remove up to 4 damage counters from that Pokémon.", "..\\..\\Img\\BS\\BS_090.jpg"));
+            ai.AddToDeck(new Pokemon(95, "Switch", "trainer", 't', "Switch 1 of your Benched Pokémon with your Active Pokémon.", "..\\..\\Img\\BS\\BS_095.jpg"));
+            ai.AddToDeck(new Pokemon(95, "Switch", "trainer", 't', "Switch 1 of your Benched Pokémon with your Active Pokémon.", "..\\..\\Img\\BS\\BS_095.jpg"));
+            ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", 'e', "..\\..\\Img\\BS\\BS_100.jpg"));
+            ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", 'e', "..\\..\\Img\\BS\\BS_100.jpg"));
+            ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", 'e', "..\\..\\Img\\BS\\BS_100.jpg"));
+            ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", 'e', "..\\..\\Img\\BS\\BS_100.jpg"));
+            ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", 'e', "..\\..\\Img\\BS\\BS_100.jpg"));
+            ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", 'e', "..\\..\\Img\\BS\\BS_100.jpg"));
+            ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", 'e', "..\\..\\Img\\BS\\BS_100.jpg"));
+            ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", 'e', "..\\..\\Img\\BS\\BS_100.jpg"));
+            ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", 'e', "..\\..\\Img\\BS\\BS_100.jpg"));
+            ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", 'e', "..\\..\\Img\\BS\\BS_100.jpg"));
+            ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", 'e', "..\\..\\Img\\BS\\BS_100.jpg"));
+            ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", 'e', "..\\..\\Img\\BS\\BS_100.jpg"));
+            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", 'p', "..\\..\\Img\\BS\\BS_101.jpg"));
+            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", 'p', "..\\..\\Img\\BS\\BS_101.jpg"));
+            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", 'p', "..\\..\\Img\\BS\\BS_101.jpg"));
+            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", 'p', "..\\..\\Img\\BS\\BS_101.jpg"));
+            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", 'p', "..\\..\\Img\\BS\\BS_101.jpg"));
+            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", 'p', "..\\..\\Img\\BS\\BS_101.jpg"));
+            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", 'p', "..\\..\\Img\\BS\\BS_101.jpg"));
+            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", 'p', "..\\..\\Img\\BS\\BS_101.jpg"));
+            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", 'p', "..\\..\\Img\\BS\\BS_101.jpg"));
+            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", 'p', "..\\..\\Img\\BS\\BS_101.jpg"));
+            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", 'p', "..\\..\\Img\\BS\\BS_101.jpg"));
+            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", 'p', "..\\..\\Img\\BS\\BS_101.jpg"));
+            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", 'p', "..\\..\\Img\\BS\\BS_101.jpg"));
+            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", 'p', "..\\..\\Img\\BS\\BS_101.jpg"));
+            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", 'p', "..\\..\\Img\\BS\\BS_101.jpg"));
+            ai.AddToDeck(new Pokemon(101, "Psychic Energy", "energy", 'p', "..\\..\\Img\\BS\\BS_101.jpg"));
 
             player.Shuffle();
             ai.Shuffle();
@@ -81,6 +179,7 @@ namespace Pokemon
 
             DeckSize.Text = "x" + player.NumberOfCards().ToString();
             ODeckSize.Text = "x" + ai.NumberOfCards().ToString();
+            OHandNumber.Text = "X" + ai_Hand.NumberOfCards().ToString();
 
             PlayerHpBar.Visible = false;
             RemHp.Visible = false;
@@ -101,6 +200,10 @@ namespace Pokemon
             //playBackgroundMusic();
             PictureZoom.Image = Image.FromFile("..\\..\\Img\\BS\\CardBack.jpg");
             OpponentZoom.Image = Image.FromFile("..\\..\\Img\\BS\\CardBack.jpg");
+
+            HandIcon1.Image = Image.FromFile("..\\..\\Img\\BS\\CardBack.jpg");
+            HandIcon2.Image = Image.FromFile("..\\..\\Img\\BS\\CardBack.jpg");
+            HandIcon3.Image = Image.FromFile("..\\..\\Img\\BS\\CardBack.jpg");
 
             gameMessage.Text = "Welcome to the game please start by drawing 7 cards";
 
@@ -596,19 +699,38 @@ namespace Pokemon
 
                 DeckSize.Text = "x" + player.NumberOfCards().ToString();
                 ODeckSize.Text = "x" + ai.NumberOfCards().ToString();
+                OHandNumber.Text = "X" + ai_Hand.NumberOfCards().ToString();
                 UpdateHandView();
-                if (player_Hand.NumOfBasicPokemon() == 0)
+                if (player_Hand.NumOfBasicPokemon() == 0 && ai_Hand.NumOfBasicPokemon() != 0)
                 {
-                    gameMessage.Text = "As you do not have any Basic Pokémon, you should perform Mulligan and draw another 7 cards. Your opponent will draw 1 extra card.";
+                    gameMessage.Text = "As you do not have any Basic Pokémon, you should perform Mulligan and draw another 7 cards.";
 
-                    Power.Visible = false;
+                    StartCheck.Visible = false;
                     Mulligan.Visible = true;
+                    FlipCoin.Visible = false;
+                }
+                else if (player_Hand.NumOfBasicPokemon() == 0 && ai_Hand.NumOfBasicPokemon() == 0)
+                {
+                    gameMessage.Text = "Apparently you and your opponent do not have any Basic Pokémons, so both of you should perform Mulligan.";
+
+                    StartCheck.Visible = false;
+                    Mulligan2.Location = new Point(576, 957);
+                    Mulligan2.Visible = true;
+                    FlipCoin.Visible = false;
+                }
+                else if(player_Hand.NumOfBasicPokemon() != 0 && ai_Hand.NumOfBasicPokemon() == 0)
+                {
+                    gameMessage.Text = "Your opponent does not have any Basic Pokémons, so he should perform Mulligan.";
+
+                    StartCheck.Visible = false;
+                    Mulligan3.Location = new Point(576, 957);
+                    Mulligan3.Visible = true;
                     FlipCoin.Visible = false;
                 }
                 else
                 {
                     RightClickMenu.Enabled = true;
-                    Power.Visible = false;
+                    StartCheck.Visible = false;
                     Done.Visible = false;
                     FlipCoin.Visible = false;
                     gameMessage.Text = "You drew 7 cards from your Deck and your opponent also does. Please play Basic Pókemons";
@@ -621,12 +743,12 @@ namespace Pokemon
                 UpdateHandView();
                 if(active_Pokemon.ThereIsActivePokemon() == true)
                 {
-                    Power.Visible = true;
+                    StartCheck.Visible = true;
                     Done.Visible = true;
                 }
                 else
                 {
-                    Power.Visible = false;
+                    StartCheck.Visible = false;
                     Done.Visible = false;
                 }                
             }
@@ -3234,7 +3356,6 @@ namespace Pokemon
                         UpdateBenchView();
                         UpdateHandView();
                         AIPlaysCards();
-                        
                     }
 
                     else
@@ -3303,7 +3424,7 @@ namespace Pokemon
 
         private void AIPlaysCards()
         {
-            if(isOpponentFirstTurn == true)
+            if(isPreGameTurn == true)
             {
                 while(ai_Hand.NumOfBasicPokemon() >0 && aibench.NumberOfCards() < 6)
                 {
@@ -3314,20 +3435,107 @@ namespace Pokemon
                             aibench.Add(ai_Hand.PlayCard(i));
                             ai_Hand.RemoveFromHand(i);
                             AIUpdateBenchView();
+                            OHandNumber.Text = "X" + ai_Hand.NumberOfCards().ToString();
                         }
                     }
                     
                 }
             }
-            else
+            else if(isOpponentFirstTurn == true)
             {
+                if (ai_Hand.NumOfBasicPokemon() == 0)
+                {
+                    gameMessage.Text = "Your opponent is thinking.. ";
 
+                }
+                while (ai_Hand.NumOfBasicPokemon() > 0 && aibench.NumberOfCards() < 6)
+                {
+                    for (int i = 0; i < ai_Hand.NumberOfCards(); i++)
+                    {
+                        if (ai_Hand.ShowType(i) == "basic")
+                        {
+                            gameMessage.Text = "Your opponent plays " + ai_Hand.ShowName(i).ToLower() + " from his hand to his bench.";
+                            aibench.Add(ai_Hand.PlayCard(i));
+                            ai_Hand.RemoveFromHand(i);
+                            AIUpdateBenchView();
+
+                            OHandNumber.Text = "X" + ai_Hand.NumberOfCards().ToString();
+                        }
+                    }
+
+                }
             }
+        }
+
+        private void AIPlaysEnergyCards()
+        {
+            if(isOpponentFirstTurn == true)
+            {
+                if (ai_Hand.NumOfBasicEnergies() > 0)
+                {
+                    int index = 0;
+                    for (int x = 0; x < ai_Hand.NumberOfCards(); x++)
+                    {
+                        if (ai_Hand.ShowType(x) == "energy")
+                        {
+                            index = x;
+                        }
+                    }         
+                    //
+                    if (ai_Hand.ShowName(index) == "Fire Energy")
+                    {
+                        ai_Active_Pokemon.EnergyLoad('f');
+                    }
+
+                    else if (ai_Hand.ShowName(index) == "Water Energy")
+                    {
+                        ai_Active_Pokemon.EnergyLoad('w');
+                    }
+                    else if (ai_Hand.ShowName(index) == "Fighting Energy")
+                    {
+                        ai_Active_Pokemon.EnergyLoad('l');
+                    }
+                    else if (ai_Hand.ShowName(index) == "Psychic Energy")
+                    {
+                        ai_Active_Pokemon.EnergyLoad('p');
+                    }
+                    else if (ai_Hand.ShowName(index) == "Grass Energy")
+                    {
+                        ai_Active_Pokemon.EnergyLoad('g');
+                    }
+                    else if (ai_Hand.ShowName(index) == "Lightning Energy")
+                    {
+                        ai_Active_Pokemon.EnergyLoad('e');
+                    }
+                    else if (ai_Hand.ShowName(index) == "Metal Energy")
+                    {   
+                        ai_Active_Pokemon.EnergyLoad('m');
+                    }
+                    else if (ai_Hand.ShowName(index) == "Dark Energy")
+                    {
+                        ai_Active_Pokemon.EnergyLoad('d');
+                    }
+                    else if (ai_Hand.ShowName(index) == "Fairy Energy")
+                    {
+                        ai_Active_Pokemon.EnergyLoad('a');
+                    }
+                    gameMessage.Text = "Your opponent loads one " + ai_Hand.ShowName(index).ToLower() + " to " + ai_Active_Pokemon.ShowName();
+                    ai_used.Add(ai_Hand.PlayCard(index));
+                    ai_Hand.RemoveFromHand(index);
+                    OHandNumber.Text = "X" + ai_Hand.NumberOfCards().ToString();
+                    UpdateAIActivePokemonView();
+                }
+                else
+                {
+                    gameMessage.Text = "AI is thinking what to do next before the attack..";
+                }
+            }
+            
         }
 
         private void AIChoosesActivePokemon()
         {
-            if(isOpponentFirstTurn == true)
+            if(isPreGameTurn == true)
             {
                 Random random = new Random();
                 int i = random.Next(0, aibench.NumberOfCards());
@@ -3335,9 +3543,49 @@ namespace Pokemon
                 ai_Active_Pokemon.Become(aibench.PlayCard(i));
                 
                 UpdateAIActivePokemonView();
-                ai_Hand.RemoveFromHand(i);
                 aibench.RemoveFromBench(i);
                 AIUpdateBenchView();
+
+                OpCardName.Text = ai_Active_Pokemon.ShowName();
+                OpponentHpBar.Maximum = ai_Active_Pokemon.ShowHP();
+                OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                OMaxHp.Text = ai_Active_Pokemon.ShowHP().ToString();
+
+                OpponentZoom.Image = Image.FromFile(ai_Active_Pokemon.ShowImage());
+
+                OpCardName.Visible = true;
+                HpLabel2.Visible = true;
+                OMaxHp.Visible = true;
+                OpponentHpBar.Visible = true;
+                EnergyBox2.Visible = true;
+
+                switch (ai_Active_Pokemon.ShowEnergy())
+                {
+                    case 'f':
+                        EnergyBox2.Image = Image.FromFile("..\\..\\Img\\EnergyBox\\Fire.gif");
+                        break;
+                    case 'w':
+                        EnergyBox2.Image = Image.FromFile("..\\..\\Img\\EnergyBox\\Water.gif");
+                        break;
+                    case 'g':
+                        EnergyBox2.Image = Image.FromFile("..\\..\\Img\\EnergyBox\\Grass.gif");
+                        break;
+                    case 'p':
+                        EnergyBox2.Image = Image.FromFile("..\\..\\Img\\EnergyBox\\Psychic.gif");
+                        break;
+                    case 'l':
+                        EnergyBox2.Image = Image.FromFile("..\\..\\Img\\EnergyBox\\Fighting.gif");
+                        break;
+                    case 'e':
+                        EnergyBox2.Image = Image.FromFile("..\\..\\Img\\EnergyBox\\Lightning.gif");
+                        break;
+                    case 'c':
+                        EnergyBox2.Image = Image.FromFile("..\\..\\Img\\EnergyBox\\Colorless.gif");
+                        break;
+                    default:
+                        EnergyBox2.Visible = false;
+                        break;
+                }
             }
         }
 
@@ -3439,114 +3687,123 @@ namespace Pokemon
 
             if (player_Hand.ShowType(num) == "energy")
             {
-                ToolStripMenuItem item = sender as ToolStripMenuItem;
-                if (item != null)
+
+                if (isFirstTurn == false)
                 {
-                    int index = (item.OwnerItem as ToolStripMenuItem).DropDownItems.IndexOf(item);
-                    if (playedEnergy == false)
+                    ToolStripMenuItem item = sender as ToolStripMenuItem;
+                    if (item != null)
                     {
-                        if (index <= (bench.NumberOfCards()-1))
+                        int index = (item.OwnerItem as ToolStripMenuItem).DropDownItems.IndexOf(item);
+                        if (playedEnergy == false)
                         {
-                            if (player_Hand.ShowName(num) == "Fire Energy")
+                            if (index <= (bench.NumberOfCards() - 1))
                             {
-                                bench.EnergyLoad(index, 'f');
-                            }
+                                if (player_Hand.ShowName(num) == "Fire Energy")
+                                {
+                                    bench.EnergyLoad(index, 'f');
+                                }
 
-                            else if (player_Hand.ShowName(num) == "Water Energy")
-                            {
-                                bench.EnergyLoad(index, 'w');
-                            }
-                            else if (player_Hand.ShowName(num) == "Fighting Energy")
-                            {
-                                bench.EnergyLoad(index, 'l');
-                            }
-                            else if (player_Hand.ShowName(num) == "Psychic Energy")
-                            {
-                                bench.EnergyLoad(index, 'p');
-                            }
-                            else if (player_Hand.ShowName(num) == "Grass Energy")
-                            {
-                                bench.EnergyLoad(index, 'g');
-                            }
-                            else if (player_Hand.ShowName(num) == "Lightning Energy")
-                            {
-                                bench.EnergyLoad(index, 'e');
-                            }
-                            else if (player_Hand.ShowName(num) == "Metal Energy")
-                            {
-                                bench.EnergyLoad(index, 'm');
-                            }
-                            else if (player_Hand.ShowName(num) == "Dark Energy")
-                            {
-                                bench.EnergyLoad(index, 'e');
-                            }
-                            else if (player_Hand.ShowName(num) == "Fairy Energy")
-                            {
-                                bench.EnergyLoad(index, 'a');
-                            }
-                            gameMessage.Text = "You loaded a " + player_Hand.ShowName(num).ToLower() + " to " + bench.ShowName(index);
-                            player_used.Add(player_Hand.PlayCard(num));
-                            player_Hand.RemoveFromHand(num);
-                            
-                            UpdateHandView();
-                            UpdateBenchView();
-                            UpdateActivePokemonView();
-                            //playedEnergy = true;
+                                else if (player_Hand.ShowName(num) == "Water Energy")
+                                {
+                                    bench.EnergyLoad(index, 'w');
+                                }
+                                else if (player_Hand.ShowName(num) == "Fighting Energy")
+                                {
+                                    bench.EnergyLoad(index, 'l');
+                                }
+                                else if (player_Hand.ShowName(num) == "Psychic Energy")
+                                {
+                                    bench.EnergyLoad(index, 'p');
+                                }
+                                else if (player_Hand.ShowName(num) == "Grass Energy")
+                                {
+                                    bench.EnergyLoad(index, 'g');
+                                }
+                                else if (player_Hand.ShowName(num) == "Lightning Energy")
+                                {
+                                    bench.EnergyLoad(index, 'e');
+                                }
+                                else if (player_Hand.ShowName(num) == "Metal Energy")
+                                {
+                                    bench.EnergyLoad(index, 'm');
+                                }
+                                else if (player_Hand.ShowName(num) == "Dark Energy")
+                                {
+                                    bench.EnergyLoad(index, 'e');
+                                }
+                                else if (player_Hand.ShowName(num) == "Fairy Energy")
+                                {
+                                    bench.EnergyLoad(index, 'a');
+                                }
+                                gameMessage.Text = "You loaded a " + player_Hand.ShowName(num).ToLower() + " to " + bench.ShowName(index);
+                                player_used.Add(player_Hand.PlayCard(num));
+                                player_Hand.RemoveFromHand(num);
 
+                                UpdateHandView();
+                                UpdateBenchView();
+                                UpdateActivePokemonView();
+                                playedEnergy = true;
+
+                            }
+                            else
+                            {
+                                if (player_Hand.ShowName(num) == "Fire Energy")
+                                {
+                                    active_Pokemon.EnergyLoad('f');
+                                }
+
+                                else if (player_Hand.ShowName(num) == "Water Energy")
+                                {
+                                    active_Pokemon.EnergyLoad('w');
+                                }
+                                else if (player_Hand.ShowName(num) == "Fighting Energy")
+                                {
+                                    active_Pokemon.EnergyLoad('l');
+                                }
+                                else if (player_Hand.ShowName(num) == "Psychic Energy")
+                                {
+                                    active_Pokemon.EnergyLoad('p');
+                                }
+                                else if (player_Hand.ShowName(num) == "Grass Energy")
+                                {
+                                    active_Pokemon.EnergyLoad('g');
+                                }
+                                else if (player_Hand.ShowName(num) == "Lightning Energy")
+                                {
+                                    active_Pokemon.EnergyLoad('e');
+                                }
+                                else if (player_Hand.ShowName(num) == "Metal Energy")
+                                {
+                                    active_Pokemon.EnergyLoad('m');
+                                }
+                                else if (player_Hand.ShowName(num) == "Dark Energy")
+                                {
+                                    active_Pokemon.EnergyLoad('d');
+                                }
+                                else if (player_Hand.ShowName(num) == "Fairy Energy")
+                                {
+                                    active_Pokemon.EnergyLoad('a');
+                                }
+                                gameMessage.Text = "You loaded a " + player_Hand.ShowName(num).ToLower() + " to " + active_Pokemon.ShowName();
+                                player_used.Add(player_Hand.PlayCard(num));
+                                player_Hand.RemoveFromHand(num);
+
+                                UpdateHandView();
+                                UpdateBenchView();
+                                UpdateActivePokemonView();
+                            }
                         }
                         else
                         {
-                            if (player_Hand.ShowName(num) == "Fire Energy")
-                            {
-                                active_Pokemon.EnergyLoad('f');
-                            }
-
-                            else if (player_Hand.ShowName(num) == "Water Energy")
-                            {
-                                active_Pokemon.EnergyLoad('w');
-                            }
-                            else if (player_Hand.ShowName(num) == "Fighting Energy")
-                            {
-                                active_Pokemon.EnergyLoad('l');
-                            }
-                            else if (player_Hand.ShowName(num) == "Psychic Energy")
-                            {
-                                active_Pokemon.EnergyLoad('p');
-                            }
-                            else if (player_Hand.ShowName(num) == "Grass Energy")
-                            {
-                                active_Pokemon.EnergyLoad('g');
-                            }
-                            else if (player_Hand.ShowName(num) == "Lightning Energy")
-                            {
-                                active_Pokemon.EnergyLoad('e');
-                            }
-                            else if (player_Hand.ShowName(num) == "Metal Energy")
-                            {
-                                active_Pokemon.EnergyLoad('m');
-                            }
-                            else if (player_Hand.ShowName(num) == "Dark Energy")
-                            {
-                                active_Pokemon.EnergyLoad('d');
-                            }
-                            else if (player_Hand.ShowName(num) == "Fairy Energy")
-                            {
-                                active_Pokemon.EnergyLoad('a');
-                            }
-                            gameMessage.Text = "You loaded a " + player_Hand.ShowName(num).ToLower() + " to " + active_Pokemon.ShowName();
-                            player_used.Add(player_Hand.PlayCard(num));
-                            player_Hand.RemoveFromHand(num);
-
-                            UpdateHandView();
-                            UpdateBenchView();
-                            UpdateActivePokemonView();
+                            gameMessage.Text = "You already played an energy this turn.";
                         }
                     }
-                    else
-                    {
-                        gameMessage.Text = "You already played an energy this turn.";
-                    }
-                };
+                    
+                }
+                 else
+                {
+                    gameMessage.Text = "You cannot load an energy at this stage yet.";
+                }
             } 
             
             else if (player_Hand.ShowType(num) == "second")
@@ -3648,12 +3905,13 @@ namespace Pokemon
                 {
                     active_Pokemon.Become(bench.PlayCard(num));
                     UpdateActivePokemonView();
-                    gameMessage.Text = active_Pokemon.ShowName() + " is your new Active Pokémon.";
                     bench.RemoveFromBench(num);
                     UpdateBenchView();
                     AIChoosesActivePokemon();
-                    Done.Visible = true;
-                    
+                    gameMessage.Text = active_Pokemon.ShowName() + " is your new Active Pokémon. The AI chooses " + ai_Active_Pokemon.ShowName() + ".";
+                    StartCheck.Visible = true;
+                    StartCheck.Location = new Point(576, 957);
+
                 }
                 else
                 {
@@ -3901,6 +4159,366 @@ namespace Pokemon
                 gameMessage.Text = "You flip the coin and get Tails.";
                 gameMessage.Visible = true;
             }
+        }
+
+        private void Mulligan_Click(object sender, EventArgs e)
+        {
+            player.ShuffleCardFromHandIntoDeck(player_Hand.PlayCard(0));
+            player.ShuffleCardFromHandIntoDeck(player_Hand.PlayCard(1));
+            player.ShuffleCardFromHandIntoDeck(player_Hand.PlayCard(2));
+            player.ShuffleCardFromHandIntoDeck(player_Hand.PlayCard(3));
+            player.ShuffleCardFromHandIntoDeck(player_Hand.PlayCard(4));
+            player.ShuffleCardFromHandIntoDeck(player_Hand.PlayCard(5));
+            player.ShuffleCardFromHandIntoDeck(player_Hand.PlayCard(6));
+            player_Hand.RemoveFromHand(0);
+            player_Hand.RemoveFromHand(0);
+            player_Hand.RemoveFromHand(0);
+            player_Hand.RemoveFromHand(0);
+            player_Hand.RemoveFromHand(0);
+            player_Hand.RemoveFromHand(0);
+            player_Hand.RemoveFromHand(0);
+
+            ai_Hand.DrawCard(ai.DrawCard());
+
+            player.Shuffle();
+
+            player_Hand.DrawCard(player.DrawCard());
+            player_Hand.DrawCard(player.DrawCard());
+            player_Hand.DrawCard(player.DrawCard());
+            player_Hand.DrawCard(player.DrawCard());
+            player_Hand.DrawCard(player.DrawCard());
+            player_Hand.DrawCard(player.DrawCard());
+            player_Hand.DrawCard(player.DrawCard());
+
+            DeckSize.Text = "x" + player.NumberOfCards().ToString();
+            ODeckSize.Text = "x" + ai.NumberOfCards().ToString();
+            OHandNumber.Text = "X" + ai_Hand.NumberOfCards().ToString();
+
+            gameMessage.Text = "You draw again 7 cards and your opponent draws an extra card.";
+            UpdateHandView();
+            RightClickMenu.Enabled = true;
+            Mulligan.Visible = false;
+
+            if (player_Hand.NumOfBasicPokemon() == 0 && ai_Hand.NumOfBasicPokemon() != 0)
+            {
+                gameMessage.Text = "As you do not have any Basic Pokémon, you should perform Mulligan and draw another 7 cards.";
+
+                StartCheck.Visible = false;
+                Mulligan.Visible = true;
+                FlipCoin.Visible = false;
+                RightClickMenu.Enabled = false;
+            }
+            else if (player_Hand.NumOfBasicPokemon() == 0 && ai_Hand.NumOfBasicPokemon() == 0)
+            {
+                gameMessage.Text = "Apparently you and your opponent do not have any Basic Pokémons, so both of you should perform Mulligan.";
+
+                StartCheck.Visible = false;
+                Mulligan2.Location = new Point(576, 957);
+                Mulligan2.Visible = true;
+                FlipCoin.Visible = false;
+                RightClickMenu.Enabled = false;
+
+            }
+            else if (player_Hand.NumOfBasicPokemon() != 0 && ai_Hand.NumOfBasicPokemon() == 0)
+            {
+                gameMessage.Text = "Your opponent does not have any Basic Pokémons, so he should perform Mulligan.";
+
+                StartCheck.Visible = false;
+                Mulligan3.Location = new Point(576, 957);
+                Mulligan3.Visible = true;
+                FlipCoin.Visible = false;
+                RightClickMenu.Enabled = false;
+
+            }
+
+        }
+
+        private void Mulligan2_Click(object sender, EventArgs e)
+        {
+            player.ShuffleCardFromHandIntoDeck(player_Hand.PlayCard(0));
+            player.ShuffleCardFromHandIntoDeck(player_Hand.PlayCard(1));
+            player.ShuffleCardFromHandIntoDeck(player_Hand.PlayCard(2));
+            player.ShuffleCardFromHandIntoDeck(player_Hand.PlayCard(3));
+            player.ShuffleCardFromHandIntoDeck(player_Hand.PlayCard(4));
+            player.ShuffleCardFromHandIntoDeck(player_Hand.PlayCard(5));
+            player.ShuffleCardFromHandIntoDeck(player_Hand.PlayCard(6));
+            player_Hand.RemoveFromHand(0);
+            player_Hand.RemoveFromHand(0);
+            player_Hand.RemoveFromHand(0);
+            player_Hand.RemoveFromHand(0);
+            player_Hand.RemoveFromHand(0);
+            player_Hand.RemoveFromHand(0);
+            player_Hand.RemoveFromHand(0);
+
+            ai.ShuffleCardFromHandIntoDeck(ai_Hand.PlayCard(0));
+            ai.ShuffleCardFromHandIntoDeck(ai_Hand.PlayCard(1));
+            ai.ShuffleCardFromHandIntoDeck(ai_Hand.PlayCard(2));
+            ai.ShuffleCardFromHandIntoDeck(ai_Hand.PlayCard(3));
+            ai.ShuffleCardFromHandIntoDeck(ai_Hand.PlayCard(4));
+            ai.ShuffleCardFromHandIntoDeck(ai_Hand.PlayCard(5));
+            ai.ShuffleCardFromHandIntoDeck(ai_Hand.PlayCard(6));
+            ai_Hand.RemoveFromHand(0);
+            ai_Hand.RemoveFromHand(0);
+            ai_Hand.RemoveFromHand(0);
+            ai_Hand.RemoveFromHand(0);
+            ai_Hand.RemoveFromHand(0);
+            ai_Hand.RemoveFromHand(0);
+            ai_Hand.RemoveFromHand(0);
+
+
+            ai_Hand.DrawCard(ai.DrawCard());
+            player_Hand.DrawCard(player.DrawCard());
+
+            player.Shuffle();
+            ai.Shuffle();
+
+            player_Hand.DrawCard(player.DrawCard());
+            player_Hand.DrawCard(player.DrawCard());
+            player_Hand.DrawCard(player.DrawCard());
+            player_Hand.DrawCard(player.DrawCard());
+            player_Hand.DrawCard(player.DrawCard());
+            player_Hand.DrawCard(player.DrawCard());
+            player_Hand.DrawCard(player.DrawCard());
+
+            ai_Hand.DrawCard(ai.DrawCard());
+            ai_Hand.DrawCard(ai.DrawCard());
+            ai_Hand.DrawCard(ai.DrawCard());
+            ai_Hand.DrawCard(ai.DrawCard());
+            ai_Hand.DrawCard(ai.DrawCard());
+            ai_Hand.DrawCard(ai.DrawCard());
+            ai_Hand.DrawCard(ai.DrawCard());
+
+            DeckSize.Text = "x" + player.NumberOfCards().ToString();
+            ODeckSize.Text = "x" + ai.NumberOfCards().ToString();
+            OHandNumber.Text = "X" + ai_Hand.NumberOfCards().ToString();
+
+            gameMessage.Text = "You draw again 7 cards and your opponent draws 7 too. Both also draw an extra card for Mulligan.";
+            UpdateHandView();
+            RightClickMenu.Enabled = true;
+            Mulligan2.Visible = false;
+
+            if (player_Hand.NumOfBasicPokemon() == 0 && ai_Hand.NumOfBasicPokemon() != 0)
+            {
+                gameMessage.Text = "As you do not have any Basic Pokémon, you should perform Mulligan and draw another 7 cards.";
+
+                StartCheck.Visible = false;
+                Mulligan.Visible = true;
+                FlipCoin.Visible = false;
+                RightClickMenu.Enabled = false;
+
+            }
+            else if (player_Hand.NumOfBasicPokemon() == 0 && ai_Hand.NumOfBasicPokemon() == 0)
+            {
+                gameMessage.Text = "Apparently you and your opponent do not have any Basic Pokémons, so both of you should perform Mulligan.";
+
+                StartCheck.Visible = false;
+                Mulligan2.Location = new Point(576, 957);
+                Mulligan2.Visible = true;
+                FlipCoin.Visible = false;
+                RightClickMenu.Enabled = false;
+
+            }
+            else if (player_Hand.NumOfBasicPokemon() != 0 && ai_Hand.NumOfBasicPokemon() == 0)
+            {
+                gameMessage.Text = "Your opponent does not have any Basic Pokémons, so he should perform Mulligan.";
+
+                StartCheck.Visible = false;
+                Mulligan3.Location = new Point(576, 957);
+                Mulligan3.Visible = true;
+                FlipCoin.Visible = false;
+                RightClickMenu.Enabled = false;
+
+            }
+        }
+
+        private void Mulligan3_Click(object sender, EventArgs e)
+        {
+            ai.ShuffleCardFromHandIntoDeck(ai_Hand.PlayCard(0));
+            ai.ShuffleCardFromHandIntoDeck(ai_Hand.PlayCard(1));
+            ai.ShuffleCardFromHandIntoDeck(ai_Hand.PlayCard(2));
+            ai.ShuffleCardFromHandIntoDeck(ai_Hand.PlayCard(3));
+            ai.ShuffleCardFromHandIntoDeck(ai_Hand.PlayCard(4));
+            ai.ShuffleCardFromHandIntoDeck(ai_Hand.PlayCard(5));
+            ai.ShuffleCardFromHandIntoDeck(ai_Hand.PlayCard(6));
+            ai_Hand.RemoveFromHand(0);
+            ai_Hand.RemoveFromHand(0);
+            ai_Hand.RemoveFromHand(0);
+            ai_Hand.RemoveFromHand(0);
+            ai_Hand.RemoveFromHand(0);
+            ai_Hand.RemoveFromHand(0);
+            ai_Hand.RemoveFromHand(0);
+
+            player_Hand.DrawCard(player.DrawCard());
+
+            ai.Shuffle();
+
+            ai_Hand.DrawCard(ai.DrawCard());
+            ai_Hand.DrawCard(ai.DrawCard());
+            ai_Hand.DrawCard(ai.DrawCard());
+            ai_Hand.DrawCard(ai.DrawCard());
+            ai_Hand.DrawCard(ai.DrawCard());
+            ai_Hand.DrawCard(ai.DrawCard());
+            ai_Hand.DrawCard(ai.DrawCard());
+
+            DeckSize.Text = "x" + player.NumberOfCards().ToString();
+            ODeckSize.Text = "x" + ai.NumberOfCards().ToString();
+            OHandNumber.Text = "X" + ai_Hand.NumberOfCards().ToString();
+
+            gameMessage.Text = "Your opponent draws 7 cards. You draw an extra card for Mulligan.";
+
+
+            RightClickMenu.Enabled = true;
+            Mulligan3.Visible = false;
+            if (player_Hand.NumOfBasicPokemon() == 0 && ai_Hand.NumOfBasicPokemon() != 0)
+            {
+                gameMessage.Text = "As you do not have any Basic Pokémon, you should perform Mulligan and draw another 7 cards.";
+
+                StartCheck.Visible = false;
+                Mulligan.Visible = true;
+                FlipCoin.Visible = false;
+                RightClickMenu.Enabled = false;
+
+            }
+            else if (player_Hand.NumOfBasicPokemon() == 0 && ai_Hand.NumOfBasicPokemon() == 0)
+            {
+                gameMessage.Text = "Apparently you and your opponent do not have any Basic Pokémons, so both of you should perform Mulligan.";
+
+                StartCheck.Visible = false;
+                Mulligan2.Location = new Point(576, 957);
+                Mulligan2.Visible = true;
+                FlipCoin.Visible = false;
+                RightClickMenu.Enabled = false;
+
+            }
+            else if (player_Hand.NumOfBasicPokemon() != 0 && ai_Hand.NumOfBasicPokemon() == 0)
+            {
+                gameMessage.Text = "Your opponent does not have any Basic Pokémons, so he should perform Mulligan.";
+
+                StartCheck.Visible = false;
+                Mulligan3.Location = new Point(576, 957);
+                Mulligan3.Visible = true;
+                FlipCoin.Visible = false;
+                RightClickMenu.Enabled = false;
+            }
+        }
+
+        private void StartCheck_Click(object sender, EventArgs e)
+        {
+            Heads.Visible = true;
+            Tails.Visible = true;
+            Heads.Location = new Point(576, 957); 
+            Tails.Location = new Point(683, 957);
+            gameMessage.Text = "Choose either Heads or Tails to see who starts.";
+            StartCheck.Visible = false;
+            RightClickMenu.Enabled = false;
+            isPreGameTurn = false;
+        }
+
+        private void Heads_Click(object sender, EventArgs e)
+        {
+            SoundPlayer simpleSound = new SoundPlayer("..\\..\\Sounds\\flipcoin.wav");
+            simpleSound.Play();
+            gameMessage.Visible = false;
+            CoinResult.Visible = false;
+            Heads.Visible = false;
+            Tails.Visible = false;
+            Thread.Sleep(2000);
+            Random random = new Random();
+            int result = random.Next(0, 2);
+            if (result == 0)
+            {
+                CoinResult.Image = Image.FromFile("..\\..\\Img\\Coins\\Wizards_Silver_Chansey_Coin.png");
+                CoinResult.Visible = true;
+                gameMessage.Text = "You flip the coin and get Heads. You start";
+                gameMessage.Visible = true;
+                Draw2.Location = new Point(576, 957);
+                Draw2.Visible = true;
+                
+            }
+            else
+            {
+                CoinResult.Image = Image.FromFile("..\\..\\Img\\Coins\\tails.gif");
+                CoinResult.Visible = true;
+                gameMessage.Text = "You flip the coin and get Tails. Your opponent starts";
+                gameMessage.Visible = true;
+                isOpponentFirstTurn = true;
+                Next1.Location = new Point(576, 957);
+                Next1.Visible = true;
+            }
+        }
+
+        private void Tails_Click(object sender, EventArgs e)
+        {
+            SoundPlayer simpleSound = new SoundPlayer("..\\..\\Sounds\\flipcoin.wav");
+            simpleSound.Play();
+            gameMessage.Visible = false;
+            CoinResult.Visible = false;
+            Heads.Visible = false;
+            Tails.Visible = false;
+            Thread.Sleep(2000);
+            Random random = new Random();
+            int result = random.Next(0, 2);
+            if (result == 0)
+            {
+                CoinResult.Image = Image.FromFile("..\\..\\Img\\Coins\\Wizards_Silver_Chansey_Coin.png");
+                CoinResult.Visible = true;
+                gameMessage.Text = "You flip the coin and get Heads. Your opponent starts";
+                gameMessage.Visible = true;
+                isOpponentFirstTurn = true;
+                Next1.Location = new Point(576, 957);
+                Next1.Visible = true;
+            }
+            else
+            {
+                CoinResult.Image = Image.FromFile("..\\..\\Img\\Coins\\tails.gif");
+                CoinResult.Visible = true;
+                gameMessage.Text = "You flip the coin and get Tails. You start.";
+                gameMessage.Visible = true;
+                Draw2.Location = new Point(576, 957);
+                Draw2.Visible = true;
+            }
+        }
+
+        private void Draw2_Click(object sender, EventArgs e)
+        {
+            CoinResult.Visible = false;
+            player_Hand.DrawCard(player.DrawCard());
+            DeckSize.Text = "x" + player.NumberOfCards().ToString();
+            gameMessage.Text = "You draw a card.";
+            UpdateHandView();
+            Draw2.Visible = false;
+            RightClickMenu.Enabled = true;
+            isFirstTurn = false;
+        }
+
+        private void Next1_Click(object sender, EventArgs e)
+        {
+            CoinResult.Visible = false;
+            
+            ai_Hand.DrawCard(ai.DrawCard());
+            ODeckSize.Text = "x" + ai.NumberOfCards().ToString();
+            OHandNumber.Text = "X" + ai_Hand.NumberOfCards().ToString();
+            gameMessage.Text = "Your opponent draws a card.";
+            Next1.Visible = false;
+            Next2.Location = new Point(683, 957);
+            Next2.Visible = true;
+            playSimpleSound();      
+        }
+
+        private void Next2_Click(object sender, EventArgs e)
+        {
+            AIPlaysCards();
+            Next2.Visible = false;
+            Next3.Location = new Point(683, 957);
+            Next3.Visible = true;
+        }
+
+        private void Next3_Click(object sender, EventArgs e)
+        {
+            AIPlaysEnergyCards();
+            Next3.Visible = false;
+            //Next4.Location = new Point(683, 957);
+            //Next4.Visible = true;
         }
     }
 }
