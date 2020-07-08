@@ -28,8 +28,10 @@ namespace Pokemon
         Active ai_Active_Pokemon = new Active();
         Used player_used = new Used();
         Used ai_used = new Used();
-        bool isFirstTurn = true;
         bool isPreGameTurn = true;
+        bool youStartTurn = false;
+        bool aiStartsTurn = false;
+        bool isyourFirstTurn = false;
         bool isOpponentFirstTurn = false;
 
         bool playedEnergy = false;
@@ -673,7 +675,7 @@ namespace Pokemon
         }
         public void Draw_Click(object sender, EventArgs e)
         {
-            if(isFirstTurn == true)
+            if(isPreGameTurn == true)
             {
                 SoundPlayer simpleSound = new SoundPlayer("..\\..\\Sounds\\draw.wav");
                 simpleSound.Play();
@@ -3342,7 +3344,7 @@ namespace Pokemon
 
         private void Play_Click(object sender, EventArgs e)
         {
-            if(isFirstTurn == true)
+            if(isPreGameTurn == true)
             {
                 int num = GetHandBoxIndex();
                 if (player_Hand.ShowType(num) == "basic")
@@ -3371,11 +3373,11 @@ namespace Pokemon
                 {
                     if (bench.NumberOfCards() == 0)
                     {
-                        gameMessage.Text = "You cannot evolve on your first turn.";
+                        gameMessage.Text = "You cannot evolve at this stage.";
                     }
                     else
                     {
-                        gameMessage.Text = "You cannot evolve on your first turn.";
+                        gameMessage.Text = "You cannot evolve at this stage.";
                     }
                 }
             }
@@ -3441,7 +3443,7 @@ namespace Pokemon
                     
                 }
             }
-            else if(isOpponentFirstTurn == true)
+            else if(aiStartsTurn == true)
             {
                 if (ai_Hand.NumOfBasicPokemon() == 0)
                 {
@@ -3465,23 +3467,26 @@ namespace Pokemon
 
                 }
             }
+            else
+            {
+
+            }
         }
 
         private void AIPlaysEnergyCards()
         {
-            if(isOpponentFirstTurn == true)
+            if(aiStartsTurn == true)
             {
                 if (ai_Hand.NumOfBasicEnergies() > 0)
                 {
                     int index = 0;
                     for (int x = 0; x < ai_Hand.NumberOfCards(); x++)
                     {
-                        if (ai_Hand.ShowType(x) == "energy")
+                        if (ai_Hand.ShowType(x) == "energy" && ai_Hand.ShowEnergy(x) == ai_Active_Pokemon.ShowEnergy())
                         {
                             index = x;
                         }
-                    }         
-                    //
+                    }
                     if (ai_Hand.ShowName(index) == "Fire Energy")
                     {
                         ai_Active_Pokemon.EnergyLoad('f');
@@ -3688,7 +3693,7 @@ namespace Pokemon
             if (player_Hand.ShowType(num) == "energy")
             {
 
-                if (isFirstTurn == false)
+                if (isPreGameTurn == false)
                 {
                     ToolStripMenuItem item = sender as ToolStripMenuItem;
                     if (item != null)
@@ -3791,6 +3796,7 @@ namespace Pokemon
                                 UpdateHandView();
                                 UpdateBenchView();
                                 UpdateActivePokemonView();
+                                playedEnergy = true;
                             }
                         }
                         else
@@ -3875,7 +3881,7 @@ namespace Pokemon
 
         private void playAsAttackerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(isFirstTurn == true)
+            if(isPreGameTurn == true)
             {
                 int num = 0;
                 UpdateBenchView();
@@ -3952,7 +3958,7 @@ namespace Pokemon
                     gameMessage.Text = active_Pokemon.ShowName() + " is your new Active Pokémon.";
                     bench.RemoveFromBench(num);
                     UpdateBenchView();
-                    Done.Visible = true;
+               
                 }
                 else
                 {
@@ -4431,6 +4437,7 @@ namespace Pokemon
                 CoinResult.Visible = true;
                 gameMessage.Text = "You flip the coin and get Heads. You start";
                 gameMessage.Visible = true;
+                youStartTurn = true;
                 Draw2.Location = new Point(576, 957);
                 Draw2.Visible = true;
                 
@@ -4441,7 +4448,7 @@ namespace Pokemon
                 CoinResult.Visible = true;
                 gameMessage.Text = "You flip the coin and get Tails. Your opponent starts";
                 gameMessage.Visible = true;
-                isOpponentFirstTurn = true;
+                aiStartsTurn = true;
                 Next1.Location = new Point(576, 957);
                 Next1.Visible = true;
             }
@@ -4464,7 +4471,7 @@ namespace Pokemon
                 CoinResult.Visible = true;
                 gameMessage.Text = "You flip the coin and get Heads. Your opponent starts";
                 gameMessage.Visible = true;
-                isOpponentFirstTurn = true;
+                aiStartsTurn = true;
                 Next1.Location = new Point(576, 957);
                 Next1.Visible = true;
             }
@@ -4474,6 +4481,7 @@ namespace Pokemon
                 CoinResult.Visible = true;
                 gameMessage.Text = "You flip the coin and get Tails. You start.";
                 gameMessage.Visible = true;
+                youStartTurn = true;
                 Draw2.Location = new Point(576, 957);
                 Draw2.Visible = true;
             }
@@ -4482,13 +4490,24 @@ namespace Pokemon
         private void Draw2_Click(object sender, EventArgs e)
         {
             CoinResult.Visible = false;
+
+            if(isPreGameTurn == true)
+            {
+
+                isPreGameTurn = false;
+            }
+            else
+            {
+                PlayerEnd.Location = new Point(683, 957);
+                PlayerEnd.Visible = true;
+            }
+
             player_Hand.DrawCard(player.DrawCard());
             DeckSize.Text = "x" + player.NumberOfCards().ToString();
             gameMessage.Text = "You draw a card.";
             UpdateHandView();
             Draw2.Visible = false;
             RightClickMenu.Enabled = true;
-            isFirstTurn = false;
         }
 
         private void Next1_Click(object sender, EventArgs e)
@@ -4517,8 +4536,58 @@ namespace Pokemon
         {
             AIPlaysEnergyCards();
             Next3.Visible = false;
-            //Next4.Location = new Point(683, 957);
-            //Next4.Visible = true;
+            Next4.Location = new Point(683, 957);
+            Next4.Visible = true;
+        }
+
+        private void Next4_Click(object sender, EventArgs e)
+        {
+            Next4.Visible = false;
+            Next5.Location = new Point(683, 957);
+            Next5.Visible = true;
+        }
+
+        private void Next5_Click(object sender, EventArgs e)
+        {
+            Next5.Visible = false;
+            EndOpponentsTurn.Location = new Point(683, 957);
+            EndOpponentsTurn.Visible = true;
+        }
+
+        private void EndOpponentsTurn_Click(object sender, EventArgs e)
+        {
+            if(aiStartsTurn == true)
+            {
+                aiStartsTurn = false;
+                isyourFirstTurn = true;
+            }
+            else if(isOpponentFirstTurn == true)
+            {
+                isOpponentFirstTurn = false;
+            }
+            EndOpponentsTurn.Visible = false;
+            playedEnergy = false;
+            playedAttack = false;
+            RightClickMenu.Enabled = true;
+            Draw2.Location = new Point(576, 957);
+            Draw2.Visible = true;
+        }
+
+        private void PlayerEnd_Click(object sender, EventArgs e)
+        {
+            if(youStartTurn == true)
+            {
+                youStartTurn = false;
+                isOpponentFirstTurn = true;
+            }
+            else if (isyourFirstTurn == true)
+            {
+                isyourFirstTurn = false;
+            }
+            PlayerEnd.Visible = false;
+            RightClickMenu.Enabled = false;
+            Next1.Location = new Point(683, 957);
+            Next1.Visible = true;       
         }
     }
 }

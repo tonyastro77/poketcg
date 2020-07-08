@@ -164,6 +164,10 @@
             this.Mulligan2 = new System.Windows.Forms.Button();
             this.Mulligan3 = new System.Windows.Forms.Button();
             this.Next3 = new System.Windows.Forms.Button();
+            this.Next4 = new System.Windows.Forms.Button();
+            this.Next5 = new System.Windows.Forms.Button();
+            this.EndOpponentsTurn = new System.Windows.Forms.Button();
+            this.PlayerEnd = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.PictureZoom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureActive)).BeginInit();
             this.RightClickMenu3.SuspendLayout();
@@ -1653,12 +1657,60 @@
             this.Next3.Visible = false;
             this.Next3.Click += new System.EventHandler(this.Next3_Click);
             // 
+            // Next4
+            // 
+            this.Next4.Location = new System.Drawing.Point(886, 969);
+            this.Next4.Name = "Next4";
+            this.Next4.Size = new System.Drawing.Size(75, 23);
+            this.Next4.TabIndex = 146;
+            this.Next4.Text = "NEXT>>>>";
+            this.Next4.UseVisualStyleBackColor = true;
+            this.Next4.Visible = false;
+            this.Next4.Click += new System.EventHandler(this.Next4_Click);
+            // 
+            // Next5
+            // 
+            this.Next5.Location = new System.Drawing.Point(1061, 967);
+            this.Next5.Name = "Next5";
+            this.Next5.Size = new System.Drawing.Size(75, 23);
+            this.Next5.TabIndex = 147;
+            this.Next5.Text = "NEXT>>>>>";
+            this.Next5.UseVisualStyleBackColor = true;
+            this.Next5.Visible = false;
+            this.Next5.Click += new System.EventHandler(this.Next5_Click);
+            // 
+            // EndOpponentsTurn
+            // 
+            this.EndOpponentsTurn.Location = new System.Drawing.Point(1077, 1006);
+            this.EndOpponentsTurn.Name = "EndOpponentsTurn";
+            this.EndOpponentsTurn.Size = new System.Drawing.Size(75, 23);
+            this.EndOpponentsTurn.TabIndex = 148;
+            this.EndOpponentsTurn.Text = "END";
+            this.EndOpponentsTurn.UseVisualStyleBackColor = true;
+            this.EndOpponentsTurn.Visible = false;
+            this.EndOpponentsTurn.Click += new System.EventHandler(this.EndOpponentsTurn_Click);
+            // 
+            // PlayerEnd
+            // 
+            this.PlayerEnd.Location = new System.Drawing.Point(1175, 988);
+            this.PlayerEnd.Name = "PlayerEnd";
+            this.PlayerEnd.Size = new System.Drawing.Size(75, 23);
+            this.PlayerEnd.TabIndex = 149;
+            this.PlayerEnd.Text = "END";
+            this.PlayerEnd.UseVisualStyleBackColor = true;
+            this.PlayerEnd.Visible = false;
+            this.PlayerEnd.Click += new System.EventHandler(this.PlayerEnd_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(222)))), ((int)(((byte)(191)))));
             this.ClientSize = new System.Drawing.Size(1904, 1041);
+            this.Controls.Add(this.PlayerEnd);
+            this.Controls.Add(this.EndOpponentsTurn);
+            this.Controls.Add(this.Next5);
+            this.Controls.Add(this.Next4);
             this.Controls.Add(this.Next3);
             this.Controls.Add(this.Mulligan3);
             this.Controls.Add(this.Mulligan2);
@@ -2026,6 +2078,10 @@
         private System.Windows.Forms.Button Mulligan2;
         private System.Windows.Forms.Button Mulligan3;
         private System.Windows.Forms.Button Next3;
+        private System.Windows.Forms.Button Next4;
+        private System.Windows.Forms.Button Next5;
+        private System.Windows.Forms.Button EndOpponentsTurn;
+        private System.Windows.Forms.Button PlayerEnd;
     }
 }
 
