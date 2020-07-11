@@ -13,7 +13,7 @@ namespace Pokemon
 {
     public partial class Form1 : Form
     {
-
+        //Game Zone Piles
         Deck player = new Deck();
         Deck ai = new Deck();
         Hand player_Hand = new Hand();
@@ -28,11 +28,31 @@ namespace Pokemon
         Active ai_Active_Pokemon = new Active();
         Used player_used = new Used();
         Used ai_used = new Used();
+
+        //Phase Restrictions
         bool isPreGameTurn = true;
         bool youStartTurn = false;
         bool aiStartsTurn = false;
         bool isyourFirstTurn = false;
         bool isOpponentFirstTurn = false;
+
+        //Pokémon Conditions
+        bool PlayerConfused = false;
+        bool AIConfused = false;
+        bool confusedCheck = false;
+        bool PlayerPoisoned = false;      
+        bool AIPoisoned = false;
+        bool poisonedCheck = false;
+        bool PlayerAsleep = false;
+        bool AIAsleep = false;
+        bool asleepCheck = false;
+        bool PlayerParalyzed = false;
+        bool AIParalyzed = false;
+        bool paralyzedCheck = false;
+        bool PlayerBurned = false;
+        bool AIBurned = false;
+        bool burnedCheck = false;
+        bool dealsNothingCheck = false;
 
         bool playedEnergy = false;
         bool playedAttack = false;
@@ -50,28 +70,28 @@ namespace Pokemon
         public void Form1_Load(object sender, EventArgs e)
         {
 
-            player.AddToDeck(new Pokemon(46, "Charmander", "basic", 50, 50, 'f', 'w', 'n', 1, "Obviously prefers hot places. If it gets caught in the rain, steam is said to spout from the tip of its tail.", "..\\..\\Img\\BSPainted\\BS_046.jpg", new Attack("Scratch", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Ember", "Discard 1 Fire Energy card attached to Charmander in order to use this attack.", 30, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(46, "Charmander", "basic", 50, 50, 'f', 'w', 'n', 1, "Obviously prefers hot places. If it gets caught in the rain, steam is said to spout from the tip of its tail.", "..\\..\\Img\\BSPainted\\BS_046.jpg", new Attack("Scratch", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Ember", "Discard 1 Fire Energy card attached to Charmander in order to use this attack.", 30, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(46, "Charmander", "basic", 50, 50, 'f', 'w', 'n', 1, "Obviously prefers hot places. If it gets caught in the rain, steam is said to spout from the tip of its tail.", "..\\..\\Img\\BSPainted\\BS_046.jpg", new Attack("Scratch", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Ember", "Discard 1 Fire Energy card attached to Charmander in order to use this attack.", 30, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(46, "Charmander", "basic", 50, 50, 'f', 'w', 'n', 1, "Obviously prefers hot places. If it gets caught in the rain, steam is said to spout from the tip of its tail.", "..\\..\\Img\\BSPainted\\BS_046.jpg", new Attack("Scratch", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Ember", "Discard 1 Fire Energy card attached to Charmander in order to use this attack.", 30, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(24, "Charmeleon", "second", "Charmander", 80, 80, 'f', 'w', 'n', 1, "It lashes about with its tail to knock down its foe. It then tears up the fallen opponent with sharp claws.", "..\\..\\Img\\BS\\BS_024.jpg", new Attack("Slash", "", 30, new EnergyCost(3, 0, 0, 0, 0, 0, 0)), new Attack("Flamethrower", "Discard 1 Fire Energy card attached to Charmeleon in order to use this attack.", 50, new EnergyCost(1, 0, 2, 0, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(24, "Charmeleon", "second", "Charmander", 80, 80, 'f', 'w', 'n', 1, "It lashes about with its tail to knock down its foe. It then tears up the fallen opponent with sharp claws.", "..\\..\\Img\\BS\\BS_024.jpg", new Attack("Slash", "", 30, new EnergyCost(3, 0, 0, 0, 0, 0, 0)), new Attack("Flamethrower", "Discard 1 Fire Energy card attached to Charmeleon in order to use this attack.", 50, new EnergyCost(1, 0, 2, 0, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(68, "Vulpix", "basic", 50, 50, 'f', 'w', 'n', 1, "At the time of birth, it has just one tail. Its tail splits from the tip as it grows older.", "..\\..\\Img\\BS\\BS_068.jpg", new Attack("Confuse Ray", "Flip a coin. If heads, the Defending Pokémon is now Confused.", 10, new EnergyCost(0, 0, 2, 0, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(68, "Vulpix", "basic", 50, 50, 'f', 'w', 'n', 1, "At the time of birth, it has just one tail. Its tail splits from the tip as it grows older.", "..\\..\\Img\\BS\\BS_068.jpg", new Attack("Confuse Ray", "Flip a coin. If heads, the Defending Pokémon is now Confused.", 10, new EnergyCost(0, 0, 2, 0, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(12, "Ninetales", "second", "Vulpix", 80, 80, 'f', 'w', 'n', 1, "If your opponent has any Benched Pokémon, choose 1 of them and switch it with the Defending Pokémon.", "..\\..\\Img\\BS\\BS_012.jpg", new Attack("Lure", "If your opponent has any Benched Pokémon, choose 1 of them and switch it with the Defending Pokémon.", 0, new EnergyCost(2, 0, 0, 0, 0, 0, 0)), new Attack("Fire Blast", "Discard 1 Fire Energy card attached to Ninetales in order to use this attack.", 80, new EnergyCost(0, 0, 4, 0, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(28, "Growlithe", "basic", 60, 60, 'f', 'w', 'n', 1, "Very protective of its territory. It will bark and bite to repel intruders from its space.", "..\\..\\Img\\BS\\BS_028.jpg", new Attack("Flare", "", 20, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(28, "Growlithe", "basic", 60, 60, 'f', 'w', 'n', 1, "Very protective of its territory. It will bark and bite to repel intruders from its space.", "..\\..\\Img\\BS\\BS_028.jpg", new Attack("Flare", "", 20, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(23, "Arcanine", "second", "Growlithe", 100, 100, 'f', 'w', 'n', 3, "A Pokémon that has been long admired for its beauty. It runs gracefully, as if on wings.", "..\\..\\Img\\BS\\BS_023.jpg", new Attack("Flamethrower", "Discard 1 Fire Energy card attached to Arcanine in order to use this attack.", 50, new EnergyCost(1, 0, 2, 0, 0, 0, 0)), new Attack("Take Down", "Arcanine does 30 damage to itself.", 80, new EnergyCost(2, 0, 2, 0, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(69, "Weedle", "basic", 40, 40, 'g', 'f', 'n', 1, "Often found in forests, eating leaves. It has a sharp, venomous stinger on its head.", "..\\..\\Img\\BSPainted\\BS_069.jpg", new Attack("Poison Sting", "Flip a coin. If heads, the Defending Pokémon is now Poisoned.", 10, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(69, "Weedle", "basic", 40, 40, 'g', 'f', 'n', 1, "Often found in forests, eating leaves. It has a sharp, venomous stinger on its head.", "..\\..\\Img\\BSPainted\\BS_069.jpg", new Attack("Poison Sting", "Flip a coin. If heads, the Defending Pokémon is now Poisoned.", 10, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(69, "Weedle", "basic", 40, 40, 'g', 'f', 'n', 1, "Often found in forests, eating leaves. It has a sharp, venomous stinger on its head.", "..\\..\\Img\\BSPainted\\BS_069.jpg", new Attack("Poison Sting", "Flip a coin. If heads, the Defending Pokémon is now Poisoned.", 10, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(69, "Weedle", "basic", 40, 40, 'g', 'f', 'n', 1, "Often found in forests, eating leaves. It has a sharp, venomous stinger on its head.", "..\\..\\Img\\BSPainted\\BS_069.jpg", new Attack("Poison Sting", "Flip a coin. If heads, the Defending Pokémon is now Poisoned.", 10, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(55, "Nidoran Male", "basic", 40, 40, 'g', 'p', 'n', 1, "Stiffens its ears to sense danger. The larger, more powerful of its horns secretes venom.", "..\\..\\Img\\BS\\BS_055.jpg", new Attack("Horn Hazard", "Flip a coin. If tails, this attack does nothing.", 30, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(55, "Nidoran Male", "basic", 40, 40, 'g', 'p', 'n', 1, "Stiffens its ears to sense danger. The larger, more powerful of its horns secretes venom.", "..\\..\\Img\\BS\\BS_055.jpg", new Attack("Horn Hazard", "Flip a coin. If tails, this attack does nothing.", 30, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(55, "Nidoran Male", "basic", 40, 40, 'g', 'p', 'n', 1, "Stiffens its ears to sense danger. The larger, more powerful of its horns secretes venom.", "..\\..\\Img\\BS\\BS_055.jpg", new Attack("Horn Hazard", "Flip a coin. If tails, this attack does nothing.", 30, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(55, "Nidoran Male", "basic", 40, 40, 'g', 'p', 'n', 1, "Stiffens its ears to sense danger. The larger, more powerful of its horns secretes venom.", "..\\..\\Img\\BS\\BS_055.jpg", new Attack("Horn Hazard", "Flip a coin. If tails, this attack does nothing.", 30, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(66, "Tangela", "basic", 50, 50, 'g', 'f', 'n', 2, "Its whole body is swathed with wide vines that are similar to seaweed. These vines shake as it walks.", "..\\..\\Img\\BS\\BS_066.jpg", new Attack("Bind", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 20, new EnergyCost(1, 0, 0, 1, 0, 0, 0)), new Attack("Poisonpowder", "The Defending Pokémon is now Poisoned.", 20, new EnergyCost(0, 0, 0, 3, 0, 0, 0)), new List<char>()));
-            player.AddToDeck(new Pokemon(66, "Tangela", "basic", 50, 50, 'g', 'f', 'n', 2, "Its whole body is swathed with wide vines that are similar to seaweed. These vines shake as it walks.", "..\\..\\Img\\BS\\BS_066.jpg", new Attack("Bind", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 20, new EnergyCost(1, 0, 0, 1, 0, 0, 0)), new Attack("Poisonpowder", "The Defending Pokémon is now Poisoned.", 20, new EnergyCost(0, 0, 0, 3, 0, 0, 0)), new List<char>()));
+            player.AddToDeck(new Pokemon(46, "Charmander", "basic", 50, 50, 'f', 'w', 'n', 1, "Obviously prefers hot places. If it gets caught in the rain, steam is said to spout from the tip of its tail.", "..\\..\\Img\\BSPainted\\BS_046.jpg", new Attack("Scratch", "offensive", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Ember", "offensive", "Discard 1 Fire Energy card attached to Charmander in order to use this attack.", 30, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>(), false));
+            player.AddToDeck(new Pokemon(46, "Charmander", "basic", 50, 50, 'f', 'w', 'n', 1, "Obviously prefers hot places. If it gets caught in the rain, steam is said to spout from the tip of its tail.", "..\\..\\Img\\BSPainted\\BS_046.jpg", new Attack("Scratch", "offensive", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Ember", "offensive", "Discard 1 Fire Energy card attached to Charmander in order to use this attack.", 30, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>(), false));
+            player.AddToDeck(new Pokemon(46, "Charmander", "basic", 50, 50, 'f', 'w', 'n', 1, "Obviously prefers hot places. If it gets caught in the rain, steam is said to spout from the tip of its tail.", "..\\..\\Img\\BSPainted\\BS_046.jpg", new Attack("Scratch", "offensive", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Ember", "offensive", "Discard 1 Fire Energy card attached to Charmander in order to use this attack.", 30, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>(), false));
+            player.AddToDeck(new Pokemon(46, "Charmander", "basic", 50, 50, 'f', 'w', 'n', 1, "Obviously prefers hot places. If it gets caught in the rain, steam is said to spout from the tip of its tail.", "..\\..\\Img\\BSPainted\\BS_046.jpg", new Attack("Scratch", "offensive", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Ember", "offensive", "Discard 1 Fire Energy card attached to Charmander in order to use this attack.", 30, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>(), false));
+            player.AddToDeck(new Pokemon(24, "Charmeleon", "second", "Charmander", 80, 80, 'f', 'w', 'n', 1, "It lashes about with its tail to knock down its foe. It then tears up the fallen opponent with sharp claws.", "..\\..\\Img\\BS\\BS_024.jpg", new Attack("Slash", "offensive", "", 30, new EnergyCost(3, 0, 0, 0, 0, 0, 0)), new Attack("Flamethrower", "offensive", "Discard 1 Fire Energy card attached to Charmeleon in order to use this attack.", 50, new EnergyCost(1, 0, 2, 0, 0, 0, 0)), new List<char>(), false));
+            player.AddToDeck(new Pokemon(24, "Charmeleon", "second", "Charmander", 80, 80, 'f', 'w', 'n', 1, "It lashes about with its tail to knock down its foe. It then tears up the fallen opponent with sharp claws.", "..\\..\\Img\\BS\\BS_024.jpg", new Attack("Slash", "offensive", "", 30, new EnergyCost(3, 0, 0, 0, 0, 0, 0)), new Attack("Flamethrower", "offensive", "Discard 1 Fire Energy card attached to Charmeleon in order to use this attack.", 50, new EnergyCost(1, 0, 2, 0, 0, 0, 0)), new List<char>(), false));
+            player.AddToDeck(new Pokemon(68, "Vulpix", "basic", 50, 50, 'f', 'w', 'n', 1, "At the time of birth, it has just one tail. Its tail splits from the tip as it grows older.", "..\\..\\Img\\BS\\BS_068.jpg", new Attack("Confuse Ray", "offensive", "Flip a coin. If heads, the Defending Pokémon is now Confused.", 10, new EnergyCost(0, 0, 2, 0, 0, 0, 0)), new List<char>(), false));
+            player.AddToDeck(new Pokemon(68, "Vulpix", "basic", 50, 50, 'f', 'w', 'n', 1, "At the time of birth, it has just one tail. Its tail splits from the tip as it grows older.", "..\\..\\Img\\BS\\BS_068.jpg", new Attack("Confuse Ray", "offensive", "Flip a coin. If heads, the Defending Pokémon is now Confused.", 10, new EnergyCost(0, 0, 2, 0, 0, 0, 0)), new List<char>(), false));
+            player.AddToDeck(new Pokemon(12, "Ninetales", "second", "Vulpix", 80, 80, 'f', 'w', 'n', 1, "If your opponent has any Benched Pokémon, choose 1 of them and switch it with the Defending Pokémon.", "..\\..\\Img\\BS\\BS_012.jpg", new Attack("Lure", "defensive", "If your opponent has any Benched Pokémon, choose 1 of them and switch it with the Defending Pokémon.", 0, new EnergyCost(2, 0, 0, 0, 0, 0, 0)), new Attack("Fire Blast", "offensive", "Discard 1 Fire Energy card attached to Ninetales in order to use this attack.", 80, new EnergyCost(0, 0, 4, 0, 0, 0, 0)), new List<char>(), false));
+            player.AddToDeck(new Pokemon(28, "Growlithe", "basic", 60, 60, 'f', 'w', 'n', 1, "Very protective of its territory. It will bark and bite to repel intruders from its space.", "..\\..\\Img\\BS\\BS_028.jpg", new Attack("Flare", "offensive", "", 20, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>(), false));
+            player.AddToDeck(new Pokemon(28, "Growlithe", "basic", 60, 60, 'f', 'w', 'n', 1, "Very protective of its territory. It will bark and bite to repel intruders from its space.", "..\\..\\Img\\BS\\BS_028.jpg", new Attack("Flare", "offensive", "", 20, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>(), false));
+            player.AddToDeck(new Pokemon(23, "Arcanine", "second", "Growlithe", 100, 100, 'f', 'w', 'n', 3, "A Pokémon that has been long admired for its beauty. It runs gracefully, as if on wings.", "..\\..\\Img\\BS\\BS_023.jpg", new Attack("Flamethrower", "offensive", "Discard 1 Fire Energy card attached to Arcanine in order to use this attack.", 50, new EnergyCost(1, 0, 2, 0, 0, 0, 0)), new Attack("Take Down", "offensive", "Arcanine does 30 damage to itself.", 80, new EnergyCost(2, 0, 2, 0, 0, 0, 0)), new List<char>(), false));
+            player.AddToDeck(new Pokemon(69, "Weedle", "basic", 40, 40, 'g', 'f', 'n', 1, "Often found in forests, eating leaves. It has a sharp, venomous stinger on its head.", "..\\..\\Img\\BSPainted\\BS_069.jpg", new Attack("Poison Sting", "offensive", "Flip a coin. If heads, the Defending Pokémon is now Poisoned.", 10, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>(), false));
+            player.AddToDeck(new Pokemon(69, "Weedle", "basic", 40, 40, 'g', 'f', 'n', 1, "Often found in forests, eating leaves. It has a sharp, venomous stinger on its head.", "..\\..\\Img\\BSPainted\\BS_069.jpg", new Attack("Poison Sting", "offensive", "Flip a coin. If heads, the Defending Pokémon is now Poisoned.", 10, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>(), false));
+            player.AddToDeck(new Pokemon(69, "Weedle", "basic", 40, 40, 'g', 'f', 'n', 1, "Often found in forests, eating leaves. It has a sharp, venomous stinger on its head.", "..\\..\\Img\\BSPainted\\BS_069.jpg", new Attack("Poison Sting", "offensive", "Flip a coin. If heads, the Defending Pokémon is now Poisoned.", 10, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>(), false));
+            player.AddToDeck(new Pokemon(69, "Weedle", "basic", 40, 40, 'g', 'f', 'n', 1, "Often found in forests, eating leaves. It has a sharp, venomous stinger on its head.", "..\\..\\Img\\BSPainted\\BS_069.jpg", new Attack("Poison Sting", "offensive", "Flip a coin. If heads, the Defending Pokémon is now Poisoned.", 10, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>(), false));
+            player.AddToDeck(new Pokemon(55, "Nidoran Male", "basic", 40, 40, 'g', 'p', 'n', 1, "Stiffens its ears to sense danger. The larger, more powerful of its horns secretes venom.", "..\\..\\Img\\BS\\BS_055.jpg", new Attack("Horn Hazard", "offensive", "Flip a coin. If tails, this attack does nothing.", 30, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>(), false));
+            player.AddToDeck(new Pokemon(55, "Nidoran Male", "basic", 40, 40, 'g', 'p', 'n', 1, "Stiffens its ears to sense danger. The larger, more powerful of its horns secretes venom.", "..\\..\\Img\\BS\\BS_055.jpg", new Attack("Horn Hazard", "offensive", "Flip a coin. If tails, this attack does nothing.", 30, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>(), false));
+            player.AddToDeck(new Pokemon(55, "Nidoran Male", "basic", 40, 40, 'g', 'p', 'n', 1, "Stiffens its ears to sense danger. The larger, more powerful of its horns secretes venom.", "..\\..\\Img\\BS\\BS_055.jpg", new Attack("Horn Hazard", "offensive", "Flip a coin. If tails, this attack does nothing.", 30, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>(), false));
+            player.AddToDeck(new Pokemon(55, "Nidoran Male", "basic", 40, 40, 'g', 'p', 'n', 1, "Stiffens its ears to sense danger. The larger, more powerful of its horns secretes venom.", "..\\..\\Img\\BS\\BS_055.jpg", new Attack("Horn Hazard", "offensive", "Flip a coin. If tails, this attack does nothing.", 30, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>(), false));
+            player.AddToDeck(new Pokemon(66, "Tangela", "basic", 50, 50, 'g', 'f', 'n', 2, "Its whole body is swathed with wide vines that are similar to seaweed. These vines shake as it walks.", "..\\..\\Img\\BS\\BS_066.jpg", new Attack("Bind", "offensive", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 20, new EnergyCost(1, 0, 0, 1, 0, 0, 0)), new Attack("Poisonpowder", "offensive", "The Defending Pokémon is now Poisoned.", 20, new EnergyCost(0, 0, 0, 3, 0, 0, 0)), new List<char>(), false));
+            player.AddToDeck(new Pokemon(66, "Tangela", "basic", 50, 50, 'g', 'f', 'n', 2, "Its whole body is swathed with wide vines that are similar to seaweed. These vines shake as it walks.", "..\\..\\Img\\BS\\BS_066.jpg", new Attack("Bind", "offensive", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 20, new EnergyCost(1, 0, 0, 1, 0, 0, 0)), new Attack("Poisonpowder", "offensive", "The Defending Pokémon is now Poisoned.", 20, new EnergyCost(0, 0, 0, 3, 0, 0, 0)), new List<char>(), false));
             player.AddToDeck(new Pokemon(92, "Energy Removal", "trainer", 't', "Choose 1 Energy card attached to 1 of your opponent's Pokémon and discard it.", "..\\..\\Img\\BS\\BS_092.jpg"));
             player.AddToDeck(new Pokemon(81, "Energy Retrieval", "trainer", 't', "Trade 1 of the other cards in your hand for up to 2 basic Energy cards from your discard pile.", "..\\..\\Img\\BS\\BS_081.jpg"));
             player.AddToDeck(new Pokemon(81, "Energy Retrieval", "trainer", 't', "Trade 1 of the other cards in your hand for up to 2 basic Energy cards from your discard pile.", "..\\..\\Img\\BS\\BS_081.jpg"));
@@ -112,27 +132,27 @@ namespace Pokemon
             player.AddToDeck(new Pokemon(99, "Grass Energy", "energy", 'g', "..\\..\\Img\\BS\\BS_099.jpg"));
 
 
-            ai.AddToDeck(new Pokemon(58, "Pikachu", "basic", 40, 40, 'e', 'l', 'n', 1, "When several of these Pokémon gather, their electricity can cause lightning storms.", "..\\..\\Img\\BSPainted\\BS_058.jpg", new Attack("Gnaw", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Thunder Jolt", "Flip a coin. If tails, Pikachu does 10 damage to itself.", 30, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(58, "Pikachu", "basic", 40, 40, 'e', 'l', 'n', 1, "When several of these Pokémon gather, their electricity can cause lightning storms.", "..\\..\\Img\\BSPainted\\BS_058.jpg", new Attack("Gnaw", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Thunder Jolt", "Flip a coin. If tails, Pikachu does 10 damage to itself.", 30, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(58, "Pikachu", "basic", 40, 40, 'e', 'l', 'n', 1, "When several of these Pokémon gather, their electricity can cause lightning storms.", "..\\..\\Img\\BSPainted\\BS_058.jpg", new Attack("Gnaw", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Thunder Jolt", "Flip a coin. If tails, Pikachu does 10 damage to itself.", 30, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(58, "Pikachu", "basic", 40, 40, 'e', 'l', 'n', 1, "When several of these Pokémon gather, their electricity can cause lightning storms.", "..\\..\\Img\\BSPainted\\BS_058.jpg", new Attack("Gnaw", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Thunder Jolt", "Flip a coin. If tails, Pikachu does 10 damage to itself.", 30, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(53, "Magnemite", "basic", 40, 40, 'e', 'l', 'n', 1, "Uses anti-gravity to stay suspended. Appears without warning and uses attacks like Thunder Wave.", "..\\..\\Img\\BS\\BS_053.jpg", new Attack("Thunder Wave", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 10, new EnergyCost(0, 0, 0, 0, 1, 0, 0)), new Attack("Self Destruct", "Does 10 damage to each Pokémon on each player's Bench. (Don't apply Weakness and Resistance for Benched Pokémon.) Magnemite does 40 damage to itself.", 40, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(53, "Magnemite", "basic", 40, 40, 'e', 'l', 'n', 1, "Uses anti-gravity to stay suspended. Appears without warning and uses attacks like Thunder Wave.", "..\\..\\Img\\BS\\BS_053.jpg", new Attack("Thunder Wave", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 10, new EnergyCost(0, 0, 0, 0, 1, 0, 0)), new Attack("Self Destruct", "Does 10 damage to each Pokémon on each player's Bench. (Don't apply Weakness and Resistance for Benched Pokémon.) Magnemite does 40 damage to itself.", 40, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(53, "Magnemite", "basic", 40, 40, 'e', 'l', 'n', 1, "Uses anti-gravity to stay suspended. Appears without warning and uses attacks like Thunder Wave.", "..\\..\\Img\\BS\\BS_053.jpg", new Attack("Thunder Wave", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 10, new EnergyCost(0, 0, 0, 0, 1, 0, 0)), new Attack("Self Destruct", "Does 10 damage to each Pokémon on each player's Bench. (Don't apply Weakness and Resistance for Benched Pokémon.) Magnemite does 40 damage to itself.", 40, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(43, "Abra", "basic", 30, 30, 'p', 'p', 'n', 0, "Using its ability to read minds, it will identify impending danger and teleport to safety.", "..\\..\\Img\\BSPainted\\BS_043.jpg", new Attack("Psychock", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 10, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(43, "Abra", "basic", 30, 30, 'p', 'p', 'n', 0, "Using its ability to read minds, it will identify impending danger and teleport to safety.", "..\\..\\Img\\BSPainted\\BS_043.jpg", new Attack("Psychock", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 10, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(43, "Abra", "basic", 30, 30, 'p', 'p', 'n', 0, "Using its ability to read minds, it will identify impending danger and teleport to safety.", "..\\..\\Img\\BSPainted\\BS_043.jpg", new Attack("Psychock", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 10, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(32, "Kadabra", "second", "Abra", 60, 60, 'p', 'p', 'n', 3, "It emits special alpha waves from its body that induce headaches even to those just nearby.", "..\\..\\Img\\BS\\BS_032.jpg", new Attack("Recover", "Discard 1 Psychic Energy card attached to Kadabra in order to use this attack. Remove all damage counters from Kadabra.", 0, new EnergyCost(0, 0, 0, 0, 0, 2, 0)), new Attack("Super Psy", "", 50, new EnergyCost(1, 0, 0, 0, 0, 2, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(50, "Gastly", "basic", 30, 30, 'p', 'n', 'l', 0, "Almost invisible, this gaseous Pokémon cloaks the target and puts it to sleep without notice.", "..\\..\\Img\\BSPainted\\BS_050.jpg", new Attack("Sleeping Gas", "Flip a coin. If heads, the Defending Pokémon is now Asleep.", 0, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Destiny Bond", "Discard 1 Psychic Energy card attached to Gastly in order to use this attack. If a Pokémon Knocks Out Gastly during your opponent's next turn, Knock Out that Pokémon.", 0, new EnergyCost(1, 0, 0, 0, 0, 1, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(50, "Gastly", "basic", 30, 30, 'p', 'n', 'l', 0, "Almost invisible, this gaseous Pokémon cloaks the target and puts it to sleep without notice.", "..\\..\\Img\\BSPainted\\BS_050.jpg", new Attack("Sleeping Gas", "Flip a coin. If heads, the Defending Pokémon is now Asleep.", 0, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Destiny Bond", "Discard 1 Psychic Energy card attached to Gastly in order to use this attack. If a Pokémon Knocks Out Gastly during your opponent's next turn, Knock Out that Pokémon.", 0, new EnergyCost(1, 0, 0, 0, 0, 1, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(50, "Gastly", "basic", 30, 30, 'p', 'n', 'l', 0, "Almost invisible, this gaseous Pokémon cloaks the target and puts it to sleep without notice.", "..\\..\\Img\\BSPainted\\BS_050.jpg", new Attack("Sleeping Gas", "Flip a coin. If heads, the Defending Pokémon is now Asleep.", 0, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Destiny Bond", "Discard 1 Psychic Energy card attached to Gastly in order to use this attack. If a Pokémon Knocks Out Gastly during your opponent's next turn, Knock Out that Pokémon.", 0, new EnergyCost(1, 0, 0, 0, 0, 1, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(29, "Haunter", "second", "Gastly", 60, 60, 'p', 'n', 'l', 1, "Because of its ability to slip through block walls, it is said to be from another dimension.", "..\\..\\Img\\BSPainted\\BS_029.jpg", new Attack("Hypnosis", "The Defending Pokémon is now Asleep.", 0, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Dream Eater", "You can't use this attack unless the Defending Pokémon is Asleep.", 50, new EnergyCost(0, 0, 0, 0, 0, 2, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(29, "Haunter", "second", "Gastly", 60, 60, 'p', 'n', 'l', 1, "Because of its ability to slip through block walls, it is said to be from another dimension.", "..\\..\\Img\\BSPainted\\BS_029.jpg", new Attack("Hypnosis", "The Defending Pokémon is now Asleep.", 0, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Dream Eater", "You can't use this attack unless the Defending Pokémon is Asleep.", 50, new EnergyCost(0, 0, 0, 0, 0, 2, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(49, "Drowzee", "basic", 50, 50, 'p', 'p', 'n', 1, "Puts enemies to sleep, then eats their dreams. Occasionally gets sick from eating bad dreams.", "..\\..\\Img\\BS\\BS_049.jpg", new Attack("Pound", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Confuse Ray", "Flip a coin. If heads, the Defending Pokémon is now Confused.", 10, new EnergyCost(0, 0, 0, 0, 0, 2, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(49, "Drowzee", "basic", 50, 50, 'p', 'p', 'n', 1, "Puts enemies to sleep, then eats their dreams. Occasionally gets sick from eating bad dreams.", "..\\..\\Img\\BS\\BS_049.jpg", new Attack("Pound", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Confuse Ray", "Flip a coin. If heads, the Defending Pokémon is now Confused.", 10, new EnergyCost(0, 0, 0, 0, 0, 2, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(31, "Jynx", "basic", 70, 70, 'p', 'p', 'n', 2, "Merely by meditating, the Pokémon launches a powerful psychic energy attack.", "..\\..\\Img\\BSPainted\\BS_031.jpg", new Attack("Doubleslap", "Flip 2 coins. This attack does 10 damage times the number of heads.", 10, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Meditate", "Does 20 damage plus 10 more damage for each damage counter on the Defending Pokémon.", 20, new EnergyCost(1, 0, 0, 0, 0, 2, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(31, "Jynx", "basic", 70, 70, 'p', 'p', 'n', 2, "Merely by meditating, the Pokémon launches a powerful psychic energy attack.", "..\\..\\Img\\BSPainted\\BS_031.jpg", new Attack("Doubleslap", "Flip 2 coins. This attack does 10 damage times the number of heads.", 10, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Meditate", "Does 20 damage plus 10 more damage for each damage counter on the Defending Pokémon.", 20, new EnergyCost(1, 0, 0, 0, 0, 2, 0)), new List<char>()));
-            ai.AddToDeck(new Pokemon(10, "Mewtwo", "basic", 60, 60, 'p', 'p', 'n', 3, "A scientist created this Pokémon after years of horrific gene-splicing and DNA engineering experiments.", "..\\..\\Img\\BSPainted\\BS_010.jpg", new Attack("Psychic", "Does 10 damage plus 10 more damage for each Energy card attached to the Defending Pokémon.", 10, new EnergyCost(1, 0, 0, 0, 0, 1, 0)), new Attack("Barrier", "Discard 1 Psychic Energy card attached to Mewtwo in order to use this attack. During your opponent's next turn, prevent all effects of attacks, including damage, done to Mewtwo.", 0, new EnergyCost(0, 0, 0, 0, 0, 2, 0)), new List<char>()));
+            ai.AddToDeck(new Pokemon(58, "Pikachu", "basic", 40, 40, 'e', 'l', 'n', 1, "When several of these Pokémon gather, their electricity can cause lightning storms.", "..\\..\\Img\\BSPainted\\BS_058.jpg", new Attack("Gnaw", "offensive", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Thunder Jolt", "offensive", "Flip a coin. If tails, Pikachu does 10 damage to itself.", 30, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>(), false));
+            ai.AddToDeck(new Pokemon(58, "Pikachu", "basic", 40, 40, 'e', 'l', 'n', 1, "When several of these Pokémon gather, their electricity can cause lightning storms.", "..\\..\\Img\\BSPainted\\BS_058.jpg", new Attack("Gnaw", "offensive", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Thunder Jolt", "offensive", "Flip a coin. If tails, Pikachu does 10 damage to itself.", 30, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>(), false));
+            ai.AddToDeck(new Pokemon(58, "Pikachu", "basic", 40, 40, 'e', 'l', 'n', 1, "When several of these Pokémon gather, their electricity can cause lightning storms.", "..\\..\\Img\\BSPainted\\BS_058.jpg", new Attack("Gnaw", "offensive", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Thunder Jolt", "offensive", "Flip a coin. If tails, Pikachu does 10 damage to itself.", 30, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>(), false));
+            ai.AddToDeck(new Pokemon(58, "Pikachu", "basic", 40, 40, 'e', 'l', 'n', 1, "When several of these Pokémon gather, their electricity can cause lightning storms.", "..\\..\\Img\\BSPainted\\BS_058.jpg", new Attack("Gnaw", "offensive", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Thunder Jolt", "offensive", "Flip a coin. If tails, Pikachu does 10 damage to itself.", 30, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>(), false));
+            ai.AddToDeck(new Pokemon(53, "Magnemite", "basic", 40, 40, 'e', 'l', 'n', 1, "Uses anti-gravity to stay suspended. Appears without warning and uses attacks like Thunder Wave.", "..\\..\\Img\\BS\\BS_053.jpg", new Attack("Thunder Wave", "offensive", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 10, new EnergyCost(0, 0, 0, 0, 1, 0, 0)), new Attack("Self Destruct", "offensive", "Does 10 damage to each Pokémon on each player's Bench. (Don't apply Weakness and Resistance for Benched Pokémon.) Magnemite does 40 damage to itself.", 40, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>(), false));
+            ai.AddToDeck(new Pokemon(53, "Magnemite", "basic", 40, 40, 'e', 'l', 'n', 1, "Uses anti-gravity to stay suspended. Appears without warning and uses attacks like Thunder Wave.", "..\\..\\Img\\BS\\BS_053.jpg", new Attack("Thunder Wave", "offensive", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 10, new EnergyCost(0, 0, 0, 0, 1, 0, 0)), new Attack("Self Destruct", "offensive", "Does 10 damage to each Pokémon on each player's Bench. (Don't apply Weakness and Resistance for Benched Pokémon.) Magnemite does 40 damage to itself.", 40, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>(), false));
+            ai.AddToDeck(new Pokemon(53, "Magnemite", "basic", 40, 40, 'e', 'l', 'n', 1, "Uses anti-gravity to stay suspended. Appears without warning and uses attacks like Thunder Wave.", "..\\..\\Img\\BS\\BS_053.jpg", new Attack("Thunder Wave", "offensive", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 10, new EnergyCost(0, 0, 0, 0, 1, 0, 0)), new Attack("Self Destruct", "offensive", "Does 10 damage to each Pokémon on each player's Bench. (Don't apply Weakness and Resistance for Benched Pokémon.) Magnemite does 40 damage to itself.", 40, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>(), false));
+            ai.AddToDeck(new Pokemon(43, "Abra", "basic", 30, 30, 'p', 'p', 'n', 0, "Using its ability to read minds, it will identify impending danger and teleport to safety.", "..\\..\\Img\\BSPainted\\BS_043.jpg", new Attack("Psychock", "offensive", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 10, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new List<char>(), false));
+            ai.AddToDeck(new Pokemon(43, "Abra", "basic", 30, 30, 'p', 'p', 'n', 0, "Using its ability to read minds, it will identify impending danger and teleport to safety.", "..\\..\\Img\\BSPainted\\BS_043.jpg", new Attack("Psychock", "offensive", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 10, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new List<char>(), false));
+            ai.AddToDeck(new Pokemon(43, "Abra", "basic", 30, 30, 'p', 'p', 'n', 0, "Using its ability to read minds, it will identify impending danger and teleport to safety.", "..\\..\\Img\\BSPainted\\BS_043.jpg", new Attack("Psychock", "offensive", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 10, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new List<char>(), false));
+            ai.AddToDeck(new Pokemon(32, "Kadabra", "second", "Abra", 60, 60, 'p', 'p', 'n', 3, "It emits special alpha waves from its body that induce headaches even to those just nearby.", "..\\..\\Img\\BS\\BS_032.jpg", new Attack("Recover", "defensive", "Discard 1 Psychic Energy card attached to Kadabra in order to use this attack. Remove all damage counters from Kadabra.", 0, new EnergyCost(0, 0, 0, 0, 0, 2, 0)), new Attack("Super Psy", "offensive", "", 50, new EnergyCost(1, 0, 0, 0, 0, 2, 0)), new List<char>(), false));
+            ai.AddToDeck(new Pokemon(50, "Gastly", "basic", 30, 30, 'p', 'n', 'l', 0, "Almost invisible, this gaseous Pokémon cloaks the target and puts it to sleep without notice.", "..\\..\\Img\\BSPainted\\BS_050.jpg", new Attack("Sleeping Gas", "offensive", "Flip a coin. If heads, the Defending Pokémon is now Asleep.", 0, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Destiny Bond", "defensive", "Discard 1 Psychic Energy card attached to Gastly in order to use this attack. If a Pokémon Knocks Out Gastly during your opponent's next turn, Knock Out that Pokémon.", 0, new EnergyCost(1, 0, 0, 0, 0, 1, 0)), new List<char>(), false));
+            ai.AddToDeck(new Pokemon(50, "Gastly", "basic", 30, 30, 'p', 'n', 'l', 0, "Almost invisible, this gaseous Pokémon cloaks the target and puts it to sleep without notice.", "..\\..\\Img\\BSPainted\\BS_050.jpg", new Attack("Sleeping Gas", "offensive", "Flip a coin. If heads, the Defending Pokémon is now Asleep.", 0, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Destiny Bond", "defensive", "Discard 1 Psychic Energy card attached to Gastly in order to use this attack. If a Pokémon Knocks Out Gastly during your opponent's next turn, Knock Out that Pokémon.", 0, new EnergyCost(1, 0, 0, 0, 0, 1, 0)), new List<char>(), false));
+            ai.AddToDeck(new Pokemon(50, "Gastly", "basic", 30, 30, 'p', 'n', 'l', 0, "Almost invisible, this gaseous Pokémon cloaks the target and puts it to sleep without notice.", "..\\..\\Img\\BSPainted\\BS_050.jpg", new Attack("Sleeping Gas", "offensive", "Flip a coin. If heads, the Defending Pokémon is now Asleep.", 0, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Destiny Bond", "defensive", "Discard 1 Psychic Energy card attached to Gastly in order to use this attack. If a Pokémon Knocks Out Gastly during your opponent's next turn, Knock Out that Pokémon.", 0, new EnergyCost(1, 0, 0, 0, 0, 1, 0)), new List<char>(), false));
+            ai.AddToDeck(new Pokemon(29, "Haunter", "second", "Gastly", 60, 60, 'p', 'n', 'l', 1, "Because of its ability to slip through block walls, it is said to be from another dimension.", "..\\..\\Img\\BSPainted\\BS_029.jpg", new Attack("Hypnosis", "offensive", "The Defending Pokémon is now Asleep.", 0, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Dream Eater", "offensive", "You can't use this attack unless the Defending Pokémon is Asleep.", 50, new EnergyCost(0, 0, 0, 0, 0, 2, 0)), new List<char>(), false));
+            ai.AddToDeck(new Pokemon(29, "Haunter", "second", "Gastly", 60, 60, 'p', 'n', 'l', 1, "Because of its ability to slip through block walls, it is said to be from another dimension.", "..\\..\\Img\\BSPainted\\BS_029.jpg", new Attack("Hypnosis", "offensive", "The Defending Pokémon is now Asleep.", 0, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Dream Eater", "offensive", "You can't use this attack unless the Defending Pokémon is Asleep.", 50, new EnergyCost(0, 0, 0, 0, 0, 2, 0)), new List<char>(), false));
+            ai.AddToDeck(new Pokemon(49, "Drowzee", "basic", 50, 50, 'p', 'p', 'n', 1, "Puts enemies to sleep, then eats their dreams. Occasionally gets sick from eating bad dreams.", "..\\..\\Img\\BS\\BS_049.jpg", new Attack("Pound", "offensive", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Confuse Ray", "offensive", "Flip a coin. If heads, the Defending Pokémon is now Confused.", 10, new EnergyCost(0, 0, 0, 0, 0, 2, 0)), new List<char>(), false));
+            ai.AddToDeck(new Pokemon(49, "Drowzee", "basic", 50, 50, 'p', 'p', 'n', 1, "Puts enemies to sleep, then eats their dreams. Occasionally gets sick from eating bad dreams.", "..\\..\\Img\\BS\\BS_049.jpg", new Attack("Pound", "offensive", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Confuse Ray", "offensive", "Flip a coin. If heads, the Defending Pokémon is now Confused.", 10, new EnergyCost(0, 0, 0, 0, 0, 2, 0)), new List<char>(), false));
+            ai.AddToDeck(new Pokemon(31, "Jynx", "basic", 70, 70, 'p', 'p', 'n', 2, "Merely by meditating, the Pokémon launches a powerful psychic energy attack.", "..\\..\\Img\\BSPainted\\BS_031.jpg", new Attack("Doubleslap", "offensive", "Flip 2 coins. This attack does 10 damage times the number of heads.", 10, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Meditate", "offensive", "Does 20 damage plus 10 more damage for each damage counter on the Defending Pokémon.", 20, new EnergyCost(1, 0, 0, 0, 0, 2, 0)), new List<char>(), false));
+            ai.AddToDeck(new Pokemon(31, "Jynx", "basic", 70, 70, 'p', 'p', 'n', 2, "Merely by meditating, the Pokémon launches a powerful psychic energy attack.", "..\\..\\Img\\BSPainted\\BS_031.jpg", new Attack("Doubleslap", "offensive", "Flip 2 coins. This attack does 10 damage times the number of heads.", 10, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Meditate", "offensive", "Does 20 damage plus 10 more damage for each damage counter on the Defending Pokémon.", 20, new EnergyCost(1, 0, 0, 0, 0, 2, 0)), new List<char>(), false));
+            ai.AddToDeck(new Pokemon(10, "Mewtwo", "basic", 60, 60, 'p', 'p', 'n', 3, "A scientist created this Pokémon after years of horrific gene-splicing and DNA engineering experiments.", "..\\..\\Img\\BSPainted\\BS_010.jpg", new Attack("Psychic", "offensive", "Does 10 damage plus 10 more damage for each Energy card attached to the Defending Pokémon.", 10, new EnergyCost(1, 0, 0, 0, 0, 1, 0)), new Attack("Barrier", "defensive", "Discard 1 Psychic Energy card attached to Mewtwo in order to use this attack. During your opponent's next turn, prevent all effects of attacks, including damage, done to Mewtwo.", 0, new EnergyCost(0, 0, 0, 0, 0, 2, 0)), new List<char>(), false));
             ai.AddToDeck(new Pokemon(91, "Bill", "trainer", 't', "Draw 2 cards.", "..\\..\\Img\\BS\\BS_091.jpg"));
             ai.AddToDeck(new Pokemon(91, "Bill", "trainer", 't', "Draw 2 cards.", "..\\..\\Img\\BS\\BS_091.jpg"));
             ai.AddToDeck(new Pokemon(71, "Computer Search", "trainer", 't', "Discard 2 of the other cards from your hand in order to search your deck for any card and put it into your hand. Shuffle your deck afterward.", "..\\..\\Img\\BS\\BS_071.jpg"));
@@ -3337,11 +3357,6 @@ namespace Pokemon
             }
         }
 
-        private void Hand1_Click(object sender, EventArgs e)
-        {
-          
-        }
-
         private void Play_Click(object sender, EventArgs e)
         {
             if(isPreGameTurn == true)
@@ -3349,7 +3364,46 @@ namespace Pokemon
                 int num = GetHandBoxIndex();
                 if (player_Hand.ShowType(num) == "basic")
                 {
+                    if (bench.NumberOfCards() < 6)
+                    {
+                        gameMessage.Text = "You played " + player_Hand.ShowName(num) + " from your hand to your bench";
+                        bench.Add(player_Hand.PlayCard(num));
+                        player_Hand.RemoveFromHand(num);
+                        UpdateBenchView();
+                        UpdateHandView();
+                        AIPlaysCards();
+                    }
+                    else
+                    {
+                        gameMessage.Text = "Your bench is full!";
+                    }
+                }
+                else if (player_Hand.ShowType(num) == "energy")
+                {
+                }
+                else if (player_Hand.ShowType(num) == "trainer")
+                {
+                    gameMessage.Text = "You cannot play trainers at this stage.";
+                }
+                else if (player_Hand.ShowType(num) == "second")
+                {
+                    if (bench.NumberOfCards() == 0)
+                    {
+                        gameMessage.Text = "You cannot evolve at this stage.";
+                    }
+                    else
+                    {
+                        gameMessage.Text = "You cannot evolve at this stage.";
+                    }
+                }
+            }
 
+            else if (isyourFirstTurn == true)
+            {
+                int num = GetHandBoxIndex();
+
+                if (player_Hand.ShowType(num) == "basic")
+                {
                     if (bench.NumberOfCards() < 6)
                     {
                         gameMessage.Text = "You played " + player_Hand.ShowName(num) + " from your hand to your bench";
@@ -3365,19 +3419,23 @@ namespace Pokemon
                         gameMessage.Text = "Your bench is full!";
                     }
                 }
+
                 else if (player_Hand.ShowType(num) == "energy")
                 {
-                    gameMessage.Text = "Please choose instead the Pokémon to load the energy into from the menu.";
+                }
+                else if (player_Hand.ShowType(num) == "trainer")
+                {
+                    gameMessage.Text = "You cannot play trainers during your first turn.";
                 }
                 else if (player_Hand.ShowType(num) == "second")
                 {
                     if (bench.NumberOfCards() == 0)
                     {
-                        gameMessage.Text = "You cannot evolve at this stage.";
+                        gameMessage.Text = "You cannot evolve your Pokémon during your first turn.";
                     }
                     else
                     {
-                        gameMessage.Text = "You cannot evolve at this stage.";
+                        gameMessage.Text = "You cannot evolve your Pokémon during your first turn.";
                     }
                 }
             }
@@ -3404,9 +3462,10 @@ namespace Pokemon
                 }
                 else if (player_Hand.ShowType(num) == "energy")
                 {
-
-
-
+                }
+                else if (player_Hand.ShowType(num) == "trainer")
+                {
+                    //TO BE FILLED LATER
                 }
                 else if (player_Hand.ShowType(num) == "second")
                 {
@@ -3419,8 +3478,7 @@ namespace Pokemon
                         gameMessage.Text = "Please choose instead the Pokémon to evolve from in the menu.";
                     }
                 }
-            }
-            
+            }           
 
         }
 
@@ -3619,7 +3677,7 @@ namespace Pokemon
                        
                         if (active_Pokemon.CanPerformAttack(1) == true)
                         {
-                            gameMessage.Text = "You performed " + active_Pokemon.ShowAttackName(1) + " on the Defending Pokémon";
+                            AttackingAI(1);
                             playedAttack = true;
                         }
                         else
@@ -3633,7 +3691,7 @@ namespace Pokemon
                     {
                         if (active_Pokemon.CanPerformAttack(2) == true)
                         {
-                            gameMessage.Text = "You performed " + active_Pokemon.ShowAttackName(2) + " on the Defending Pokémon";
+                            AttackingAI(2);
                             playedAttack = true;
                         }
                         else
@@ -3647,7 +3705,7 @@ namespace Pokemon
                     {
                         if (active_Pokemon.CanPerformAttack(3) == true)
                         {
-                            gameMessage.Text = "You performed " + active_Pokemon.ShowAttackName(3) + " on the Defending Pokémon";
+                            AttackingAI(3);
                             playedAttack = true;
                         }
                         else
@@ -3814,57 +3872,89 @@ namespace Pokemon
             
             else if (player_Hand.ShowType(num) == "second")
             {
-                ToolStripMenuItem item = sender as ToolStripMenuItem;
-                if (item != null)
+                if(isPreGameTurn == true)
                 {
-                    int index = (item.OwnerItem as ToolStripMenuItem).DropDownItems.IndexOf(item);
-
-                    if (index <= (bench.NumberOfCards() - 1))
-                    {
-                        if (player_Hand.ShowFirstStage(num) == bench.ShowName(index))
-                        {
-                            int damage = bench.ShowHp(index) - bench.ShowRemHp(index);
-                            List<char> inheritenergies = bench.GetEnergyLoaded(index);
-                            player_used.Add(bench.PlayCard(index));
-                            gameMessage.Text = "You evolved " + bench.ShowName(index) + " into " + player_Hand.ShowName(num);
-                            bench.PutInto(index, player_Hand.PlayCard(num));
-                            bench.InheritDamage(index, damage);
-                            bench.InheritEnergies(index, inheritenergies);
-                            player_Hand.RemoveFromHand(num);
-                            UpdateBenchView();
-                            UpdateHandView();
-                        }
-                        else
-                        {
-                            gameMessage.Text = "You can\'t place " + player_Hand.ShowName(num) + " on " + bench.ShowName(index) + ". Find its right evolved form.";
-                        }
-                    }
-                    else
-                    {
-                        if (player_Hand.ShowFirstStage(num) == active_Pokemon.ShowName())
-                        {
-                            int damage = active_Pokemon.ShowHP() - active_Pokemon.ShowRemHP();
-                            List<char> inheritenergies = active_Pokemon.GetEnergyLoaded();
-                            player_used.Add(active_Pokemon.GetActivePokemon());
-                            gameMessage.Text = "You evolved " + active_Pokemon.ShowName() + " into " + player_Hand.ShowName(num);
-                            active_Pokemon.Become(player_Hand.PlayCard(num));
-                            active_Pokemon.InheritDamage(damage);
-                            active_Pokemon.InheritEnergies(inheritenergies);
-                            player_Hand.RemoveFromHand(num);
-                            UpdateActivePokemonView();
-                            UpdateHandView();
-                        }
-                        else
-                        {
-                            gameMessage.Text = "You can\'t place " + player_Hand.ShowName(num) + " on " + active_Pokemon.ShowName() + ". Find its right evolved form.";
-                        }
-                        
-                    }
-                        
+                    gameMessage.Text = "You cannot evolve at this stage.";
                 }
+                else if(isyourFirstTurn == true || youStartTurn == true)
+                {
+                    gameMessage.Text = "You cannot evolve during your first turn.";
+                }
+                else
+                {
+                    
+                    ToolStripMenuItem item = sender as ToolStripMenuItem;                  
+                    if (item != null)
+                    {
+                        int index = (item.OwnerItem as ToolStripMenuItem).DropDownItems.IndexOf(item);
+
+                        if (index <= (bench.NumberOfCards() - 1))
+                        {
+                            if (player_Hand.ShowFirstStage(num) == bench.ShowName(index) && bench.CanEvolve(index) == true)
+                            {
+                                int damage = bench.ShowHp(index) - bench.ShowRemHp(index);
+                                List<char> inheritenergies = bench.GetEnergyLoaded(index);
+                                player_used.Add(bench.PlayCard(index));
+                                gameMessage.Text = "You evolved " + bench.ShowName(index) + " into " + player_Hand.ShowName(num);
+                                bench.PutInto(index, player_Hand.PlayCard(num));
+                                bench.InheritDamage(index, damage);
+                                bench.InheritEnergies(index, inheritenergies);
+                                player_Hand.RemoveFromHand(num);
+                                UpdateBenchView();
+                                UpdateHandView();
+                            }
+                            else if (player_Hand.ShowFirstStage(num) == bench.ShowName(index) && bench.CanEvolve(index) == false)
+                            {
+                                gameMessage.Text = "You can\'t evolve " + bench.ShowName(index) + " as you just played it this turn.";
+                            }
+                            else
+                            {
+                                gameMessage.Text = "You can\'t place " + player_Hand.ShowName(num) + " on " + bench.ShowName(index) + ". Find its right evolved form.";
+                            }
+                        }
+                        else
+                        {
+                            if (player_Hand.ShowFirstStage(num) == active_Pokemon.ShowName() && active_Pokemon.CanEvolve() == true)
+                            {
+                                int damage = active_Pokemon.ShowHP() - active_Pokemon.ShowRemHP();
+                                List<char> inheritenergies = active_Pokemon.GetEnergyLoaded();
+                                player_used.Add(active_Pokemon.GetActivePokemon());
+                                gameMessage.Text = "You evolved " + active_Pokemon.ShowName() + " into " + player_Hand.ShowName(num);
+                                active_Pokemon.Become(player_Hand.PlayCard(num));
+                                active_Pokemon.InheritDamage(damage);
+                                active_Pokemon.InheritEnergies(inheritenergies);
+                                player_Hand.RemoveFromHand(num);
+                                UpdateActivePokemonView();
+                                UpdateHandView();
+                            }
+                            else if (player_Hand.ShowFirstStage(num) == active_Pokemon.ShowName() && active_Pokemon.CanEvolve() == false)
+                            {
+                                gameMessage.Text = "You can\'t evolve " + player_Hand.ShowName(num) + " this turn because you just played it.";
+                            }
+                            else
+                            {
+                                gameMessage.Text = "You can\'t place " + player_Hand.ShowName(num) + " on " + active_Pokemon.ShowName() + ". Find its right evolved form.";
+                            }
+                        }
+                    }
+                }                
             }
 
-
+            else if (player_Hand.ShowType(num) == "trainer")
+            {
+                if (isPreGameTurn == true)
+                {
+                    gameMessage.Text = "You can\'t use trainer cards at this stage.";
+                }
+                else if (youStartTurn == true)
+                {
+                    gameMessage.Text = "You can\'t use trainer cards when you start the game.";
+                }
+                else
+                {
+                    // CODE TO BE WRITTEN SOON
+                }
+            }
         }
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
@@ -4154,16 +4244,57 @@ namespace Pokemon
             if(result == 0)
             {
                 CoinResult.Image = Image.FromFile("..\\..\\Img\\Coins\\Wizards_Silver_Chansey_Coin.png");
-                CoinResult.Visible = true;
-                gameMessage.Text = "You flip the coin and get Heads.";
+                CoinResult.Visible = true;              
                 gameMessage.Visible = true;
+                if(confusedCheck == true)
+                {
+                    gameMessage.Text = "You flip the coin and get Heads. " + ai_Active_Pokemon.ShowName() + " is now Confused.";
+                    confusedCheck = false;
+                    AIConfused = true;
+                }
+                else if(poisonedCheck == true)
+                {
+                    gameMessage.Text = "You flip the coin and get Heads. " + ai_Active_Pokemon.ShowName() + " is now Poisoned.";
+                    poisonedCheck = false;
+                    AIPoisoned = true;
+                }
+                else if(asleepCheck == true)
+                {
+                    gameMessage.Text = "You flip the coin and get Heads. " + ai_Active_Pokemon.ShowName() + " is now Asleep.";
+                    asleepCheck = false;
+                    AIAsleep = true;
+                }
+                else if (burnedCheck == true)
+                {
+                    gameMessage.Text = "You flip the coin and get Heads. " + ai_Active_Pokemon.ShowName() + " is now Burned.";
+                    burnedCheck = false;
+                    AIBurned = true;
+                }
+                else if (paralyzedCheck == true)
+                {
+                    gameMessage.Text = "You flip the coin and get Heads. " + ai_Active_Pokemon.ShowName() + " is now Paralyzed.";
+                    paralyzedCheck = false;
+                    AIParalyzed = true;
+                }
+                else if (dealsNothingCheck == true)
+                {
+                    gameMessage.Text = "You flip the coin and get Heads. You deal 30 damage on " + ai_Active_Pokemon.ShowName() + ".";
+                    paralyzedCheck = false;
+                    AIParalyzed = true;
+                    ai_Active_Pokemon.ReceiveDamage(30);
+                    OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                }
+                FlipCoin.Visible = false;
+                PlayerEnd.Visible = true;
             }
             else
             {
                 CoinResult.Image = Image.FromFile("..\\..\\Img\\Coins\\tails.gif");
                 CoinResult.Visible = true;
-                gameMessage.Text = "You flip the coin and get Tails.";
+                gameMessage.Text = "You flip the coin and get Tails, nothing else happens.";
                 gameMessage.Visible = true;
+                FlipCoin.Visible = false;
+                PlayerEnd.Visible = true;
             }
         }
 
@@ -4355,6 +4486,7 @@ namespace Pokemon
             ai_Hand.RemoveFromHand(0);
 
             player_Hand.DrawCard(player.DrawCard());
+            UpdateHandView();
 
             ai.Shuffle();
 
@@ -4437,6 +4569,7 @@ namespace Pokemon
                 CoinResult.Visible = true;
                 gameMessage.Text = "You flip the coin and get Heads. You start";
                 gameMessage.Visible = true;
+                isPreGameTurn = false;
                 youStartTurn = true;
                 Draw2.Location = new Point(576, 957);
                 Draw2.Visible = true;
@@ -4448,6 +4581,7 @@ namespace Pokemon
                 CoinResult.Visible = true;
                 gameMessage.Text = "You flip the coin and get Tails. Your opponent starts";
                 gameMessage.Visible = true;
+                isPreGameTurn = false;
                 aiStartsTurn = true;
                 Next1.Location = new Point(576, 957);
                 Next1.Visible = true;
@@ -4471,6 +4605,7 @@ namespace Pokemon
                 CoinResult.Visible = true;
                 gameMessage.Text = "You flip the coin and get Heads. Your opponent starts";
                 gameMessage.Visible = true;
+                isPreGameTurn = false;
                 aiStartsTurn = true;
                 Next1.Location = new Point(576, 957);
                 Next1.Visible = true;
@@ -4481,6 +4616,7 @@ namespace Pokemon
                 CoinResult.Visible = true;
                 gameMessage.Text = "You flip the coin and get Tails. You start.";
                 gameMessage.Visible = true;
+                isPreGameTurn = false;
                 youStartTurn = true;
                 Draw2.Location = new Point(576, 957);
                 Draw2.Visible = true;
@@ -4491,16 +4627,9 @@ namespace Pokemon
         {
             CoinResult.Visible = false;
 
-            if(isPreGameTurn == true)
-            {
-
-                isPreGameTurn = false;
-            }
-            else
-            {
-                PlayerEnd.Location = new Point(683, 957);
-                PlayerEnd.Visible = true;
-            }
+            PlayerEnd.Location = new Point(683, 957);
+            PlayerEnd.Visible = true;
+          
 
             player_Hand.DrawCard(player.DrawCard());
             DeckSize.Text = "x" + player.NumberOfCards().ToString();
@@ -4571,6 +4700,26 @@ namespace Pokemon
             RightClickMenu.Enabled = true;
             Draw2.Location = new Point(576, 957);
             Draw2.Visible = true;
+
+            bench.ChangeCanEvolveStatusToTrue();
+            active_Pokemon.ChangeCanEvolveStatusToTrue();
+            if (AIPoisoned == true)
+            {
+                ai_Active_Pokemon.ReceiveDamage(10);
+                OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                gameMessage.Text = "As your opponent is Poisoned, it receives 10 damage after his turn.";
+            }
+            else if (AIBurned == true)
+            {
+                ai_Active_Pokemon.ReceiveDamage(20);
+                OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                gameMessage.Text = "As your opponent is Burned, it receives 20 damage after his turn.";
+            }
+            else if (AIParalyzed == true)
+            {
+                gameMessage.Text = "Your opponent is no longer Paralyzed after the end of his turn.";
+                AIParalyzed = false;
+            }
         }
 
         private void PlayerEnd_Click(object sender, EventArgs e)
@@ -4587,7 +4736,172 @@ namespace Pokemon
             PlayerEnd.Visible = false;
             RightClickMenu.Enabled = false;
             Next1.Location = new Point(683, 957);
-            Next1.Visible = true;       
+            Next1.Visible = true;
+
+            aibench.ChangeCanEvolveStatusToTrue();
+            ai_Active_Pokemon.ChangeCanEvolveStatusToTrue();
+
+            if(AIPoisoned == true)
+            {
+                ai_Active_Pokemon.ReceiveDamage(10);
+                OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                gameMessage.Text = "As your opponent is Poisoned, it receives 10 damage after your turn.";
+            }
+            else if(AIBurned == true)
+            {
+                ai_Active_Pokemon.ReceiveDamage(20);
+                OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                gameMessage.Text = "As your opponent is Burned, it receives 20 damage after your turn.";
+            }
+        }
+
+        private void AttackingAI(int index)
+        {
+            if(active_Pokemon.ShowName() == "Charmander")
+            {
+                if(active_Pokemon.ShowAttackName(index) == "Scratch")
+                {
+                    ai_Active_Pokemon.ReceiveDamage(10);
+                    gameMessage.Text = "You perform Scratch and deal 10 damage on " + ai_Active_Pokemon.ShowName();
+                    OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                }
+                else if(active_Pokemon.ShowAttackName(index) == "Ember")
+                {
+                    ai_Active_Pokemon.ReceiveDamage(30);
+                    gameMessage.Text = "You perform Ember and deal 30 damage on " + ai_Active_Pokemon.ShowName() + " . You also discard a fire energy";
+                    OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                }
+            }
+            else if(active_Pokemon.ShowName() == "Charmeleon")
+            {
+                if (active_Pokemon.ShowAttackName(index) == "Slash")
+                {
+                    ai_Active_Pokemon.ReceiveDamage(30);
+                    gameMessage.Text = "You perform Slash and deal 30 damage on " + ai_Active_Pokemon.ShowName();
+                    OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                }
+            }
+            else if (active_Pokemon.ShowName() == "Vulpix")
+            {
+                if (active_Pokemon.ShowAttackName(index) == "Confuse Ray")
+                {
+                    ai_Active_Pokemon.ReceiveDamage(10);
+                    gameMessage.Text = "You perform Confuse Ray and deal 10 damage on " + ai_Active_Pokemon.ShowName();
+                    OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                    PlayerEnd.Visible = false;
+                    if(AIConfused == false)
+                    {
+                        FlipCoin.Visible = true;
+                        confusedCheck = true;
+                    }
+                    else
+                    {
+                        FlipCoin.Visible = false;
+                        PlayerEnd.Visible = true;
+                        confusedCheck = false;
+                    }
+                }
+            }
+            else if (active_Pokemon.ShowName() == "Ninetales")
+            {
+                if (active_Pokemon.ShowAttackName(index) == "Lure")
+                {
+                    ai_Active_Pokemon.ReceiveDamage(0);
+                    gameMessage.Text = "You perform Lure and swap a benched Pokémon with " + ai_Active_Pokemon.ShowName();
+                    OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                }
+                else if (active_Pokemon.ShowAttackName(index) == "Fire Blast")
+                {
+                    ai_Active_Pokemon.ReceiveDamage(80);
+                    gameMessage.Text = "You perform Fire Blast and deal 80 damage on " + ai_Active_Pokemon.ShowName() + " . You also discard a fire energy";
+                    OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                }
+            }
+            else if (active_Pokemon.ShowName() == "Growlithe")
+            {
+                if (active_Pokemon.ShowAttackName(index) == "Flare")
+                {
+                    ai_Active_Pokemon.ReceiveDamage(20);
+                    gameMessage.Text = "You perform Flare and deal 20 damage on " + ai_Active_Pokemon.ShowName();
+                    OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                }
+            }
+            else if (active_Pokemon.ShowName() == "Arcanine")
+            {
+                if (active_Pokemon.ShowAttackName(index) == "Flamethrower")
+                {
+                    ai_Active_Pokemon.ReceiveDamage(50);
+                    gameMessage.Text = "You perform Flamethrower and deal 50 damage on " + ai_Active_Pokemon.ShowName() + " . You also discard a fire energy";
+                    OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                }
+                else if (active_Pokemon.ShowAttackName(index) == "Take Down")
+                {
+                    ai_Active_Pokemon.ReceiveDamage(80);
+                    active_Pokemon.ReceiveDamage(30);
+                    gameMessage.Text = "You perform Take Down and deal 80 damage on " + ai_Active_Pokemon.ShowName() + " . Arcanine also deals 30 to itself.";
+                    OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                    PlayerHpBar.Value = active_Pokemon.ShowRemHP();
+                }
+            }
+            else if (active_Pokemon.ShowName() == "Weedle")
+            {
+                if (active_Pokemon.ShowAttackName(index) == "Poison Sting")
+                {
+                    ai_Active_Pokemon.ReceiveDamage(10);
+                    gameMessage.Text = "You perform Poison Sting and deal 10 damage on " + ai_Active_Pokemon.ShowName();
+                    OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                    PlayerEnd.Visible = false;
+                    if (AIPoisoned == false)
+                    {
+                        FlipCoin.Visible = true;
+                        poisonedCheck = true;
+                    }
+                    else
+                    {
+                        FlipCoin.Visible = false;
+                        PlayerEnd.Visible = true;
+                        poisonedCheck = false;
+                    }
+                }
+            }
+            else if (active_Pokemon.ShowName() == "Nidoran Male")
+            {
+                if (active_Pokemon.ShowAttackName(index) == "Horn Hazard")
+                {
+                    
+                    gameMessage.Text = "Flip the coin to see if this attack deals any damage..";                  
+                    PlayerEnd.Visible = false;
+                    FlipCoin.Visible = true;
+                    dealsNothingCheck = true;
+                }
+            }
+            else if (active_Pokemon.ShowName() == "Tangela")
+            {
+                if (active_Pokemon.ShowAttackName(index) == "Bind")
+                {
+                    ai_Active_Pokemon.ReceiveDamage(20);
+                    gameMessage.Text = "You perform Bind and deal 20 damage on " + ai_Active_Pokemon.ShowName();
+                    OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                    if (AIParalyzed == false)
+                    {
+                        FlipCoin.Visible = true;
+                        paralyzedCheck = true;
+                    }
+                    else
+                    {
+                        FlipCoin.Visible = false;
+                        PlayerEnd.Visible = true;
+                        paralyzedCheck = false;
+                    }
+                }
+                else if (active_Pokemon.ShowAttackName(index) == "Poisonpowder")
+                {
+                    ai_Active_Pokemon.ReceiveDamage(20);
+                    gameMessage.Text = "You perform Poisonpowder and deal 20 damage on " + ai_Active_Pokemon.ShowName() +". Your opponent is also now Poisoned.";
+                    OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                    AIPoisoned = true;
+                }
+            }
         }
     }
 }

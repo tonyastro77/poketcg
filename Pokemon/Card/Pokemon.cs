@@ -26,6 +26,8 @@ namespace Pokemon
 
         public List<char> EnergyLoaded;
 
+        public bool CanEvolve { get; set; }
+
         public Pokemon(int id)
         {
             this.Id = id;
@@ -52,7 +54,7 @@ namespace Pokemon
         }
 
         // A basic pokemon with one attack or pokemon power
-        public Pokemon(int id, string name, string type, int hp, int remhp, char energy, char weakness, char resistance, int retreat, string pokedex, string Img, Attack attack1, List<char> energyLoaded)
+        public Pokemon(int id, string name, string type, int hp, int remhp, char energy, char weakness, char resistance, int retreat, string pokedex, string Img, Attack attack1, List<char> energyLoaded, bool CanEvolve)
         {
             this.Id = id;
             this.Name = name;
@@ -67,10 +69,11 @@ namespace Pokemon
             this.Img = Img;
             this.attack1 = attack1;
             this.EnergyLoaded = energyLoaded;
+            this.CanEvolve = CanEvolve;
         }
 
         // A stage 2 evolution with one attack or pokemon power
-        public Pokemon(int id, string name, string type, string stage_1, int hp, int remhp, char energy, char weakness, char resistance, int retreat, string pokedex, string Img, Attack attack1, List<char> energyLoaded)
+        public Pokemon(int id, string name, string type, string stage_1, int hp, int remhp, char energy, char weakness, char resistance, int retreat, string pokedex, string Img, Attack attack1, List<char> energyLoaded, bool CanEvolve)
         {
             this.Id = id;
             this.Name = name;
@@ -86,10 +89,11 @@ namespace Pokemon
             this.Img = Img;
             this.attack1 = attack1;
             this.EnergyLoaded = energyLoaded;
+            this.CanEvolve = CanEvolve;
         }
 
         // A stage 3 evolution with one attack or pokemon power
-        public Pokemon(int id, string name, string type, string stage_1, string stage_2, int hp, int remhp, char energy, char weakness, char resistance, int retreat, string pokedex, string Img, Attack attack1, List<char> energyLoaded)
+        public Pokemon(int id, string name, string type, string stage_1, string stage_2, int hp, int remhp, char energy, char weakness, char resistance, int retreat, string pokedex, string Img, Attack attack1, List<char> energyLoaded, bool CanEvolve)
         {
             this.Id = id;
             this.Name = name;
@@ -106,10 +110,11 @@ namespace Pokemon
             this.Img = Img;
             this.attack1 = attack1;
             this.EnergyLoaded = energyLoaded;
+            this.CanEvolve = CanEvolve;
         }
 
         // A basic pokemon with 2 attacks or pokemon powers
-        public Pokemon(int id, string name, string type, int hp, int remhp, char energy, char weakness, char resistance, int retreat, string pokedex, string Img, Attack attack1, Attack attack2, List<char> energyLoaded)
+        public Pokemon(int id, string name, string type, int hp, int remhp, char energy, char weakness, char resistance, int retreat, string pokedex, string Img, Attack attack1, Attack attack2, List<char> energyLoaded, bool CanEvolve)
         {
             this.Id = id;
             this.Name = name;
@@ -125,10 +130,11 @@ namespace Pokemon
             this.attack1 = attack1;
             this.attack2 = attack2;
             this.EnergyLoaded = energyLoaded;
+            this.CanEvolve = CanEvolve;
         }
 
         // a stage 2 evolution with 2 attacks or pokemon powers
-        public Pokemon(int id, string name, string type, string stage_1, int hp, int remhp, char energy, char weakness, char resistance, int retreat, string pokedex, string Img, Attack attack1, Attack attack2, List<char> energyLoaded)
+        public Pokemon(int id, string name, string type, string stage_1, int hp, int remhp, char energy, char weakness, char resistance, int retreat, string pokedex, string Img, Attack attack1, Attack attack2, List<char> energyLoaded, bool CanEvolve)
         {
             this.Id = id;
             this.Name = name;
@@ -145,10 +151,11 @@ namespace Pokemon
             this.attack1 = attack1;
             this.attack2 = attack2;
             this.EnergyLoaded = energyLoaded;
+            this.CanEvolve = CanEvolve;
         }
 
         // a stage 3 evolution with 2 attacks or pokemon powers
-        public Pokemon(int id, string name, string type, string stage_1, string stage_2, int hp, int remhp, char energy, char weakness, char resistance, int retreat, string pokedex, string Img, Attack attack1, Attack attack2, List<char> energyLoaded)
+        public Pokemon(int id, string name, string type, string stage_1, string stage_2, int hp, int remhp, char energy, char weakness, char resistance, int retreat, string pokedex, string Img, Attack attack1, Attack attack2, List<char> energyLoaded, bool CanEvolve)
         {
             this.Id = id;
             this.Name = name;
@@ -166,10 +173,11 @@ namespace Pokemon
             this.attack1 = attack1;
             this.attack2 = attack2;
             this.EnergyLoaded = energyLoaded;
+            this.CanEvolve = CanEvolve;
         }
 
         // A basic pokemon with 3 attacks or pokemon powers
-        public Pokemon(int id, string name, string type, int hp, int remhp, char energy, char weakness, char resistance, int retreat, string pokedex, string Img, Attack attack1, Attack attack2, Attack attack3, List<char> energyLoaded)
+        public Pokemon(int id, string name, string type, int hp, int remhp, char energy, char weakness, char resistance, int retreat, string pokedex, string Img, Attack attack1, Attack attack2, Attack attack3, List<char> energyLoaded, bool CanEvolve)
         {
             this.Id = id;
             this.Name = name;
@@ -186,10 +194,11 @@ namespace Pokemon
             this.attack2 = attack2;
             this.attack3 = attack3;
             this.EnergyLoaded = energyLoaded;
+            this.CanEvolve = CanEvolve;
         }
 
         // a stage 2 evolution with 3 attacks or pokemon powers
-        public Pokemon(int id, string name, string type, string stage_1, int hp, int remhp, char energy, char weakness, char resistance, int retreat, string pokedex, string Img, Attack attack1, Attack attack2, Attack attack3, List<char> energyLoaded)
+        public Pokemon(int id, string name, string type, string stage_1, int hp, int remhp, char energy, char weakness, char resistance, int retreat, string pokedex, string Img, Attack attack1, Attack attack2, Attack attack3, List<char> energyLoaded, bool CanEvolve)
         {
             this.Id = id;
             this.Name = name;
@@ -207,10 +216,11 @@ namespace Pokemon
             this.attack2 = attack2;
             this.attack3 = attack3;
             this.EnergyLoaded = energyLoaded;
+            this.CanEvolve = CanEvolve;
         }
 
         // a stage 3 evolution with 3 attacks or pokemon powers
-        public Pokemon(int id, string name, string type, string stage_1, string stage_2, int hp, int remhp, char energy, char weakness, char resistance, int retreat, string pokedex, string Img, Attack attack1, Attack attack2, Attack attack3, List<char> energyLoaded)
+        public Pokemon(int id, string name, string type, string stage_1, string stage_2, int hp, int remhp, char energy, char weakness, char resistance, int retreat, string pokedex, string Img, Attack attack1, Attack attack2, Attack attack3, List<char> energyLoaded, bool CanEvolve)
         {
             this.Id = id;
             this.Name = name;
@@ -229,6 +239,7 @@ namespace Pokemon
             this.attack2 = attack2;
             this.attack3 = attack3;
             this.EnergyLoaded = energyLoaded;
+            this.CanEvolve = CanEvolve;
         }
 
         public void LoadEnergy(char x)

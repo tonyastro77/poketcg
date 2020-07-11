@@ -150,7 +150,6 @@
             this.OBench5Energy3 = new System.Windows.Forms.PictureBox();
             this.OBench5Energy4 = new System.Windows.Forms.PictureBox();
             this.OBench5Energy5 = new System.Windows.Forms.PictureBox();
-            this.FlipCoin = new System.Windows.Forms.Button();
             this.CoinResult = new System.Windows.Forms.PictureBox();
             this.Heads = new System.Windows.Forms.Button();
             this.Tails = new System.Windows.Forms.Button();
@@ -168,6 +167,7 @@
             this.Next5 = new System.Windows.Forms.Button();
             this.EndOpponentsTurn = new System.Windows.Forms.Button();
             this.PlayerEnd = new System.Windows.Forms.Button();
+            this.FlipCoin = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.PictureZoom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureActive)).BeginInit();
             this.RightClickMenu3.SuspendLayout();
@@ -675,7 +675,6 @@
             this.Hand1.TabIndex = 40;
             this.Hand1.TabStop = false;
             this.Hand1.Tag = "Hand1";
-            this.Hand1.Click += new System.EventHandler(this.Hand1_Click);
             this.Hand1.MouseHover += new System.EventHandler(this.HoverOn_Click);
             // 
             // RightClickMenu
@@ -1506,17 +1505,6 @@
             this.OBench5Energy5.TabIndex = 127;
             this.OBench5Energy5.TabStop = false;
             // 
-            // FlipCoin
-            // 
-            this.FlipCoin.Location = new System.Drawing.Point(789, 957);
-            this.FlipCoin.Name = "FlipCoin";
-            this.FlipCoin.Size = new System.Drawing.Size(75, 23);
-            this.FlipCoin.TabIndex = 132;
-            this.FlipCoin.Text = "FLIPCOIN";
-            this.FlipCoin.UseVisualStyleBackColor = true;
-            this.FlipCoin.Visible = false;
-            this.FlipCoin.Click += new System.EventHandler(this.FlipCoin_Click);
-            // 
             // CoinResult
             // 
             this.CoinResult.Location = new System.Drawing.Point(621, 357);
@@ -1700,6 +1688,17 @@
             this.PlayerEnd.UseVisualStyleBackColor = true;
             this.PlayerEnd.Visible = false;
             this.PlayerEnd.Click += new System.EventHandler(this.PlayerEnd_Click);
+            // 
+            // FlipCoin
+            // 
+            this.FlipCoin.Location = new System.Drawing.Point(789, 957);
+            this.FlipCoin.Name = "FlipCoin";
+            this.FlipCoin.Size = new System.Drawing.Size(75, 23);
+            this.FlipCoin.TabIndex = 132;
+            this.FlipCoin.Text = "FLIPCOIN";
+            this.FlipCoin.UseVisualStyleBackColor = true;
+            this.FlipCoin.Visible = false;
+            this.FlipCoin.Click += new System.EventHandler(this.FlipCoin_Click);
             // 
             // Form1
             // 
@@ -2064,7 +2063,6 @@
         private System.Windows.Forms.PictureBox OBench5Energy3;
         private System.Windows.Forms.PictureBox OBench5Energy4;
         private System.Windows.Forms.PictureBox OBench5Energy5;
-        private System.Windows.Forms.Button FlipCoin;
         private System.Windows.Forms.PictureBox CoinResult;
         private System.Windows.Forms.Button Heads;
         private System.Windows.Forms.Button Tails;
@@ -2082,6 +2080,7 @@
         private System.Windows.Forms.Button Next5;
         private System.Windows.Forms.Button EndOpponentsTurn;
         private System.Windows.Forms.Button PlayerEnd;
+        private System.Windows.Forms.Button FlipCoin;
     }
 }
 

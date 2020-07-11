@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -119,6 +120,11 @@ namespace Pokemon.Game_Zone
         public char GetEnergyLoadedAt(int x)
         {
             return Active_Pokemon.EnergyLoaded[x];
+        }
+
+        public bool CanEvolve()
+        {
+            return Active_Pokemon.CanEvolve;
         }
 
         public string ReturnEnergyLoadedImg(int x)
@@ -644,5 +650,18 @@ namespace Pokemon.Game_Zone
           
         }
 
+        public void ChangeCanEvolveStatusToTrue()
+        {
+            Active_Pokemon.CanEvolve = true;
+        }
+
+        public void ReceiveDamage(int damage)
+        {
+            Active_Pokemon.Rem_Hp -= damage;
+            if(Active_Pokemon.Rem_Hp < 0)
+            {
+                Active_Pokemon.Rem_Hp = 0;
+            }
+        }
     }
 }

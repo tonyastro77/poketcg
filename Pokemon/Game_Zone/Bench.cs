@@ -69,6 +69,11 @@ namespace Pokemon.Game_Zone
             return bench[x].EnergyLoaded;
         }
 
+        public bool CanEvolve(int x)
+        {
+            return bench[x].CanEvolve;
+        }
+
         public int LoadedEnergyCount(int index)
         {
             return bench[index].EnergyLoaded.Count;
@@ -133,6 +138,14 @@ namespace Pokemon.Game_Zone
         public List<char> InheritEnergies(int index, List<char> previouse_energies)
         {
             return bench[index].EnergyLoaded = previouse_energies;
+        }
+
+        public void ChangeCanEvolveStatusToTrue()
+        {
+            for (int i = 0; i < bench.Count; i++)
+            {
+                bench[i].CanEvolve = true;
+            }
         }
 
     }
