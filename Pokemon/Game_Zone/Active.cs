@@ -166,6 +166,16 @@ namespace Pokemon.Game_Zone
             Active_Pokemon.EnergyLoaded.RemoveAt(x);
         }
 
+        public void DiscardEnergyType(char x)
+        {
+            int i = 0;
+            while(Active_Pokemon.EnergyLoaded[i] != x)
+            {
+                i++;
+            }
+            Active_Pokemon.EnergyLoaded.RemoveAt(i);
+        }
+
         //The Benched Pokémon becomes the new Active Pokémon
         public void Become(Pokemon pokemon)
         {
@@ -663,5 +673,11 @@ namespace Pokemon.Game_Zone
                 Active_Pokemon.Rem_Hp = 0;
             }
         }
+        public void ClearEverthingFromCard()
+        {
+            Active_Pokemon.Rem_Hp = Active_Pokemon.Hp;
+            Active_Pokemon.CanEvolve = false;
+        }
+
     }
 }

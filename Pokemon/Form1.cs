@@ -35,6 +35,8 @@ namespace Pokemon
         bool aiStartsTurn = false;
         bool isyourFirstTurn = false;
         bool isOpponentFirstTurn = false;
+        bool isYourTurn = false;
+        bool isOpponentsTurn = false;
 
         //Pokémon Conditions
         bool PlayerConfused = false;
@@ -654,7 +656,26 @@ namespace Pokemon
             }
            
         }
+        private void HoverOnAIDiscard_Click(object sender, EventArgs e)
+        {
+            //erase all the menu
+            (RightClickAIDiscard.Items[0] as ToolStripMenuItem).DropDownItems.Clear();
 
+            //based on amount of cards in the discard pile then will soon show amount of cards
+            for (int i = 0; i < ai_discard.TotalNumber(); i++)
+            {
+                if (ai_discard.TotalNumber() == 0)
+                {
+                    //it does not show any cards
+                }
+                else
+                {
+                    //it shows as many cards as the ones that are in the discard
+                    (RightClickAIDiscard.Items[0] as ToolStripMenuItem).DropDownItems.Add(ai_discard.ShowName(i)).MouseHover += new EventHandler(ShowAIDiscardCard);
+                }
+            }
+
+        }
         private void ShowDiscardCard(object sender, EventArgs e)
         {
             ToolStripMenuItem item = sender as ToolStripMenuItem;
@@ -674,7 +695,24 @@ namespace Pokemon
               
             };
         }
+        private void ShowAIDiscardCard(object sender, EventArgs e)
+        {
+            ToolStripMenuItem item = sender as ToolStripMenuItem;
+            OpponentHpBar.Visible = false;
+            OpCardName.Visible = true;
+            HpLabel2.Visible = false;
+            OMaxHp.Visible = false;
+            EnergyBox2.Visible = false;
 
+            if (item != null)
+            {
+
+                int index = (item.OwnerItem as ToolStripMenuItem).DropDownItems.IndexOf(item);
+                OpponentZoom.Image = Image.FromFile(ai_discard.ShowCard(index));
+                OpCardName.Text = ai_discard.ShowName(index);
+
+            };
+        }
         public void ActivePokemonZoomAllInvisible()
         {
             PictureZoom.Visible = false;
@@ -3364,7 +3402,7 @@ namespace Pokemon
                 int num = GetHandBoxIndex();
                 if (player_Hand.ShowType(num) == "basic")
                 {
-                    if (bench.NumberOfCards() < 6)
+                    if (bench.NumberOfCards() < 5)
                     {
                         gameMessage.Text = "You played " + player_Hand.ShowName(num) + " from your hand to your bench";
                         bench.Add(player_Hand.PlayCard(num));
@@ -3404,7 +3442,7 @@ namespace Pokemon
 
                 if (player_Hand.ShowType(num) == "basic")
                 {
-                    if (bench.NumberOfCards() < 6)
+                    if (bench.NumberOfCards() < 5)
                     {
                         gameMessage.Text = "You played " + player_Hand.ShowName(num) + " from your hand to your bench";
                         bench.Add(player_Hand.PlayCard(num));
@@ -3446,7 +3484,7 @@ namespace Pokemon
                 if (player_Hand.ShowType(num) == "basic")
                 {
 
-                    if (bench.NumberOfCards() < 6)
+                    if (bench.NumberOfCards() < 5)
                     {
                         gameMessage.Text = "You played " + player_Hand.ShowName(num) + " from your hand to your bench";
                         bench.Add(player_Hand.PlayCard(num));
@@ -3598,8 +3636,6 @@ namespace Pokemon
 
         private void AIChoosesActivePokemon()
         {
-            if(isPreGameTurn == true)
-            {
                 Random random = new Random();
                 int i = random.Next(0, aibench.NumberOfCards());
 
@@ -3648,8 +3684,7 @@ namespace Pokemon
                     default:
                         EnergyBox2.Visible = false;
                         break;
-                }
-            }
+                }          
         }
 
         //Returns the integer index of the picturebox when the user rightcliks on it to then use it to apply it to other functions
@@ -3679,6 +3714,12 @@ namespace Pokemon
                         {
                             AttackingAI(1);
                             playedAttack = true;
+                            if (ai_Active_Pokemon.ShowRemHP() == 0)
+                            {
+                                PlayerEnd.Visible = false;
+                                KnockedOut.Location = new Point(683, 957);
+                                KnockedOut.Visible = true;
+                            }
                         }
                         else
                         {
@@ -3693,6 +3734,12 @@ namespace Pokemon
                         {
                             AttackingAI(2);
                             playedAttack = true;
+                            if (ai_Active_Pokemon.ShowRemHP() == 0)
+                            {
+                                PlayerEnd.Visible = false;
+                                KnockedOut.Location = new Point(683, 957);
+                                KnockedOut.Visible = true;
+                            }
                         }
                         else
                         {
@@ -3707,6 +3754,12 @@ namespace Pokemon
                         {
                             AttackingAI(3);
                             playedAttack = true;
+                            if (ai_Active_Pokemon.ShowRemHP() == 0)
+                            {
+                                PlayerEnd.Visible = false;
+                                KnockedOut.Location = new Point(683, 957);
+                                KnockedOut.Visible = true;
+                            }
                         }
                         else
                         {
@@ -4061,6 +4114,8 @@ namespace Pokemon
 
         private void retreatToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            PlayerEnd.Visible = false;
+            DisablePlayerActions();
             if(bench.Count() != 0) {
                 energydiscard = active_Pokemon.ShowRetreatCost();
                 if (energydiscard <= active_Pokemon.EnergyLoadedCount())
@@ -4114,18 +4169,21 @@ namespace Pokemon
                             break;
                         case "PictureBench3":
                             num = 2;
+                            gameMessage.Text = "You replaced " + active_Pokemon.ShowName() + " with " + bench.ShowName(num) + ". Now " + bench.ShowName(num) + " is your new Active Pokémon.";
                             ActivePokemonTemp = active_Pokemon.GetActivePokemon();
                             active_Pokemon.Become(bench.PlayCard(num));
                             bench.PutInto(num, ActivePokemonTemp);
                             break;
                         case "PictureBench4":
                             num = 3;
+                            gameMessage.Text = "You replaced " + active_Pokemon.ShowName() + " with " + bench.ShowName(num) + ". Now " + bench.ShowName(num) + " is your new Active Pokémon.";
                             ActivePokemonTemp = active_Pokemon.GetActivePokemon();
                             active_Pokemon.Become(bench.PlayCard(num));
                             bench.PutInto(num, ActivePokemonTemp);
                             break;
                         case "PictureBench5":
                             num = 4;
+                            gameMessage.Text = "You replaced " + active_Pokemon.ShowName() + " with " + bench.ShowName(num) + ". Now " + bench.ShowName(num) + " is your new Active Pokémon.";
                             ActivePokemonTemp = active_Pokemon.GetActivePokemon();
                             active_Pokemon.Become(bench.PlayCard(num));
                             bench.PutInto(num, ActivePokemonTemp);
@@ -4136,7 +4194,8 @@ namespace Pokemon
                     active_Pokemon_Retreat = false;
                     UpdateActivePokemonView();
                     UpdateBenchView();
-
+                    PlayerEnd.Visible = true;
+                    EnablePlayerActions();
                 }
                 else
                 {
@@ -4191,6 +4250,13 @@ namespace Pokemon
                             index++;
                         }                    
                 }
+                else if (x == 'g')
+                {
+                    while (player_used.GetName(index) != "Grass Energy")
+                    {
+                        index++;
+                    }
+                }
 
                 Pokemon temp = player_used.GetCard(index);
                 discard.Add(temp);
@@ -4206,6 +4272,13 @@ namespace Pokemon
                 else if (x == 'w')
                 {
                     while (player_used.GetName(index2) != "Water Energy")
+                    {
+                        index2++;
+                    }
+                }
+                else if (x == 'g')
+                {
+                    while (player_used.GetName(index2) != "Grass Energy")
                     {
                         index2++;
                     }
@@ -4238,6 +4311,7 @@ namespace Pokemon
             simpleSound.Play();
             gameMessage.Visible = false;
             CoinResult.Visible = false;
+            FlipCoin.Visible = false;
             Thread.Sleep(2000);
             Random random = new Random();
             int result = random.Next(0,2);
@@ -4246,7 +4320,9 @@ namespace Pokemon
                 CoinResult.Image = Image.FromFile("..\\..\\Img\\Coins\\Wizards_Silver_Chansey_Coin.png");
                 CoinResult.Visible = true;              
                 gameMessage.Visible = true;
-                if(confusedCheck == true)
+                PlayerEnd.Visible = true;
+                
+                if (confusedCheck == true)
                 {
                     gameMessage.Text = "You flip the coin and get Heads. " + ai_Active_Pokemon.ShowName() + " is now Confused.";
                     confusedCheck = false;
@@ -4278,14 +4354,21 @@ namespace Pokemon
                 }
                 else if (dealsNothingCheck == true)
                 {
-                    gameMessage.Text = "You flip the coin and get Heads. You deal 30 damage on " + ai_Active_Pokemon.ShowName() + ".";
-                    paralyzedCheck = false;
-                    AIParalyzed = true;
                     ai_Active_Pokemon.ReceiveDamage(30);
                     OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
-                }
-                FlipCoin.Visible = false;
-                PlayerEnd.Visible = true;
+                    if (ai_Active_Pokemon.ShowRemHP() == 0)
+                    {
+                        gameMessage.Text = "You flip the coin and get Heads. You deal 30 damage on " + ai_Active_Pokemon.ShowName() + " and gets Knocked out.";
+                        PlayerEnd.Visible = false;
+                        KnockedOut.Location = new Point(683, 957);
+                        KnockedOut.Visible = true;
+                    }
+                    else
+                    {
+                        gameMessage.Text = "You flip the coin and get Heads. You deal 30 damage on " + ai_Active_Pokemon.ShowName() + ".";
+                    }
+                    dealsNothingCheck = false;                  
+                }                         
             }
             else
             {
@@ -4293,11 +4376,45 @@ namespace Pokemon
                 CoinResult.Visible = true;
                 gameMessage.Text = "You flip the coin and get Tails, nothing else happens.";
                 gameMessage.Visible = true;
-                FlipCoin.Visible = false;
                 PlayerEnd.Visible = true;
             }
         }
+        private void KnockedOut_Click(object sender, EventArgs e)
+        {
 
+            gameMessage.Text = ai_Active_Pokemon.ShowName() + " is Knocked out so it is to be replaced by a Benched Pokémon.";
+            //Clear Active Card completely from effects
+
+            ai_Active_Pokemon.ClearEverthingFromCard();
+            AIConfused = false;
+            AIParalyzed = false;
+            AIAsleep = false;
+            AIPoisoned = false;
+            AIBurned = false;
+
+            //Passing all the used cards to the discard
+            for(int i = 0; i < ai_used.Count(); i++)
+            {
+                ai_discard.Add(ai_used.GetCard(i));
+            }
+            ai_used.DiscardAll();
+
+            //Clearing the views
+            ai_discard.Add(ai_Active_Pokemon.GetActivePokemon());
+            OpCardName.Visible = false;
+            EnergyBox2.Visible = false;
+            OpponentZoom.Image = Image.FromFile("..\\..\\Img\\BS\\CardBack.jpg");
+            HpLabel2.Visible = false;
+            OMaxHp.Visible = false;
+            OpponentHpBar.Visible = false;
+            ai_Active_Pokemon.Become(new Pokemon(0, "null", "", 'u', ""));
+            UpdateAIDiscardView();
+            UpdateAIActivePokemonView();
+  
+            KnockedOut.Visible = false;
+            Replace.Location = new Point(683, 957);
+            Replace.Visible = true;
+        }
         private void Mulligan_Click(object sender, EventArgs e)
         {
             player.ShuffleCardFromHandIntoDeck(player_Hand.PlayCard(0));
@@ -4333,7 +4450,7 @@ namespace Pokemon
 
             gameMessage.Text = "You draw again 7 cards and your opponent draws an extra card.";
             UpdateHandView();
-            RightClickMenu.Enabled = true;
+            EnablePlayerActions();
             Mulligan.Visible = false;
 
             if (player_Hand.NumOfBasicPokemon() == 0 && ai_Hand.NumOfBasicPokemon() != 0)
@@ -4343,7 +4460,7 @@ namespace Pokemon
                 StartCheck.Visible = false;
                 Mulligan.Visible = true;
                 FlipCoin.Visible = false;
-                RightClickMenu.Enabled = false;
+                DisablePlayerActions();
             }
             else if (player_Hand.NumOfBasicPokemon() == 0 && ai_Hand.NumOfBasicPokemon() == 0)
             {
@@ -4353,8 +4470,7 @@ namespace Pokemon
                 Mulligan2.Location = new Point(576, 957);
                 Mulligan2.Visible = true;
                 FlipCoin.Visible = false;
-                RightClickMenu.Enabled = false;
-
+                DisablePlayerActions();
             }
             else if (player_Hand.NumOfBasicPokemon() != 0 && ai_Hand.NumOfBasicPokemon() == 0)
             {
@@ -4364,10 +4480,8 @@ namespace Pokemon
                 Mulligan3.Location = new Point(576, 957);
                 Mulligan3.Visible = true;
                 FlipCoin.Visible = false;
-                RightClickMenu.Enabled = false;
-
+                DisablePlayerActions();
             }
-
         }
 
         private void Mulligan2_Click(object sender, EventArgs e)
@@ -4431,7 +4545,7 @@ namespace Pokemon
 
             gameMessage.Text = "You draw again 7 cards and your opponent draws 7 too. Both also draw an extra card for Mulligan.";
             UpdateHandView();
-            RightClickMenu.Enabled = true;
+            EnablePlayerActions();
             Mulligan2.Visible = false;
 
             if (player_Hand.NumOfBasicPokemon() == 0 && ai_Hand.NumOfBasicPokemon() != 0)
@@ -4441,8 +4555,7 @@ namespace Pokemon
                 StartCheck.Visible = false;
                 Mulligan.Visible = true;
                 FlipCoin.Visible = false;
-                RightClickMenu.Enabled = false;
-
+                DisablePlayerActions();
             }
             else if (player_Hand.NumOfBasicPokemon() == 0 && ai_Hand.NumOfBasicPokemon() == 0)
             {
@@ -4452,8 +4565,7 @@ namespace Pokemon
                 Mulligan2.Location = new Point(576, 957);
                 Mulligan2.Visible = true;
                 FlipCoin.Visible = false;
-                RightClickMenu.Enabled = false;
-
+                DisablePlayerActions();
             }
             else if (player_Hand.NumOfBasicPokemon() != 0 && ai_Hand.NumOfBasicPokemon() == 0)
             {
@@ -4463,8 +4575,7 @@ namespace Pokemon
                 Mulligan3.Location = new Point(576, 957);
                 Mulligan3.Visible = true;
                 FlipCoin.Visible = false;
-                RightClickMenu.Enabled = false;
-
+                DisablePlayerActions();
             }
         }
 
@@ -4505,7 +4616,7 @@ namespace Pokemon
             gameMessage.Text = "Your opponent draws 7 cards. You draw an extra card for Mulligan.";
 
 
-            RightClickMenu.Enabled = true;
+            EnablePlayerActions();
             Mulligan3.Visible = false;
             if (player_Hand.NumOfBasicPokemon() == 0 && ai_Hand.NumOfBasicPokemon() != 0)
             {
@@ -4514,8 +4625,7 @@ namespace Pokemon
                 StartCheck.Visible = false;
                 Mulligan.Visible = true;
                 FlipCoin.Visible = false;
-                RightClickMenu.Enabled = false;
-
+                DisablePlayerActions();
             }
             else if (player_Hand.NumOfBasicPokemon() == 0 && ai_Hand.NumOfBasicPokemon() == 0)
             {
@@ -4525,8 +4635,7 @@ namespace Pokemon
                 Mulligan2.Location = new Point(576, 957);
                 Mulligan2.Visible = true;
                 FlipCoin.Visible = false;
-                RightClickMenu.Enabled = false;
-
+                DisablePlayerActions();
             }
             else if (player_Hand.NumOfBasicPokemon() != 0 && ai_Hand.NumOfBasicPokemon() == 0)
             {
@@ -4536,7 +4645,7 @@ namespace Pokemon
                 Mulligan3.Location = new Point(576, 957);
                 Mulligan3.Visible = true;
                 FlipCoin.Visible = false;
-                RightClickMenu.Enabled = false;
+                DisablePlayerActions();
             }
         }
 
@@ -4548,7 +4657,7 @@ namespace Pokemon
             Tails.Location = new Point(683, 957);
             gameMessage.Text = "Choose either Heads or Tails to see who starts.";
             StartCheck.Visible = false;
-            RightClickMenu.Enabled = false;
+            DisablePlayerActions();
             isPreGameTurn = false;
         }
 
@@ -4567,7 +4676,7 @@ namespace Pokemon
             {
                 CoinResult.Image = Image.FromFile("..\\..\\Img\\Coins\\Wizards_Silver_Chansey_Coin.png");
                 CoinResult.Visible = true;
-                gameMessage.Text = "You flip the coin and get Heads. You start";
+                gameMessage.Text = "You flip the coin and get Heads. You start. Please draw a card!";
                 gameMessage.Visible = true;
                 isPreGameTurn = false;
                 youStartTurn = true;
@@ -4614,7 +4723,7 @@ namespace Pokemon
             {
                 CoinResult.Image = Image.FromFile("..\\..\\Img\\Coins\\tails.gif");
                 CoinResult.Visible = true;
-                gameMessage.Text = "You flip the coin and get Tails. You start.";
+                gameMessage.Text = "You flip the coin and get Tails. You start. Please draw a card!";
                 gameMessage.Visible = true;
                 isPreGameTurn = false;
                 youStartTurn = true;
@@ -4636,7 +4745,7 @@ namespace Pokemon
             gameMessage.Text = "You draw a card.";
             UpdateHandView();
             Draw2.Visible = false;
-            RightClickMenu.Enabled = true;
+            EnablePlayerActions();
         }
 
         private void Next1_Click(object sender, EventArgs e)
@@ -4648,8 +4757,10 @@ namespace Pokemon
             OHandNumber.Text = "X" + ai_Hand.NumberOfCards().ToString();
             gameMessage.Text = "Your opponent draws a card.";
             Next1.Visible = false;
-            Next2.Location = new Point(683, 957);
-            Next2.Visible = true;
+            //Next2.Location = new Point(683, 957);
+            //Next2.Visible = true;
+            EndOpponentsTurn.Location = new Point(683, 957);
+            EndOpponentsTurn.Visible = true;
             playSimpleSound();      
         }
 
@@ -4679,6 +4790,7 @@ namespace Pokemon
         private void Next5_Click(object sender, EventArgs e)
         {
             Next5.Visible = false;
+            Next1.Visible = false;
             EndOpponentsTurn.Location = new Point(683, 957);
             EndOpponentsTurn.Visible = true;
         }
@@ -4693,11 +4805,16 @@ namespace Pokemon
             else if(isOpponentFirstTurn == true)
             {
                 isOpponentFirstTurn = false;
+                isYourTurn = true;
             }
+            else
+            {
+                isYourTurn = true;
+            }
+            isOpponentsTurn = false;
             EndOpponentsTurn.Visible = false;
             playedEnergy = false;
             playedAttack = false;
-            RightClickMenu.Enabled = true;
             Draw2.Location = new Point(576, 957);
             Draw2.Visible = true;
 
@@ -4708,12 +4825,28 @@ namespace Pokemon
                 ai_Active_Pokemon.ReceiveDamage(10);
                 OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
                 gameMessage.Text = "As your opponent is Poisoned, it receives 10 damage after his turn.";
+                if (ai_Active_Pokemon.ShowRemHP() == 0)
+                {
+                    isOpponentsTurn = true;
+                    isYourTurn = false;
+                    Draw2.Visible = false;
+                    KnockedOut.Location = new Point(683, 957);
+                    KnockedOut.Visible = true;
+                }
             }
             else if (AIBurned == true)
             {
                 ai_Active_Pokemon.ReceiveDamage(20);
                 OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
                 gameMessage.Text = "As your opponent is Burned, it receives 20 damage after his turn.";
+                if (ai_Active_Pokemon.ShowRemHP() == 0)
+                {
+                    isOpponentsTurn = true;
+                    isYourTurn = false;
+                    Draw2.Visible = false;
+                    KnockedOut.Location = new Point(683, 957);
+                    KnockedOut.Visible = true;
+                }
             }
             else if (AIParalyzed == true)
             {
@@ -4732,9 +4865,14 @@ namespace Pokemon
             else if (isyourFirstTurn == true)
             {
                 isyourFirstTurn = false;
+                isOpponentsTurn = true;
             }
+            else
+            {
+                isOpponentsTurn = true;
+            }
+            isYourTurn = false;            
             PlayerEnd.Visible = false;
-            RightClickMenu.Enabled = false;
             Next1.Location = new Point(683, 957);
             Next1.Visible = true;
 
@@ -4746,30 +4884,70 @@ namespace Pokemon
                 ai_Active_Pokemon.ReceiveDamage(10);
                 OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
                 gameMessage.Text = "As your opponent is Poisoned, it receives 10 damage after your turn.";
+                if (ai_Active_Pokemon.ShowRemHP() == 0)
+                {
+                    isYourTurn = true;
+                    isOpponentsTurn = false;
+                    Next1.Visible = false;
+                    KnockedOut.Location = new Point(683, 957);
+                    KnockedOut.Visible = true;
+                }
             }
             else if(AIBurned == true)
             {
                 ai_Active_Pokemon.ReceiveDamage(20);
                 OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
                 gameMessage.Text = "As your opponent is Burned, it receives 20 damage after your turn.";
+                if (ai_Active_Pokemon.ShowRemHP() == 0)
+                {
+                    isYourTurn = true;
+                    isOpponentsTurn = false;
+                    Next1.Visible = false;
+                    KnockedOut.Location = new Point(683, 957);
+                    KnockedOut.Visible = true;
+                }
             }
+        }
+
+        private void DisablePlayerActions()
+        {
+            RightClickMenu.Enabled = false;
+            RightClickMenu2.Enabled = false;
+            RightClickMenu3.Enabled = false;
+        }
+        private void EnablePlayerActions()
+        {
+            RightClickMenu.Enabled = true;
+            RightClickMenu2.Enabled = true;
+            RightClickMenu3.Enabled = true;
         }
 
         private void AttackingAI(int index)
         {
-            if(active_Pokemon.ShowName() == "Charmander")
+            DisablePlayerActions();
+            if (active_Pokemon.ShowName() == "Charmander")
             {
                 if(active_Pokemon.ShowAttackName(index) == "Scratch")
                 {
                     ai_Active_Pokemon.ReceiveDamage(10);
-                    gameMessage.Text = "You perform Scratch and deal 10 damage on " + ai_Active_Pokemon.ShowName();
                     OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                    gameMessage.Text = "You perform Scratch and deal 10 damage on " + ai_Active_Pokemon.ShowName();  
                 }
                 else if(active_Pokemon.ShowAttackName(index) == "Ember")
                 {
                     ai_Active_Pokemon.ReceiveDamage(30);
-                    gameMessage.Text = "You perform Ember and deal 30 damage on " + ai_Active_Pokemon.ShowName() + " . You also discard a fire energy";
                     OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                    gameMessage.Text = "You perform Ember and deal 30 damage on " + ai_Active_Pokemon.ShowName() + " . You also discard a Fire Energy";
+                    int e = 0;
+                    while(player_used.GetName(e) != "Fire Energy")
+                    {
+                        e++;
+                    }     
+                    discard.Add(player_used.GetCard(e));
+                    player_used.RemoveAt(e);
+                    active_Pokemon.DiscardEnergyType('f');
+                    UpdateActivePokemonView();
+                    UpdateDiscardView();
                 }
             }
             else if(active_Pokemon.ShowName() == "Charmeleon")
@@ -4777,8 +4955,24 @@ namespace Pokemon
                 if (active_Pokemon.ShowAttackName(index) == "Slash")
                 {
                     ai_Active_Pokemon.ReceiveDamage(30);
-                    gameMessage.Text = "You perform Slash and deal 30 damage on " + ai_Active_Pokemon.ShowName();
+                    gameMessage.Text = "You perform Slash and deal 30 damage on " + ai_Active_Pokemon.ShowName();                                         
                     OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                }
+                else if (active_Pokemon.ShowAttackName(index) == "Flamethrower")
+                {
+                    ai_Active_Pokemon.ReceiveDamage(50);
+                    gameMessage.Text = "You perform Flamethrower and deal 50 damage on " + ai_Active_Pokemon.ShowName() + ". You also discard a Fire Energy.";
+                    OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                    int e = 0;
+                    while (player_used.GetName(e) != "Fire Energy")
+                    {
+                        e++;
+                    }
+                    discard.Add(player_used.GetCard(e));
+                    player_used.RemoveAt(e);
+                    active_Pokemon.DiscardEnergyType('f');
+                    UpdateActivePokemonView();
+                    UpdateDiscardView();
                 }
             }
             else if (active_Pokemon.ShowName() == "Vulpix")
@@ -4882,6 +5076,7 @@ namespace Pokemon
                     ai_Active_Pokemon.ReceiveDamage(20);
                     gameMessage.Text = "You perform Bind and deal 20 damage on " + ai_Active_Pokemon.ShowName();
                     OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                    PlayerEnd.Visible = false;
                     if (AIParalyzed == false)
                     {
                         FlipCoin.Visible = true;
@@ -4902,6 +5097,23 @@ namespace Pokemon
                     AIPoisoned = true;
                 }
             }
+        }
+
+        private void Replace_Click(object sender, EventArgs e)
+        {
+            Replace.Visible = false;
+            AIChoosesActivePokemon();
+            gameMessage.Text = "Your opponent chooses now " + ai_Active_Pokemon.ShowName() + " as his Active Pokémon.";
+            if (isYourTurn == true)
+            {
+                isYourTurn = false;
+                PlayerEnd.Visible = true;
+            }
+            else
+            {
+                isOpponentsTurn = false;
+                EndOpponentsTurn.Visible = true;
+            }        
         }
     }
 }

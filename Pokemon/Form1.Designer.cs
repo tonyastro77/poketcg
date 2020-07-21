@@ -120,6 +120,8 @@
             this.Bench4Energy2 = new System.Windows.Forms.PictureBox();
             this.Bench4Energy1 = new System.Windows.Forms.PictureBox();
             this.OpponentDiscardBox = new System.Windows.Forms.PictureBox();
+            this.RightClickAIDiscard = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.OActiveEnergy1 = new System.Windows.Forms.PictureBox();
             this.OActiveEnergy2 = new System.Windows.Forms.PictureBox();
             this.OActiveEnergy3 = new System.Windows.Forms.PictureBox();
@@ -168,6 +170,8 @@
             this.EndOpponentsTurn = new System.Windows.Forms.Button();
             this.PlayerEnd = new System.Windows.Forms.Button();
             this.FlipCoin = new System.Windows.Forms.Button();
+            this.KnockedOut = new System.Windows.Forms.Button();
+            this.Replace = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.PictureZoom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureActive)).BeginInit();
             this.RightClickMenu3.SuspendLayout();
@@ -232,6 +236,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Bench4Energy2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Bench4Energy1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.OpponentDiscardBox)).BeginInit();
+            this.RightClickAIDiscard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.OActiveEnergy1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.OActiveEnergy2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.OActiveEnergy3)).BeginInit();
@@ -436,13 +441,13 @@
             this.RightClickMenu2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.playAsAttackerToolStripMenuItem});
             this.RightClickMenu2.Name = "RightClickMenu2";
-            this.RightClickMenu2.Size = new System.Drawing.Size(156, 26);
+            this.RightClickMenu2.Size = new System.Drawing.Size(192, 26);
             // 
             // playAsAttackerToolStripMenuItem
             // 
             this.playAsAttackerToolStripMenuItem.Name = "playAsAttackerToolStripMenuItem";
-            this.playAsAttackerToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.playAsAttackerToolStripMenuItem.Text = "Play as attacker";
+            this.playAsAttackerToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.playAsAttackerToolStripMenuItem.Text = "Make active pokémon";
             this.playAsAttackerToolStripMenuItem.Click += new System.EventHandler(this.playAsAttackerToolStripMenuItem_Click);
             // 
             // PictureBench2
@@ -1198,12 +1203,27 @@
             // OpponentDiscardBox
             // 
             this.OpponentDiscardBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.OpponentDiscardBox.ContextMenuStrip = this.RightClickAIDiscard;
             this.OpponentDiscardBox.Location = new System.Drawing.Point(480, 247);
             this.OpponentDiscardBox.Name = "OpponentDiscardBox";
             this.OpponentDiscardBox.Size = new System.Drawing.Size(110, 154);
             this.OpponentDiscardBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.OpponentDiscardBox.TabIndex = 101;
             this.OpponentDiscardBox.TabStop = false;
+            this.OpponentDiscardBox.MouseHover += new System.EventHandler(this.HoverOnAIDiscard_Click);
+            // 
+            // RightClickAIDiscard
+            // 
+            this.RightClickAIDiscard.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1});
+            this.RightClickAIDiscard.Name = "RightClickMenu3";
+            this.RightClickAIDiscard.Size = new System.Drawing.Size(104, 26);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(103, 22);
+            this.toolStripMenuItem1.Text = "Show";
             // 
             // OActiveEnergy1
             // 
@@ -1695,10 +1715,32 @@
             this.FlipCoin.Name = "FlipCoin";
             this.FlipCoin.Size = new System.Drawing.Size(75, 23);
             this.FlipCoin.TabIndex = 132;
-            this.FlipCoin.Text = "FLIPCOIN";
+            this.FlipCoin.Text = "FLIP COIN";
             this.FlipCoin.UseVisualStyleBackColor = true;
             this.FlipCoin.Visible = false;
             this.FlipCoin.Click += new System.EventHandler(this.FlipCoin_Click);
+            // 
+            // KnockedOut
+            // 
+            this.KnockedOut.Location = new System.Drawing.Point(1267, 967);
+            this.KnockedOut.Name = "KnockedOut";
+            this.KnockedOut.Size = new System.Drawing.Size(75, 23);
+            this.KnockedOut.TabIndex = 150;
+            this.KnockedOut.Text = "OK";
+            this.KnockedOut.UseVisualStyleBackColor = true;
+            this.KnockedOut.Visible = false;
+            this.KnockedOut.Click += new System.EventHandler(this.KnockedOut_Click);
+            // 
+            // Replace
+            // 
+            this.Replace.Location = new System.Drawing.Point(1348, 967);
+            this.Replace.Name = "Replace";
+            this.Replace.Size = new System.Drawing.Size(75, 23);
+            this.Replace.TabIndex = 151;
+            this.Replace.Text = "CONTINUE";
+            this.Replace.UseVisualStyleBackColor = true;
+            this.Replace.Visible = false;
+            this.Replace.Click += new System.EventHandler(this.Replace_Click);
             // 
             // Form1
             // 
@@ -1706,6 +1748,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(222)))), ((int)(((byte)(191)))));
             this.ClientSize = new System.Drawing.Size(1904, 1041);
+            this.Controls.Add(this.Replace);
+            this.Controls.Add(this.KnockedOut);
             this.Controls.Add(this.PlayerEnd);
             this.Controls.Add(this.EndOpponentsTurn);
             this.Controls.Add(this.Next5);
@@ -1901,6 +1945,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Bench4Energy2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Bench4Energy1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.OpponentDiscardBox)).EndInit();
+            this.RightClickAIDiscard.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.OActiveEnergy1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.OActiveEnergy2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.OActiveEnergy3)).EndInit();
@@ -2081,6 +2126,10 @@
         private System.Windows.Forms.Button EndOpponentsTurn;
         private System.Windows.Forms.Button PlayerEnd;
         private System.Windows.Forms.Button FlipCoin;
+        private System.Windows.Forms.Button KnockedOut;
+        private System.Windows.Forms.ContextMenuStrip RightClickAIDiscard;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.Button Replace;
     }
 }
 

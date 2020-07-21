@@ -38,5 +38,12 @@ namespace Pokemon.Game_Zone
         {
             used.RemoveAt(index);
         }
+        public void DiscardAll()
+        {
+            for(int i = used.Count-1; i >= 0; i--)
+            {
+                used.RemoveAt(i);
+            }
+        }
     }
 }
