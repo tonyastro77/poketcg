@@ -211,6 +211,9 @@
     <Content Include="Img\N1\N1_053.jpg" />
     <Content Include="Img\N1\N1_054.jpg" />
     <Content Include="Resources\Fire.gif" />
+    <None Include="Resources\wooden_surface.bmp" />
+    <None Include="Resources\wooden_surface.jpg" />
+    <None Include="Resources\Image1.bmp" />
     <Content Include="Sounds\aquatic_ambience.wav" />
     <Content Include="Sounds\draw.wav" />
     <Content Include="Sounds\flipcoin.wav" />

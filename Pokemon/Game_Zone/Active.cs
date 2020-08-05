@@ -62,7 +62,10 @@ namespace Pokemon.Game_Zone
         {
             return Active_Pokemon.Energy;
         }
-
+        public char ShowWeakness()
+        {
+            return Active_Pokemon.Weakness;
+        }
         //Returns number of Attacks
         public int NumberOfAttacks()
         {
@@ -99,7 +102,20 @@ namespace Pokemon.Game_Zone
                     return null;
             }    
         }
-
+        public string ShowAttackType(int x)
+        {
+            switch (x)
+            {
+                case 1:
+                    return Active_Pokemon.attack1.type;
+                case 2:
+                    return Active_Pokemon.attack2.type;
+                case 3:
+                    return Active_Pokemon.attack3.type;
+                default:
+                    return null;
+            }
+        }
         //Returns number of loaded energies to the Active Pokémon
         public int EnergyLoadedCount()
         {
@@ -665,12 +681,39 @@ namespace Pokemon.Game_Zone
             Active_Pokemon.CanEvolve = true;
         }
 
+        public void DealDamage(int damage, bool has_Weakness, int additional_Damage)
+        {
+            if(has_Weakness == true)
+            {
+                Active_Pokemon.Rem_Hp -= damage - damage - additional_Damage;
+                if (Active_Pokemon.Rem_Hp < 0)
+                {
+                    Active_Pokemon.Rem_Hp = 0;
+                }
+            }
+            else
+            {
+                Active_Pokemon.Rem_Hp -= damage - additional_Damage;
+                if (Active_Pokemon.Rem_Hp < 0)
+                {
+                    Active_Pokemon.Rem_Hp = 0;
+                }
+            }  
+        }
         public void ReceiveDamage(int damage)
         {
             Active_Pokemon.Rem_Hp -= damage;
             if(Active_Pokemon.Rem_Hp < 0)
             {
                 Active_Pokemon.Rem_Hp = 0;
+            }
+        }
+        public void HealHp(int points)
+        {
+            Active_Pokemon.Rem_Hp += points;
+            if (Active_Pokemon.Rem_Hp >= Active_Pokemon.Hp)
+            {
+                Active_Pokemon.Rem_Hp = Active_Pokemon.Hp;
             }
         }
         public void ClearEverthingFromCard()

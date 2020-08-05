@@ -172,6 +172,7 @@
             this.FlipCoin = new System.Windows.Forms.Button();
             this.KnockedOut = new System.Windows.Forms.Button();
             this.Replace = new System.Windows.Forms.Button();
+            this.LureTest = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.PictureZoom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureActive)).BeginInit();
             this.RightClickMenu3.SuspendLayout();
@@ -605,6 +606,7 @@
             this.OpponentBench4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.OpponentBench4.TabIndex = 32;
             this.OpponentBench4.TabStop = false;
+            this.OpponentBench4.Click += new System.EventHandler(this.AIPictureBench_Click);
             this.OpponentBench4.MouseHover += new System.EventHandler(this.HoverOnAI_Bench_Click);
             // 
             // OpponentBench2
@@ -616,6 +618,7 @@
             this.OpponentBench2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.OpponentBench2.TabIndex = 33;
             this.OpponentBench2.TabStop = false;
+            this.OpponentBench2.Click += new System.EventHandler(this.AIPictureBench_Click);
             this.OpponentBench2.MouseHover += new System.EventHandler(this.HoverOnAI_Bench_Click);
             // 
             // OpponentBench1
@@ -627,6 +630,7 @@
             this.OpponentBench1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.OpponentBench1.TabIndex = 34;
             this.OpponentBench1.TabStop = false;
+            this.OpponentBench1.Click += new System.EventHandler(this.AIPictureBench_Click);
             this.OpponentBench1.MouseHover += new System.EventHandler(this.HoverOnAI_Bench_Click);
             // 
             // OpponentBench3
@@ -638,17 +642,19 @@
             this.OpponentBench3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.OpponentBench3.TabIndex = 35;
             this.OpponentBench3.TabStop = false;
+            this.OpponentBench3.Click += new System.EventHandler(this.AIPictureBench_Click);
             this.OpponentBench3.MouseHover += new System.EventHandler(this.HoverOnAI_Bench_Click);
             // 
             // OpponentBench5
             // 
             this.OpponentBench5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.OpponentBench5.Location = new System.Drawing.Point(478, 48);
+            this.OpponentBench5.Location = new System.Drawing.Point(482, 46);
             this.OpponentBench5.Name = "OpponentBench5";
             this.OpponentBench5.Size = new System.Drawing.Size(110, 154);
             this.OpponentBench5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.OpponentBench5.TabIndex = 36;
             this.OpponentBench5.TabStop = false;
+            this.OpponentBench5.Click += new System.EventHandler(this.AIPictureBench_Click);
             this.OpponentBench5.MouseHover += new System.EventHandler(this.HoverOnAI_Active_Click);
             // 
             // EnergyBox1
@@ -1742,12 +1748,24 @@
             this.Replace.Visible = false;
             this.Replace.Click += new System.EventHandler(this.Replace_Click);
             // 
+            // LureTest
+            // 
+            this.LureTest.Location = new System.Drawing.Point(971, 462);
+            this.LureTest.Name = "LureTest";
+            this.LureTest.Size = new System.Drawing.Size(75, 23);
+            this.LureTest.TabIndex = 152;
+            this.LureTest.Text = "Lure";
+            this.LureTest.UseVisualStyleBackColor = true;
+            this.LureTest.Visible = false;
+            this.LureTest.Click += new System.EventHandler(this.LureTest_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(222)))), ((int)(((byte)(191)))));
             this.ClientSize = new System.Drawing.Size(1904, 1041);
+            this.Controls.Add(this.LureTest);
             this.Controls.Add(this.Replace);
             this.Controls.Add(this.KnockedOut);
             this.Controls.Add(this.PlayerEnd);
@@ -2130,6 +2148,7 @@
         private System.Windows.Forms.ContextMenuStrip RightClickAIDiscard;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.Button Replace;
+        private System.Windows.Forms.Button LureTest;
     }
 }
 

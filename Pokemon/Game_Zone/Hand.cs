@@ -48,6 +48,10 @@ namespace Pokemon.Game_Zone
         {
             return hand[num].Type;
         }
+        public string ShowImpact(int num)
+        {
+            return hand[num].Impact;
+        }
 
         public int ShowHP(int num)
         {

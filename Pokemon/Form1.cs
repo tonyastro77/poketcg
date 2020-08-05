@@ -55,14 +55,18 @@ namespace Pokemon
         bool AIBurned = false;
         bool burnedCheck = false;
         bool dealsNothingCheck = false;
-
+        bool PlusPowerOn = false;
+        int PlusPowerDamage = 0;
+        bool hasWeakness = false;
         bool playedEnergy = false;
         bool playedAttack = false;
         bool active_Pokemon_Retreat = false;
+        bool ai_Active_Pokemon_Retreat = false;
         int energydiscard = 0;
         bool energytodiscard = false;
         int playerPrizes = 4;
         int aiPrizes = 4;
+
 
         public Form1()
         {
@@ -71,6 +75,8 @@ namespace Pokemon
 
         public void Form1_Load(object sender, EventArgs e)
         {
+            //function for quick testing only
+            LureTest.Visible = false;
 
             player.AddToDeck(new Pokemon(46, "Charmander", "basic", 50, 50, 'f', 'w', 'n', 1, "Obviously prefers hot places. If it gets caught in the rain, steam is said to spout from the tip of its tail.", "..\\..\\Img\\BSPainted\\BS_046.jpg", new Attack("Scratch", "offensive", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Ember", "offensive", "Discard 1 Fire Energy card attached to Charmander in order to use this attack.", 30, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>(), false));
             player.AddToDeck(new Pokemon(46, "Charmander", "basic", 50, 50, 'f', 'w', 'n', 1, "Obviously prefers hot places. If it gets caught in the rain, steam is said to spout from the tip of its tail.", "..\\..\\Img\\BSPainted\\BS_046.jpg", new Attack("Scratch", "offensive", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Ember", "offensive", "Discard 1 Fire Energy card attached to Charmander in order to use this attack.", 30, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>(), false));
@@ -94,16 +100,16 @@ namespace Pokemon
             player.AddToDeck(new Pokemon(55, "Nidoran Male", "basic", 40, 40, 'g', 'p', 'n', 1, "Stiffens its ears to sense danger. The larger, more powerful of its horns secretes venom.", "..\\..\\Img\\BS\\BS_055.jpg", new Attack("Horn Hazard", "offensive", "Flip a coin. If tails, this attack does nothing.", 30, new EnergyCost(0, 0, 0, 1, 0, 0, 0)), new List<char>(), false));
             player.AddToDeck(new Pokemon(66, "Tangela", "basic", 50, 50, 'g', 'f', 'n', 2, "Its whole body is swathed with wide vines that are similar to seaweed. These vines shake as it walks.", "..\\..\\Img\\BS\\BS_066.jpg", new Attack("Bind", "offensive", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 20, new EnergyCost(1, 0, 0, 1, 0, 0, 0)), new Attack("Poisonpowder", "offensive", "The Defending Pokémon is now Poisoned.", 20, new EnergyCost(0, 0, 0, 3, 0, 0, 0)), new List<char>(), false));
             player.AddToDeck(new Pokemon(66, "Tangela", "basic", 50, 50, 'g', 'f', 'n', 2, "Its whole body is swathed with wide vines that are similar to seaweed. These vines shake as it walks.", "..\\..\\Img\\BS\\BS_066.jpg", new Attack("Bind", "offensive", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 20, new EnergyCost(1, 0, 0, 1, 0, 0, 0)), new Attack("Poisonpowder", "offensive", "The Defending Pokémon is now Poisoned.", 20, new EnergyCost(0, 0, 0, 3, 0, 0, 0)), new List<char>(), false));
-            player.AddToDeck(new Pokemon(92, "Energy Removal", "trainer", 't', "Choose 1 Energy card attached to 1 of your opponent's Pokémon and discard it.", "..\\..\\Img\\BS\\BS_092.jpg"));
-            player.AddToDeck(new Pokemon(81, "Energy Retrieval", "trainer", 't', "Trade 1 of the other cards in your hand for up to 2 basic Energy cards from your discard pile.", "..\\..\\Img\\BS\\BS_081.jpg"));
-            player.AddToDeck(new Pokemon(81, "Energy Retrieval", "trainer", 't', "Trade 1 of the other cards in your hand for up to 2 basic Energy cards from your discard pile.", "..\\..\\Img\\BS\\BS_081.jpg"));
-            player.AddToDeck(new Pokemon(93, "Gust of Wind", "trainer", 't', "Choose 1 of your opponent's Benched Pokémon and switch it with his or her Active Pokémon.", "..\\..\\Img\\BS\\BS_093.jpg"));
-            player.AddToDeck(new Pokemon(75, "Lass", "trainer", 't', "You and your opponent show each other your hands, then shuffle all the Trainer cards from your hands into your decks.", "..\\..\\Img\\BS\\BS_075.jpg"));
-            player.AddToDeck(new Pokemon(84, "PlusPower", "trainer", 't', "Attach PlusPower to your Active Pokémon. At the end of your turn, discard PlusPower. If this Pokémon's attack does damage to the Defending Pokémon (after applying Weakness and Resistance), the attack does 10 more damage to the Defending Pokémon.", "..\\..\\Img\\BS\\BS_084.jpg"));
-            player.AddToDeck(new Pokemon(94, "Potion", "trainer", 't', "Remove up to 2 damage counters from 1 of your Pokémon.", "..\\..\\Img\\BS\\BS_094.jpg"));
-            player.AddToDeck(new Pokemon(94, "Potion", "trainer", 't', "Remove up to 2 damage counters from 1 of your Pokémon.", "..\\..\\Img\\BS\\BS_094.jpg"));
-            player.AddToDeck(new Pokemon(94, "Potion", "trainer", 't', "Remove up to 2 damage counters from 1 of your Pokémon.", "..\\..\\Img\\BS\\BS_094.jpg"));
-            player.AddToDeck(new Pokemon(95, "Switch", "trainer", 't', "Switch 1 of your Benched Pokémon with your Active Pokémon.", "..\\..\\Img\\BS\\BS_095.jpg"));
+            player.AddToDeck(new Pokemon(92, "Energy Removal", "trainer", "global", 't', "Choose 1 Energy card attached to 1 of your opponent's Pokémon and discard it.", "..\\..\\Img\\BS\\BS_092.jpg"));
+            player.AddToDeck(new Pokemon(81, "Energy Retrieval", "trainer", "global", 't', "Trade 1 of the other cards in your hand for up to 2 basic Energy cards from your discard pile.", "..\\..\\Img\\BS\\BS_081.jpg"));
+            player.AddToDeck(new Pokemon(81, "Energy Retrieval", "trainer", "global", 't', "Trade 1 of the other cards in your hand for up to 2 basic Energy cards from your discard pile.", "..\\..\\Img\\BS\\BS_081.jpg"));
+            player.AddToDeck(new Pokemon(93, "Gust of Wind", "trainer", "global", 't', "Choose 1 of your opponent's Benched Pokémon and switch it with his or her Active Pokémon.", "..\\..\\Img\\BS\\BS_093.jpg"));
+            player.AddToDeck(new Pokemon(75, "Lass", "trainer", "global", 't', "You and your opponent show each other your hands, then shuffle all the Trainer cards from your hands into your decks.", "..\\..\\Img\\BS\\BS_075.jpg"));
+            player.AddToDeck(new Pokemon(84, "PlusPower", "trainer", "global", 't', "Attach PlusPower to your Active Pokémon. At the end of your turn, discard PlusPower. If this Pokémon's attack does damage to the Defending Pokémon (after applying Weakness and Resistance), the attack does 10 more damage to the Defending Pokémon.", "..\\..\\Img\\BS\\BS_084.jpg"));
+            player.AddToDeck(new Pokemon(94, "Potion", "trainer", "directed", 't', "Remove up to 2 damage counters from 1 of your Pokémon.", "..\\..\\Img\\BS\\BS_094.jpg"));
+            player.AddToDeck(new Pokemon(94, "Potion", "trainer", "directed", 't', "Remove up to 2 damage counters from 1 of your Pokémon.", "..\\..\\Img\\BS\\BS_094.jpg"));
+            player.AddToDeck(new Pokemon(94, "Potion", "trainer", "directed", 't', "Remove up to 2 damage counters from 1 of your Pokémon.", "..\\..\\Img\\BS\\BS_094.jpg"));
+            player.AddToDeck(new Pokemon(95, "Switch", "trainer", "global", 't', "Switch 1 of your Benched Pokémon with your Active Pokémon.", "..\\..\\Img\\BS\\BS_095.jpg"));
             player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", 'f', "..\\..\\Img\\BS\\BS_098.jpg"));
             player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", 'f', "..\\..\\Img\\BS\\BS_098.jpg"));
             player.AddToDeck(new Pokemon(98, "Fire Energy", "energy", 'f', "..\\..\\Img\\BS\\BS_098.jpg"));
@@ -155,17 +161,17 @@ namespace Pokemon
             ai.AddToDeck(new Pokemon(31, "Jynx", "basic", 70, 70, 'p', 'p', 'n', 2, "Merely by meditating, the Pokémon launches a powerful psychic energy attack.", "..\\..\\Img\\BSPainted\\BS_031.jpg", new Attack("Doubleslap", "offensive", "Flip 2 coins. This attack does 10 damage times the number of heads.", 10, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Meditate", "offensive", "Does 20 damage plus 10 more damage for each damage counter on the Defending Pokémon.", 20, new EnergyCost(1, 0, 0, 0, 0, 2, 0)), new List<char>(), false));
             ai.AddToDeck(new Pokemon(31, "Jynx", "basic", 70, 70, 'p', 'p', 'n', 2, "Merely by meditating, the Pokémon launches a powerful psychic energy attack.", "..\\..\\Img\\BSPainted\\BS_031.jpg", new Attack("Doubleslap", "offensive", "Flip 2 coins. This attack does 10 damage times the number of heads.", 10, new EnergyCost(0, 0, 0, 0, 0, 1, 0)), new Attack("Meditate", "offensive", "Does 20 damage plus 10 more damage for each damage counter on the Defending Pokémon.", 20, new EnergyCost(1, 0, 0, 0, 0, 2, 0)), new List<char>(), false));
             ai.AddToDeck(new Pokemon(10, "Mewtwo", "basic", 60, 60, 'p', 'p', 'n', 3, "A scientist created this Pokémon after years of horrific gene-splicing and DNA engineering experiments.", "..\\..\\Img\\BSPainted\\BS_010.jpg", new Attack("Psychic", "offensive", "Does 10 damage plus 10 more damage for each Energy card attached to the Defending Pokémon.", 10, new EnergyCost(1, 0, 0, 0, 0, 1, 0)), new Attack("Barrier", "defensive", "Discard 1 Psychic Energy card attached to Mewtwo in order to use this attack. During your opponent's next turn, prevent all effects of attacks, including damage, done to Mewtwo.", 0, new EnergyCost(0, 0, 0, 0, 0, 2, 0)), new List<char>(), false));
-            ai.AddToDeck(new Pokemon(91, "Bill", "trainer", 't', "Draw 2 cards.", "..\\..\\Img\\BS\\BS_091.jpg"));
-            ai.AddToDeck(new Pokemon(91, "Bill", "trainer", 't', "Draw 2 cards.", "..\\..\\Img\\BS\\BS_091.jpg"));
-            ai.AddToDeck(new Pokemon(71, "Computer Search", "trainer", 't', "Discard 2 of the other cards from your hand in order to search your deck for any card and put it into your hand. Shuffle your deck afterward.", "..\\..\\Img\\BS\\BS_071.jpg"));
-            ai.AddToDeck(new Pokemon(80, "Defender", "trainer", 't', "Attach Defender to 1 of your Pokémon. At the end of your opponent's next turn, discard Defender. Damage done to that Pokémon by attacks is reduced by 20 (after applying Weakness and Resistance).", "..\\..\\Img\\BS\\BS_080.jpg"));
-            ai.AddToDeck(new Pokemon(93, "Gust of Wind", "trainer", 't', "Choose 1 of your opponent's Benched Pokémon and switch it with his or her Active Pokémon.", "..\\..\\Img\\BS\\BS_093.jpg"));
-            ai.AddToDeck(new Pokemon(93, "Gust of Wind", "trainer", 't', "Choose 1 of your opponent's Benched Pokémon and switch it with his or her Active Pokémon.", "..\\..\\Img\\BS\\BS_093.jpg"));
-            ai.AddToDeck(new Pokemon(94, "Potion", "trainer", 't', "Remove up to 2 damage counters from 1 of your Pokémon.", "..\\..\\Img\\BS\\BS_094.jpg"));
-            ai.AddToDeck(new Pokemon(88, "Professor Oak", "trainer", 't', "Discard your hand, then draw 7 cards.", "..\\..\\Img\\BS\\BS_088.jpg"));
-            ai.AddToDeck(new Pokemon(90, "Super Potion", "trainer", 't', "Discard 1 Energy card attached to 1 of your own Pokémon in order to remove up to 4 damage counters from that Pokémon.", "..\\..\\Img\\BS\\BS_090.jpg"));
-            ai.AddToDeck(new Pokemon(95, "Switch", "trainer", 't', "Switch 1 of your Benched Pokémon with your Active Pokémon.", "..\\..\\Img\\BS\\BS_095.jpg"));
-            ai.AddToDeck(new Pokemon(95, "Switch", "trainer", 't', "Switch 1 of your Benched Pokémon with your Active Pokémon.", "..\\..\\Img\\BS\\BS_095.jpg"));
+            ai.AddToDeck(new Pokemon(91, "Bill", "trainer", "global", 't', "Draw 2 cards.", "..\\..\\Img\\BS\\BS_091.jpg"));
+            ai.AddToDeck(new Pokemon(91, "Bill", "trainer", "global", 't', "Draw 2 cards.", "..\\..\\Img\\BS\\BS_091.jpg"));
+            ai.AddToDeck(new Pokemon(71, "Computer Search", "global", "trainer", 't', "Discard 2 of the other cards from your hand in order to search your deck for any card and put it into your hand. Shuffle your deck afterward.", "..\\..\\Img\\BS\\BS_071.jpg"));
+            ai.AddToDeck(new Pokemon(80, "Defender", "trainer", "directed", 't', "Attach Defender to 1 of your Pokémon. At the end of your opponent's next turn, discard Defender. Damage done to that Pokémon by attacks is reduced by 20 (after applying Weakness and Resistance).", "..\\..\\Img\\BS\\BS_080.jpg"));
+            ai.AddToDeck(new Pokemon(93, "Gust of Wind", "trainer", "global", 't', "Choose 1 of your opponent's Benched Pokémon and switch it with his or her Active Pokémon.", "..\\..\\Img\\BS\\BS_093.jpg"));
+            ai.AddToDeck(new Pokemon(93, "Gust of Wind", "trainer", "global", 't', "Choose 1 of your opponent's Benched Pokémon and switch it with his or her Active Pokémon.", "..\\..\\Img\\BS\\BS_093.jpg"));
+            ai.AddToDeck(new Pokemon(94, "Potion", "trainer", "directed", 't', "Remove up to 2 damage counters from 1 of your Pokémon.", "..\\..\\Img\\BS\\BS_094.jpg"));
+            ai.AddToDeck(new Pokemon(88, "Professor Oak", "trainer", "global", 't', "Discard your hand, then draw 7 cards.", "..\\..\\Img\\BS\\BS_088.jpg"));
+            ai.AddToDeck(new Pokemon(90, "Super Potion", "trainer", "directed", 't', "Discard 1 Energy card attached to 1 of your own Pokémon in order to remove up to 4 damage counters from that Pokémon.", "..\\..\\Img\\BS\\BS_090.jpg"));
+            ai.AddToDeck(new Pokemon(95, "Switch", "trainer", "global", 't', "Switch 1 of your Benched Pokémon with your Active Pokémon.", "..\\..\\Img\\BS\\BS_095.jpg"));
+            ai.AddToDeck(new Pokemon(95, "Switch", "trainer", "global", 't', "Switch 1 of your Benched Pokémon with your Active Pokémon.", "..\\..\\Img\\BS\\BS_095.jpg"));
             ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", 'e', "..\\..\\Img\\BS\\BS_100.jpg"));
             ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", 'e', "..\\..\\Img\\BS\\BS_100.jpg"));
             ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", 'e', "..\\..\\Img\\BS\\BS_100.jpg"));
@@ -330,7 +336,10 @@ namespace Pokemon
             {
                 (RightClickMenu.Items[0] as ToolStripMenuItem).DropDownItems.Clear();
             }
-
+            else if(player_Hand.ShowType(num) == "trainer" && player_Hand.ShowImpact(num) == "global")
+            {
+                (RightClickMenu.Items[0] as ToolStripMenuItem).DropDownItems.Clear();
+            }
             else
             {
                 switch (bench_size)
@@ -735,6 +744,8 @@ namespace Pokemon
         {
             if(isPreGameTurn == true)
             {
+                player.Shuffle();
+                player.Shuffle();
                 SoundPlayer simpleSound = new SoundPlayer("..\\..\\Sounds\\draw.wav");
                 simpleSound.Play();
 
@@ -3503,7 +3514,7 @@ namespace Pokemon
                 }
                 else if (player_Hand.ShowType(num) == "trainer")
                 {
-                    //TO BE FILLED LATER
+                    PlayingTrainerCard(num, 0);
                 }
                 else if (player_Hand.ShowType(num) == "second")
                 {
@@ -3699,7 +3710,18 @@ namespace Pokemon
         //Takes place when user clicks on the chosen attack from the menu
         void PerformAttack(object sender, EventArgs e)
         {
-
+            if (active_Pokemon.ShowEnergy() == ai_Active_Pokemon.ShowWeakness())
+            {
+                hasWeakness = true;
+            }
+            else
+            {
+                hasWeakness = false;
+            }
+            if (PlusPowerOn == true)
+            {
+                PlusPowerDamage = 10;
+            }
             ToolStripMenuItem item = sender as ToolStripMenuItem;
             if (item != null)
             {
@@ -3711,15 +3733,22 @@ namespace Pokemon
                     {
                        
                         if (active_Pokemon.CanPerformAttack(1) == true)
-                        {
+                        {                            
                             AttackingAI(1);
                             playedAttack = true;
+
                             if (ai_Active_Pokemon.ShowRemHP() == 0)
                             {
                                 PlayerEnd.Visible = false;
                                 KnockedOut.Location = new Point(683, 957);
                                 KnockedOut.Visible = true;
-                            }
+                                FlipCoin.Visible = false;
+                                poisonedCheck = false;
+                                confusedCheck = false;
+                                paralyzedCheck = false;
+                                burnedCheck = false;
+                                asleepCheck = false;
+                            }                         
                         }
                         else
                         {
@@ -3739,6 +3768,12 @@ namespace Pokemon
                                 PlayerEnd.Visible = false;
                                 KnockedOut.Location = new Point(683, 957);
                                 KnockedOut.Visible = true;
+                                FlipCoin.Visible = false;
+                                poisonedCheck = false;
+                                confusedCheck = false;
+                                paralyzedCheck = false;
+                                burnedCheck = false;
+                                asleepCheck = false;
                             }
                         }
                         else
@@ -3759,6 +3794,12 @@ namespace Pokemon
                                 PlayerEnd.Visible = false;
                                 KnockedOut.Location = new Point(683, 957);
                                 KnockedOut.Visible = true;
+                                FlipCoin.Visible = false;
+                                poisonedCheck = false;
+                                confusedCheck = false;
+                                paralyzedCheck = false;
+                                burnedCheck = false;
+                                asleepCheck = false;
                             }
                         }
                         else
@@ -4005,7 +4046,22 @@ namespace Pokemon
                 }
                 else
                 {
-                    // CODE TO BE WRITTEN SOON
+                    ToolStripMenuItem item = sender as ToolStripMenuItem;
+                    if (item != null)
+                    {
+                        int index = (item.OwnerItem as ToolStripMenuItem).DropDownItems.IndexOf(item);
+
+                        if (index <= (bench.NumberOfCards() - 1))
+                        {
+                            
+                        }
+                        else
+                        {
+                            PlayingTrainerCard(num, index);
+                            
+                        }
+                    }
+                    
                 }
             }
         }
@@ -4354,7 +4410,7 @@ namespace Pokemon
                 }
                 else if (dealsNothingCheck == true)
                 {
-                    ai_Active_Pokemon.ReceiveDamage(30);
+                    ai_Active_Pokemon.DealDamage(30, hasWeakness, PlusPowerDamage);
                     OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
                     if (ai_Active_Pokemon.ShowRemHP() == 0)
                     {
@@ -4879,6 +4935,8 @@ namespace Pokemon
             aibench.ChangeCanEvolveStatusToTrue();
             ai_Active_Pokemon.ChangeCanEvolveStatusToTrue();
 
+            PlusPowerOn = false;
+
             if(AIPoisoned == true)
             {
                 ai_Active_Pokemon.ReceiveDamage(10);
@@ -4929,13 +4987,13 @@ namespace Pokemon
             {
                 if(active_Pokemon.ShowAttackName(index) == "Scratch")
                 {
-                    ai_Active_Pokemon.ReceiveDamage(10);
+                    ai_Active_Pokemon.DealDamage(10, hasWeakness, PlusPowerDamage);
                     OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
                     gameMessage.Text = "You perform Scratch and deal 10 damage on " + ai_Active_Pokemon.ShowName();  
                 }
                 else if(active_Pokemon.ShowAttackName(index) == "Ember")
                 {
-                    ai_Active_Pokemon.ReceiveDamage(30);
+                    ai_Active_Pokemon.DealDamage(30, hasWeakness, PlusPowerDamage);
                     OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
                     gameMessage.Text = "You perform Ember and deal 30 damage on " + ai_Active_Pokemon.ShowName() + " . You also discard a Fire Energy";
                     int e = 0;
@@ -4954,13 +5012,13 @@ namespace Pokemon
             {
                 if (active_Pokemon.ShowAttackName(index) == "Slash")
                 {
-                    ai_Active_Pokemon.ReceiveDamage(30);
+                    ai_Active_Pokemon.DealDamage(30, hasWeakness, PlusPowerDamage);
                     gameMessage.Text = "You perform Slash and deal 30 damage on " + ai_Active_Pokemon.ShowName();                                         
                     OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
                 }
                 else if (active_Pokemon.ShowAttackName(index) == "Flamethrower")
                 {
-                    ai_Active_Pokemon.ReceiveDamage(50);
+                    ai_Active_Pokemon.DealDamage(50, hasWeakness, PlusPowerDamage);
                     gameMessage.Text = "You perform Flamethrower and deal 50 damage on " + ai_Active_Pokemon.ShowName() + ". You also discard a Fire Energy.";
                     OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
                     int e = 0;
@@ -4979,7 +5037,7 @@ namespace Pokemon
             {
                 if (active_Pokemon.ShowAttackName(index) == "Confuse Ray")
                 {
-                    ai_Active_Pokemon.ReceiveDamage(10);
+                    ai_Active_Pokemon.DealDamage(10, hasWeakness, PlusPowerDamage);
                     gameMessage.Text = "You perform Confuse Ray and deal 10 damage on " + ai_Active_Pokemon.ShowName();
                     OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
                     PlayerEnd.Visible = false;
@@ -5000,22 +5058,38 @@ namespace Pokemon
             {
                 if (active_Pokemon.ShowAttackName(index) == "Lure")
                 {
-                    ai_Active_Pokemon.ReceiveDamage(0);
-                    gameMessage.Text = "You perform Lure and swap a benched Pokémon with " + ai_Active_Pokemon.ShowName();
-                    OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                    if(aibench.NumberOfCards() == 0)
+                    {
+                        gameMessage.Text = "Your opponent does not have any Benched Pokémon. Please perform another action or end your turn.";
+
+                    }
+                    else
+                    {
+                        ChangeOpponentActivePokemon();
+                    }                   
                 }
                 else if (active_Pokemon.ShowAttackName(index) == "Fire Blast")
                 {
-                    ai_Active_Pokemon.ReceiveDamage(80);
+                    ai_Active_Pokemon.DealDamage(80, hasWeakness, PlusPowerDamage);
                     gameMessage.Text = "You perform Fire Blast and deal 80 damage on " + ai_Active_Pokemon.ShowName() + " . You also discard a fire energy";
                     OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                    int e = 0;
+                    while (player_used.GetName(e) != "Fire Energy")
+                    {
+                        e++;
+                    }
+                    discard.Add(player_used.GetCard(e));
+                    player_used.RemoveAt(e);
+                    active_Pokemon.DiscardEnergyType('f');
+                    UpdateActivePokemonView();
+                    UpdateDiscardView();
                 }
             }
             else if (active_Pokemon.ShowName() == "Growlithe")
             {
                 if (active_Pokemon.ShowAttackName(index) == "Flare")
                 {
-                    ai_Active_Pokemon.ReceiveDamage(20);
+                    ai_Active_Pokemon.DealDamage(20, hasWeakness, PlusPowerDamage);
                     gameMessage.Text = "You perform Flare and deal 20 damage on " + ai_Active_Pokemon.ShowName();
                     OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
                 }
@@ -5024,14 +5098,24 @@ namespace Pokemon
             {
                 if (active_Pokemon.ShowAttackName(index) == "Flamethrower")
                 {
-                    ai_Active_Pokemon.ReceiveDamage(50);
+                    ai_Active_Pokemon.DealDamage(50, hasWeakness, PlusPowerDamage);
                     gameMessage.Text = "You perform Flamethrower and deal 50 damage on " + ai_Active_Pokemon.ShowName() + " . You also discard a fire energy";
                     OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                    int e = 0;
+                    while (player_used.GetName(e) != "Fire Energy")
+                    {
+                        e++;
+                    }
+                    discard.Add(player_used.GetCard(e));
+                    player_used.RemoveAt(e);
+                    active_Pokemon.DiscardEnergyType('f');
+                    UpdateActivePokemonView();
+                    UpdateDiscardView();
                 }
                 else if (active_Pokemon.ShowAttackName(index) == "Take Down")
                 {
-                    ai_Active_Pokemon.ReceiveDamage(80);
-                    active_Pokemon.ReceiveDamage(30);
+                    ai_Active_Pokemon.DealDamage(80, hasWeakness, PlusPowerDamage);
+                    active_Pokemon.DealDamage(30, hasWeakness, PlusPowerDamage);
                     gameMessage.Text = "You perform Take Down and deal 80 damage on " + ai_Active_Pokemon.ShowName() + " . Arcanine also deals 30 to itself.";
                     OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
                     PlayerHpBar.Value = active_Pokemon.ShowRemHP();
@@ -5041,7 +5125,7 @@ namespace Pokemon
             {
                 if (active_Pokemon.ShowAttackName(index) == "Poison Sting")
                 {
-                    ai_Active_Pokemon.ReceiveDamage(10);
+                    ai_Active_Pokemon.DealDamage(10, hasWeakness, PlusPowerDamage);
                     gameMessage.Text = "You perform Poison Sting and deal 10 damage on " + ai_Active_Pokemon.ShowName();
                     OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
                     PlayerEnd.Visible = false;
@@ -5073,7 +5157,7 @@ namespace Pokemon
             {
                 if (active_Pokemon.ShowAttackName(index) == "Bind")
                 {
-                    ai_Active_Pokemon.ReceiveDamage(20);
+                    ai_Active_Pokemon.DealDamage(20, hasWeakness, PlusPowerDamage);
                     gameMessage.Text = "You perform Bind and deal 20 damage on " + ai_Active_Pokemon.ShowName();
                     OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
                     PlayerEnd.Visible = false;
@@ -5091,7 +5175,7 @@ namespace Pokemon
                 }
                 else if (active_Pokemon.ShowAttackName(index) == "Poisonpowder")
                 {
-                    ai_Active_Pokemon.ReceiveDamage(20);
+                    ai_Active_Pokemon.DealDamage(20, hasWeakness, PlusPowerDamage);
                     gameMessage.Text = "You perform Poisonpowder and deal 20 damage on " + ai_Active_Pokemon.ShowName() +". Your opponent is also now Poisoned.";
                     OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
                     AIPoisoned = true;
@@ -5099,6 +5183,244 @@ namespace Pokemon
             }
         }
 
+        private void PlayingTrainerCard(int x, int y)
+        {
+            //x is the card index from the hand and y is the card index on the bench
+            if (player_Hand.ShowName(x) == "Potion")
+            {
+                active_Pokemon.HealHp(20);
+                gameMessage.Text = "You use a Potion and heal 20 damage on " + active_Pokemon.ShowName();
+                PlayerHpBar.Value = active_Pokemon.ShowRemHP();
+                discard.Add(player_Hand.PlayCard(x));
+                player_Hand.RemoveFromHand(x);
+                UpdateHandView();
+                UpdateDiscardView();
+            }
+            else if (player_Hand.ShowName(x) == "Super Potion")
+            {
+                active_Pokemon.HealHp(20);
+                gameMessage.Text = "You use a Super Potion and heal 40 damage on " + active_Pokemon.ShowName() + ". You also discard an Energy Card.";
+                PlayerHpBar.Value = active_Pokemon.ShowRemHP();
+                discard.Add(player_Hand.PlayCard(x));
+                player_Hand.RemoveFromHand(x);
+                UpdateHandView();
+                UpdateDiscardView();
+            }
+            else if (player_Hand.ShowName(x) == "Gust of Wind")
+            {
+                if(aibench.NumberOfCards() == 0)
+                {
+                    gameMessage.Text = "Your opponent does not have any Benched Pokémon.";
+                }
+                else
+                {
+                    ChangeOpponentActivePokemon();
+                    discard.Add(player_Hand.PlayCard(x));
+                    player_Hand.RemoveFromHand(x);
+                    UpdateHandView();
+                    UpdateDiscardView();
+                }                
+            }
+            else if (player_Hand.ShowName(x) == "PlusPower")
+            {
+                gameMessage.Text = "You use PlusPower on " + active_Pokemon.ShowName() + ". Its attacks do 10 more damage till the end of this turn.";
+                PlusPowerOn = true;
+                discard.Add(player_Hand.PlayCard(x));
+                player_Hand.RemoveFromHand(x);
+                UpdateHandView();
+                UpdateDiscardView();
+            }
+        }
+        private void ChangeOpponentActivePokemon()
+        {
+            PictureActive.Visible = false;
+            ActiveEnergy1.Visible = false;
+            ActiveEnergy2.Visible = false;
+            ActiveEnergy3.Visible = false;
+            ActiveEnergy4.Visible = false;
+            ActiveEnergy5.Visible = false;
+            DiscardBox.Visible = false;
+            OpponentActive.Location = new Point(1319, 237);
+            OActiveEnergy1.Visible = false;
+            OActiveEnergy2.Visible = false;
+            OActiveEnergy3.Visible = false;
+            OActiveEnergy4.Visible = false;
+            OActiveEnergy5.Visible = false;
+            Deck.Visible = false;
+            DeckSize.Visible = false;
+            OpponentDeck.Visible = false;
+            ODeckSize.Visible = false;
+            HandIcon1.Visible = false;
+            HandIcon2.Visible = false;
+            HandIcon3.Visible = false;
+            OHandNumber.Visible = false;
+            PictureZoom.Visible = false;
+            CardName.Visible = false;
+            PlayerHpBar.Visible = false;
+            MaxHp.Visible = false;
+            RemHp.Visible = false;
+            EnergyBox1.Visible = false;
+            HpLabel1.Visible = false;
+            OpCardName.Visible = false;
+            OpponentHpBar.Visible = false;
+            OMaxHp.Visible = false;
+            EnergyBox2.Visible = false;
+            PictureBench1.Visible = false;
+            PictureBench2.Visible = false;
+            PictureBench3.Visible = false;
+            PictureBench4.Visible = false;
+            PictureBench5.Visible = false;
+            Bench1Energy1.Visible = false;
+            Bench1Energy2.Visible = false;
+            Bench1Energy3.Visible = false;
+            Bench1Energy4.Visible = false;
+            Bench1Energy5.Visible = false;
+            Bench2Energy1.Visible = false;
+            Bench2Energy2.Visible = false;
+            Bench2Energy3.Visible = false;
+            Bench2Energy4.Visible = false;
+            Bench2Energy5.Visible = false;
+            Bench3Energy1.Visible = false;
+            Bench3Energy2.Visible = false;
+            Bench3Energy3.Visible = false;
+            Bench3Energy4.Visible = false;
+            Bench3Energy5.Visible = false;
+            Bench4Energy1.Visible = false;
+            Bench4Energy2.Visible = false;
+            Bench4Energy3.Visible = false;
+            Bench4Energy4.Visible = false;
+            Bench4Energy5.Visible = false;
+            Bench5Energy1.Visible = false;
+            Bench5Energy2.Visible = false;
+            Bench5Energy3.Visible = false;
+            Bench5Energy4.Visible = false;
+            Bench5Energy5.Visible = false;
+
+            OBench1Energy1.Visible = false;
+            OBench1Energy2.Visible = false;
+            OBench1Energy3.Visible = false;
+            OBench1Energy4.Visible = false;
+            OBench1Energy5.Visible = false;
+            OBench2Energy1.Visible = false;
+            OBench2Energy2.Visible = false;
+            OBench2Energy3.Visible = false;
+            OBench2Energy4.Visible = false;
+            OBench2Energy5.Visible = false;
+            OBench3Energy1.Visible = false;
+            OBench3Energy2.Visible = false;
+            OBench3Energy3.Visible = false;
+            OBench3Energy4.Visible = false;
+            OBench3Energy5.Visible = false;
+            OBench4Energy1.Visible = false;
+            OBench4Energy2.Visible = false;
+            OBench4Energy3.Visible = false;
+            OBench4Energy4.Visible = false;
+            OBench4Energy5.Visible = false;
+            OBench5Energy1.Visible = false;
+            OBench5Energy2.Visible = false;
+            OBench5Energy3.Visible = false;
+            OBench5Energy4.Visible = false;
+            OBench5Energy5.Visible = false;
+            OpponentDiscardBox.Visible = false;
+            OpponentBench1.Location = new Point(480, 407);
+            OpponentBench2.Location = new Point(621, 407);
+            OpponentBench3.Location = new Point(789, 407);
+            OpponentBench4.Location = new Point(936, 407);
+            OpponentBench5.Location = new Point(1089, 407);
+            PlayerEnd.Visible = false;
+            ai_Active_Pokemon_Retreat = true;
+            gameMessage.Text = "Please choose the Pokémon with which you wish to swap " + ai_Active_Pokemon.ShowName();
+        }
+        private void GetViewBackToNormal()
+        {
+            PictureActive.Visible = true;
+            UpdateActivePokemonView();
+            DiscardBox.Visible = true;
+            OpponentActive.Location = new Point(789, 247);
+            UpdateAIActivePokemonView();
+            Deck.Visible = true;
+            DeckSize.Visible = true;
+            OpponentDeck.Visible = true;
+            ODeckSize.Visible = true;
+            HandIcon1.Visible = true;
+            HandIcon2.Visible = true;
+            HandIcon3.Visible = true;
+            OHandNumber.Visible = true;
+            PictureZoom.Visible = true;
+            CardName.Visible = true;
+            PlayerHpBar.Visible = true;
+            MaxHp.Visible = true;
+            RemHp.Visible = true;
+            EnergyBox1.Visible = true;
+            HpLabel1.Visible = true;
+            OpCardName.Visible = true;
+            OpponentHpBar.Visible = true;
+            OMaxHp.Visible = true;
+            EnergyBox2.Visible = true;
+            UpdateBenchView();
+            AIUpdateBenchView();
+            
+            OpponentDiscardBox.Visible = true;
+            OpponentBench1.Location = new Point(789, 48);
+            OpponentBench2.Location = new Point(938, 48);
+            OpponentBench3.Location = new Point(633, 48);
+            OpponentBench4.Location = new Point(1089, 48);
+            OpponentBench5.Location = new Point(480, 48);
+            PlayerEnd.Visible = true;
+            ai_Active_Pokemon_Retreat = false;       
+        }
+
+        private void AIPictureBench_Click(object sender, EventArgs e)
+        {
+            if (ai_Active_Pokemon_Retreat == true)
+            {
+                int num;
+                Pokemon ActivePokemonTemp;
+                PictureBox n = (PictureBox)sender;
+                switch (n.Name)
+                {
+                    case "OpponentBench1":
+                        num = 0;
+                        gameMessage.Text = "You replaced " + ai_Active_Pokemon.ShowName() + " with " + aibench.ShowName(num) + ". Now " + aibench.ShowName(num) + " is the AI's Active Pokémon.";
+                        ActivePokemonTemp = ai_Active_Pokemon.GetActivePokemon();
+                        ai_Active_Pokemon.Become(aibench.PlayCard(num));
+                        aibench.PutInto(num, ActivePokemonTemp);
+                        break;
+                    case "OpponentBench2":
+                        num = 1;
+                        gameMessage.Text = "You replaced " + ai_Active_Pokemon.ShowName() + " with " + aibench.ShowName(num) + ". Now " + aibench.ShowName(num) + " is the AI's Active Pokémon.";
+                        ActivePokemonTemp = ai_Active_Pokemon.GetActivePokemon();
+                        ai_Active_Pokemon.Become(aibench.PlayCard(num));
+                        aibench.PutInto(num, ActivePokemonTemp);
+                        break;
+                    case "OpponentBench3":
+                        num = 2;
+                        gameMessage.Text = "You replaced " + ai_Active_Pokemon.ShowName() + " with " + aibench.ShowName(num) + ". Now " + aibench.ShowName(num) + " is the AI's Active Pokémon.";
+                        ActivePokemonTemp = ai_Active_Pokemon.GetActivePokemon();
+                        ai_Active_Pokemon.Become(aibench.PlayCard(num));
+                        aibench.PutInto(num, ActivePokemonTemp);
+                        break;
+                    case "OpponentBench4":
+                        num = 3;
+                        gameMessage.Text = "You replaced " + ai_Active_Pokemon.ShowName() + " with " + aibench.ShowName(num) + ". Now " + aibench.ShowName(num) + " is the AI's Active Pokémon.";
+                        ActivePokemonTemp = ai_Active_Pokemon.GetActivePokemon();
+                        ai_Active_Pokemon.Become(aibench.PlayCard(num));
+                        aibench.PutInto(num, ActivePokemonTemp);
+                        break;
+                    case "OpponentBenchh5":
+                        num = 4;
+                        gameMessage.Text = "You replaced " + ai_Active_Pokemon.ShowName() + " with " + aibench.ShowName(num) + ". Now " + aibench.ShowName(num) + " is the AI's Active Pokémon.";
+                        ActivePokemonTemp = ai_Active_Pokemon.GetActivePokemon();
+                        ai_Active_Pokemon.Become(aibench.PlayCard(num));
+                        aibench.PutInto(num, ActivePokemonTemp);
+                        break;
+                    default:
+                        break;
+                }
+                GetViewBackToNormal();
+            }
+
+        }
         private void Replace_Click(object sender, EventArgs e)
         {
             Replace.Visible = false;
@@ -5114,6 +5436,12 @@ namespace Pokemon
                 isOpponentsTurn = false;
                 EndOpponentsTurn.Visible = true;
             }        
+        }
+
+        private void LureTest_Click(object sender, EventArgs e)
+        {
+            ChangeOpponentActivePokemon();
+
         }
     }
 }

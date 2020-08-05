@@ -10,6 +10,8 @@ namespace Pokemon
         public int Id { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
+
+        public string Impact { get; set; }
         public string Effect { get; set; }
         public string Stage_1 {get; set;}
         public string Stage_2 { get; set;}
@@ -43,11 +45,12 @@ namespace Pokemon
   
         }
 
-        public Pokemon(int id, string name, string type, char energy, string effect, string Img)
+        public Pokemon(int id, string name, string type, string impact, char energy, string effect, string Img)
         {
             this.Id = id;
             this.Name = name;
             this.Type = type;
+            this.Impact = impact;
             this.Effect = effect;
             this.Img = Img;
 
