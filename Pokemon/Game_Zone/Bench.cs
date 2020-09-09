@@ -147,6 +147,13 @@ namespace Pokemon.Game_Zone
                 bench[i].CanEvolve = true;
             }
         }
-
+        public void HealHp(int points, int index)
+        {
+            bench[index].Rem_Hp += points;
+            if (bench[index].Rem_Hp >= bench[index].Hp)
+            {
+                bench[index].Rem_Hp = bench[index].Hp;
+            }
+        }
     }
 }

@@ -164,9 +164,6 @@
             this.Next2 = new System.Windows.Forms.Button();
             this.Mulligan2 = new System.Windows.Forms.Button();
             this.Mulligan3 = new System.Windows.Forms.Button();
-            this.Next3 = new System.Windows.Forms.Button();
-            this.Next4 = new System.Windows.Forms.Button();
-            this.Next5 = new System.Windows.Forms.Button();
             this.EndOpponentsTurn = new System.Windows.Forms.Button();
             this.PlayerEnd = new System.Windows.Forms.Button();
             this.FlipCoin = new System.Windows.Forms.Button();
@@ -675,6 +672,10 @@
             this.EnergyBox2.TabIndex = 38;
             this.EnergyBox2.TabStop = false;
             // 
+            // timer1
+            // 
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // Hand1
             // 
             this.Hand1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -686,6 +687,7 @@
             this.Hand1.TabIndex = 40;
             this.Hand1.TabStop = false;
             this.Hand1.Tag = "Hand1";
+            this.Hand1.Click += new System.EventHandler(this.Hand1_Click);
             this.Hand1.MouseHover += new System.EventHandler(this.HoverOn_Click);
             // 
             // RightClickMenu
@@ -721,6 +723,7 @@
             this.Hand2.TabIndex = 41;
             this.Hand2.TabStop = false;
             this.Hand2.Tag = "Hand2";
+            this.Hand2.Click += new System.EventHandler(this.Hand1_Click);
             this.Hand2.MouseHover += new System.EventHandler(this.HoverOn_Click);
             // 
             // Deck
@@ -963,6 +966,7 @@
             this.Hand3.TabIndex = 78;
             this.Hand3.TabStop = false;
             this.Hand3.Tag = "Hand3";
+            this.Hand3.Click += new System.EventHandler(this.Hand1_Click);
             this.Hand3.MouseHover += new System.EventHandler(this.HoverOn_Click);
             // 
             // Hand4
@@ -976,6 +980,7 @@
             this.Hand4.TabIndex = 79;
             this.Hand4.TabStop = false;
             this.Hand4.Tag = "Hand4";
+            this.Hand4.Click += new System.EventHandler(this.Hand1_Click);
             this.Hand4.MouseHover += new System.EventHandler(this.HoverOn_Click);
             // 
             // Hand5
@@ -989,6 +994,7 @@
             this.Hand5.TabIndex = 80;
             this.Hand5.TabStop = false;
             this.Hand5.Tag = "Hand5";
+            this.Hand5.Click += new System.EventHandler(this.Hand1_Click);
             this.Hand5.MouseHover += new System.EventHandler(this.HoverOn_Click);
             // 
             // Hand6
@@ -1002,6 +1008,7 @@
             this.Hand6.TabIndex = 81;
             this.Hand6.TabStop = false;
             this.Hand6.Tag = "Hand6";
+            this.Hand6.Click += new System.EventHandler(this.Hand1_Click);
             this.Hand6.MouseHover += new System.EventHandler(this.HoverOn_Click);
             // 
             // Hand7
@@ -1015,6 +1022,7 @@
             this.Hand7.TabIndex = 82;
             this.Hand7.TabStop = false;
             this.Hand7.Tag = "Hand7";
+            this.Hand7.Click += new System.EventHandler(this.Hand1_Click);
             this.Hand7.MouseHover += new System.EventHandler(this.HoverOn_Click);
             // 
             // Hand8
@@ -1028,6 +1036,7 @@
             this.Hand8.TabIndex = 83;
             this.Hand8.TabStop = false;
             this.Hand8.Tag = "Hand8";
+            this.Hand8.Click += new System.EventHandler(this.Hand1_Click);
             this.Hand8.MouseHover += new System.EventHandler(this.HoverOn_Click);
             // 
             // Hand9
@@ -1041,6 +1050,7 @@
             this.Hand9.TabIndex = 84;
             this.Hand9.TabStop = false;
             this.Hand9.Tag = "Hand9";
+            this.Hand9.Click += new System.EventHandler(this.Hand1_Click);
             this.Hand9.MouseHover += new System.EventHandler(this.HoverOn_Click);
             // 
             // Hand10
@@ -1054,6 +1064,7 @@
             this.Hand10.TabIndex = 85;
             this.Hand10.TabStop = false;
             this.Hand10.Tag = "Hand10";
+            this.Hand10.Click += new System.EventHandler(this.Hand1_Click);
             this.Hand10.MouseHover += new System.EventHandler(this.HoverOn_Click);
             // 
             // Bench3Energy5
@@ -1240,6 +1251,7 @@
             this.OActiveEnergy1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.OActiveEnergy1.TabIndex = 106;
             this.OActiveEnergy1.TabStop = false;
+            this.OActiveEnergy1.Click += new System.EventHandler(this.AIActiveEnergy_Click);
             // 
             // OActiveEnergy2
             // 
@@ -1250,6 +1262,7 @@
             this.OActiveEnergy2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.OActiveEnergy2.TabIndex = 105;
             this.OActiveEnergy2.TabStop = false;
+            this.OActiveEnergy2.Click += new System.EventHandler(this.AIActiveEnergy_Click);
             // 
             // OActiveEnergy3
             // 
@@ -1260,6 +1273,7 @@
             this.OActiveEnergy3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.OActiveEnergy3.TabIndex = 104;
             this.OActiveEnergy3.TabStop = false;
+            this.OActiveEnergy3.Click += new System.EventHandler(this.AIActiveEnergy_Click);
             // 
             // OActiveEnergy4
             // 
@@ -1270,6 +1284,7 @@
             this.OActiveEnergy4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.OActiveEnergy4.TabIndex = 103;
             this.OActiveEnergy4.TabStop = false;
+            this.OActiveEnergy4.Click += new System.EventHandler(this.AIActiveEnergy_Click);
             // 
             // OActiveEnergy5
             // 
@@ -1280,6 +1295,7 @@
             this.OActiveEnergy5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.OActiveEnergy5.TabIndex = 102;
             this.OActiveEnergy5.TabStop = false;
+            this.OActiveEnergy5.Click += new System.EventHandler(this.AIActiveEnergy_Click);
             // 
             // OBench1Energy1
             // 
@@ -1631,7 +1647,7 @@
             this.Next2.Name = "Next2";
             this.Next2.Size = new System.Drawing.Size(75, 23);
             this.Next2.TabIndex = 142;
-            this.Next2.Text = "NEXT>>";
+            this.Next2.Text = "NEXT>";
             this.Next2.UseVisualStyleBackColor = true;
             this.Next2.Visible = false;
             this.Next2.Click += new System.EventHandler(this.Next2_Click);
@@ -1659,39 +1675,6 @@
             this.Mulligan3.UseVisualStyleBackColor = true;
             this.Mulligan3.Visible = false;
             this.Mulligan3.Click += new System.EventHandler(this.Mulligan3_Click);
-            // 
-            // Next3
-            // 
-            this.Next3.Location = new System.Drawing.Point(789, 1015);
-            this.Next3.Name = "Next3";
-            this.Next3.Size = new System.Drawing.Size(75, 23);
-            this.Next3.TabIndex = 145;
-            this.Next3.Text = "NEXT>>>";
-            this.Next3.UseVisualStyleBackColor = true;
-            this.Next3.Visible = false;
-            this.Next3.Click += new System.EventHandler(this.Next3_Click);
-            // 
-            // Next4
-            // 
-            this.Next4.Location = new System.Drawing.Point(886, 969);
-            this.Next4.Name = "Next4";
-            this.Next4.Size = new System.Drawing.Size(75, 23);
-            this.Next4.TabIndex = 146;
-            this.Next4.Text = "NEXT>>>>";
-            this.Next4.UseVisualStyleBackColor = true;
-            this.Next4.Visible = false;
-            this.Next4.Click += new System.EventHandler(this.Next4_Click);
-            // 
-            // Next5
-            // 
-            this.Next5.Location = new System.Drawing.Point(1061, 967);
-            this.Next5.Name = "Next5";
-            this.Next5.Size = new System.Drawing.Size(75, 23);
-            this.Next5.TabIndex = 147;
-            this.Next5.Text = "NEXT>>>>>";
-            this.Next5.UseVisualStyleBackColor = true;
-            this.Next5.Visible = false;
-            this.Next5.Click += new System.EventHandler(this.Next5_Click);
             // 
             // EndOpponentsTurn
             // 
@@ -1770,9 +1753,6 @@
             this.Controls.Add(this.KnockedOut);
             this.Controls.Add(this.PlayerEnd);
             this.Controls.Add(this.EndOpponentsTurn);
-            this.Controls.Add(this.Next5);
-            this.Controls.Add(this.Next4);
-            this.Controls.Add(this.Next3);
             this.Controls.Add(this.Mulligan3);
             this.Controls.Add(this.Mulligan2);
             this.Controls.Add(this.Next2);
@@ -2138,9 +2118,6 @@
         private System.Windows.Forms.Button Next2;
         private System.Windows.Forms.Button Mulligan2;
         private System.Windows.Forms.Button Mulligan3;
-        private System.Windows.Forms.Button Next3;
-        private System.Windows.Forms.Button Next4;
-        private System.Windows.Forms.Button Next5;
         private System.Windows.Forms.Button EndOpponentsTurn;
         private System.Windows.Forms.Button PlayerEnd;
         private System.Windows.Forms.Button FlipCoin;

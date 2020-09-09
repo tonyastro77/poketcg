@@ -18,7 +18,10 @@ namespace Pokemon.Game_Zone
         {
             discard.Add(x);
         }
-
+        public Pokemon GetCard(int x)
+        {
+            return discard[x];
+        }
         public string ShowCard(int x)
         {
             return discard[x].Img;
@@ -32,12 +35,31 @@ namespace Pokemon.Game_Zone
         {
             return discard[x].Name;
         }
-        
+        public string ShowType(int x)
+        {
+            return discard[x].Type;
+        }
         public string ShowTopImage()
         {
             int index = discard.Count - 1;
             return discard[index].Img;
         }
 
+        public int CountEnergiesInDiscard()
+        {
+            int count = 0;
+            for (int i = 0; i < discard.Count; i++)
+            {
+                if(discard[i].Type == "energy")
+                {
+                    count += 1;
+                }
+            }
+            return count;
+        }
+        public void RemoveFromDiscard(int x)
+        {
+            discard.RemoveAt(x);
+        }
     }
 }

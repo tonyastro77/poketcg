@@ -722,5 +722,13 @@ namespace Pokemon.Game_Zone
             Active_Pokemon.CanEvolve = false;
         }
 
+        public void HasLoadedEnergies()
+        {
+            
+            if(NumberOfAttacks() == 1)
+            {
+                Active_Pokemon.attack1.energycost()
+            }
+        }
     }
 }

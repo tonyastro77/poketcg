@@ -1,11 +1,9 @@
 ﻿using Pokemon.Card;
 using Pokemon.Game_Zone;
-using Pokemon.Players;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Media;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -59,14 +57,23 @@ namespace Pokemon
         int PlusPowerDamage = 0;
         bool hasWeakness = false;
         bool playedEnergy = false;
+        bool aiPlayedEnergy = false;
         bool playedAttack = false;
+        bool aiPlayedAttack = false;
         bool active_Pokemon_Retreat = false;
         bool ai_Active_Pokemon_Retreat = false;
         int energydiscard = 0;
         bool energytodiscard = false;
+        bool aienergytodiscard = false;
+        bool energy_retrieval = false;
+        bool energy_retrieval_2 = false;
+        bool energy_retrieval_3 = false;
+        bool trainer_switch = false;
+        bool trainer_lass = false;
         int playerPrizes = 4;
         int aiPrizes = 4;
 
+        private int _ticks;
 
         public Form1()
         {
@@ -227,7 +234,7 @@ namespace Pokemon
             RightClickMenu.Enabled = false;
 
             
-            //playBackgroundMusic();
+            playBackgroundMusic();
             PictureZoom.Image = Image.FromFile("..\\..\\Img\\BS\\CardBack.jpg");
             OpponentZoom.Image = Image.FromFile("..\\..\\Img\\BS\\CardBack.jpg");
 
@@ -348,12 +355,13 @@ namespace Pokemon
                         (RightClickMenu.Items[0] as ToolStripMenuItem).DropDownItems.Clear();
                         if (active_Pokemon.ShowName() != "null")
                         {
-                            (RightClickMenu.Items[0] as ToolStripMenuItem).DropDownItems.Add(active_Pokemon.ShowName()).Click += new EventHandler(pokemonEnergyLoadClick);
+                            (RightClickMenu.Items[0] as ToolStripMenuItem).DropDownItems.Add(active_Pokemon.ShowName()).Click += new EventHandler(pokemonEnergyLoadClick);                           
                         }
                         break;
                     case 1:
                         (RightClickMenu.Items[0] as ToolStripMenuItem).DropDownItems.Clear();                       
                         (RightClickMenu.Items[0] as ToolStripMenuItem).DropDownItems.Add(bench.ShowName(0)).Click += new EventHandler(pokemonEnergyLoadClick);
+
                         if (active_Pokemon.ShowName() != "null")
                         {
                             (RightClickMenu.Items[0] as ToolStripMenuItem).DropDownItems.Add(active_Pokemon.ShowName()).Click += new EventHandler(pokemonEnergyLoadClick);
@@ -365,7 +373,7 @@ namespace Pokemon
                         (RightClickMenu.Items[0] as ToolStripMenuItem).DropDownItems.Add(bench.ShowName(1)).Click += new EventHandler(pokemonEnergyLoadClick);
                         if (active_Pokemon.ShowName() != "null")
                         {
-                            (RightClickMenu.Items[0] as ToolStripMenuItem).DropDownItems.Add(active_Pokemon.ShowName()).Click += new EventHandler(pokemonEnergyLoadClick);
+                            (RightClickMenu.Items[0] as ToolStripMenuItem).DropDownItems.Add(active_Pokemon.ShowName()).Click += new EventHandler(pokemonEnergyLoadClick);                            
                         }
                         break;
                     case 3:
@@ -1017,146 +1025,418 @@ namespace Pokemon
                     break;
 
                 case 1:
+                    Hand1.Location = new Point(384, 830);
                     Hand1.Visible = true;
                     Hand1.Image = Image.FromFile(player_Hand.ShowCard(0));
                     
                     break;
 
                 case 2:
+                    Hand1.Location = new Point(384, 830);
                     Hand1.Visible = true;
                     Hand1.Image = Image.FromFile(player_Hand.ShowCard(0));
+                    Hand2.Location = new Point(471, 830);
                     Hand2.Visible = true;
                     Hand2.Image = Image.FromFile(player_Hand.ShowCard(1));
            
                     break;
                 case 3:
+                    Hand1.Location = new Point(384, 830);
                     Hand1.Visible = true;
                     Hand1.Image = Image.FromFile(player_Hand.ShowCard(0));
+                    Hand2.Location = new Point(471, 830);
                     Hand2.Visible = true;
                     Hand2.Image = Image.FromFile(player_Hand.ShowCard(1));
+                    Hand3.Location = new Point(559, 830);
                     Hand3.Visible = true;
                     Hand3.Image = Image.FromFile(player_Hand.ShowCard(2));
 
                     break;
                 case 4:
+                    Hand1.Location = new Point(384, 830);
                     Hand1.Visible = true;
                     Hand1.Image = Image.FromFile(player_Hand.ShowCard(0));
+                    Hand2.Location = new Point(471, 830);
                     Hand2.Visible = true;
                     Hand2.Image = Image.FromFile(player_Hand.ShowCard(1));
+                    Hand3.Location = new Point(559, 830);
                     Hand3.Visible = true;
                     Hand3.Image = Image.FromFile(player_Hand.ShowCard(2));
+                    Hand4.Location = new Point(647, 830);
                     Hand4.Visible = true;
                     Hand4.Image = Image.FromFile(player_Hand.ShowCard(3));
 
                     break;
                 case 5:
+                    Hand1.Location = new Point(384, 830);
                     Hand1.Visible = true;
                     Hand1.Image = Image.FromFile(player_Hand.ShowCard(0));
+                    Hand2.Location = new Point(471, 830);
                     Hand2.Visible = true;
                     Hand2.Image = Image.FromFile(player_Hand.ShowCard(1));
+                    Hand3.Location = new Point(559, 830);
                     Hand3.Visible = true;
                     Hand3.Image = Image.FromFile(player_Hand.ShowCard(2));
+                    Hand4.Location = new Point(647, 830);
                     Hand4.Visible = true;
                     Hand4.Image = Image.FromFile(player_Hand.ShowCard(3));
+                    Hand5.Location = new Point(735, 830);
                     Hand5.Visible = true;
                     Hand5.Image = Image.FromFile(player_Hand.ShowCard(4));
                     break;
 
                 case 6:
+                    Hand1.Location = new Point(384, 830);
                     Hand1.Visible = true;
                     Hand1.Image = Image.FromFile(player_Hand.ShowCard(0));
+                    Hand2.Location = new Point(471, 830);
                     Hand2.Visible = true;
                     Hand2.Image = Image.FromFile(player_Hand.ShowCard(1));
+                    Hand3.Location = new Point(559, 830);
                     Hand3.Visible = true;
                     Hand3.Image = Image.FromFile(player_Hand.ShowCard(2));
+                    Hand4.Location = new Point(647, 830);
                     Hand4.Visible = true;
                     Hand4.Image = Image.FromFile(player_Hand.ShowCard(3));
+                    Hand5.Location = new Point(735, 830);
                     Hand5.Visible = true;
                     Hand5.Image = Image.FromFile(player_Hand.ShowCard(4));
+                    Hand6.Location = new Point(823, 830);
                     Hand6.Visible = true;
                     Hand6.Image = Image.FromFile(player_Hand.ShowCard(5));
                     break;
 
                 case 7:
+                    Hand1.Location = new Point(384, 830);
                     Hand1.Visible = true;
                     Hand1.Image = Image.FromFile(player_Hand.ShowCard(0));
+                    Hand2.Location = new Point(471, 830);
                     Hand2.Visible = true;
                     Hand2.Image = Image.FromFile(player_Hand.ShowCard(1));
+                    Hand3.Location = new Point(559, 830);
                     Hand3.Visible = true;
                     Hand3.Image = Image.FromFile(player_Hand.ShowCard(2));
+                    Hand4.Location = new Point(647, 830);
                     Hand4.Visible = true;
                     Hand4.Image = Image.FromFile(player_Hand.ShowCard(3));
+                    Hand5.Location = new Point(735, 830);
                     Hand5.Visible = true;
                     Hand5.Image = Image.FromFile(player_Hand.ShowCard(4));
+                    Hand6.Location = new Point(823, 830);
                     Hand6.Visible = true;
                     Hand6.Image = Image.FromFile(player_Hand.ShowCard(5));
+                    Hand7.Location = new Point(911, 830);
                     Hand7.Visible = true;
                     Hand7.Image = Image.FromFile(player_Hand.ShowCard(6));
                     break;
 
                 case 8:
+                    Hand1.Location = new Point(384, 830);
                     Hand1.Visible = true;
                     Hand1.Image = Image.FromFile(player_Hand.ShowCard(0));
+                    Hand2.Location = new Point(471, 830);
                     Hand2.Visible = true;
                     Hand2.Image = Image.FromFile(player_Hand.ShowCard(1));
+                    Hand3.Location = new Point(559, 830);
                     Hand3.Visible = true;
                     Hand3.Image = Image.FromFile(player_Hand.ShowCard(2));
+                    Hand4.Location = new Point(647, 830);
                     Hand4.Visible = true;
                     Hand4.Image = Image.FromFile(player_Hand.ShowCard(3));
+                    Hand5.Location = new Point(735, 830);
                     Hand5.Visible = true;
                     Hand5.Image = Image.FromFile(player_Hand.ShowCard(4));
+                    Hand6.Location = new Point(823, 830);
                     Hand6.Visible = true;
                     Hand6.Image = Image.FromFile(player_Hand.ShowCard(5));
+                    Hand7.Location = new Point(911, 830);
                     Hand7.Visible = true;
                     Hand7.Image = Image.FromFile(player_Hand.ShowCard(6));
+                    Hand8.Location = new Point(999, 830);
                     Hand8.Visible = true;
                     Hand8.Image = Image.FromFile(player_Hand.ShowCard(7));
                     break;
 
                 case 9:
+                    Hand1.Location = new Point(384, 830);
                     Hand1.Visible = true;
                     Hand1.Image = Image.FromFile(player_Hand.ShowCard(0));
+                    Hand2.Location = new Point(471, 830);
                     Hand2.Visible = true;
                     Hand2.Image = Image.FromFile(player_Hand.ShowCard(1));
+                    Hand3.Location = new Point(559, 830);
                     Hand3.Visible = true;
                     Hand3.Image = Image.FromFile(player_Hand.ShowCard(2));
+                    Hand4.Location = new Point(647, 830);
                     Hand4.Visible = true;
                     Hand4.Image = Image.FromFile(player_Hand.ShowCard(3));
+                    Hand5.Location = new Point(735, 830);
                     Hand5.Visible = true;
                     Hand5.Image = Image.FromFile(player_Hand.ShowCard(4));
+                    Hand6.Location = new Point(823, 830);
                     Hand6.Visible = true;
                     Hand6.Image = Image.FromFile(player_Hand.ShowCard(5));
+                    Hand7.Location = new Point(911, 830);
                     Hand7.Visible = true;
                     Hand7.Image = Image.FromFile(player_Hand.ShowCard(6));
+                    Hand8.Location = new Point(999, 830);
                     Hand8.Visible = true;
                     Hand8.Image = Image.FromFile(player_Hand.ShowCard(7));
+                    Hand9.Location = new Point(1087, 830);
                     Hand9.Visible = true;
                     Hand9.Image = Image.FromFile(player_Hand.ShowCard(8));
                     break;
 
                 case 10:
+                    Hand1.Location = new Point(384, 830);
                     Hand1.Visible = true;
                     Hand1.Image = Image.FromFile(player_Hand.ShowCard(0));
+                    Hand2.Location = new Point(471, 830);
                     Hand2.Visible = true;
                     Hand2.Image = Image.FromFile(player_Hand.ShowCard(1));
+                    Hand3.Location = new Point(559, 830);
                     Hand3.Visible = true;
                     Hand3.Image = Image.FromFile(player_Hand.ShowCard(2));
+                    Hand4.Location = new Point(647, 830);
                     Hand4.Visible = true;
                     Hand4.Image = Image.FromFile(player_Hand.ShowCard(3));
+                    Hand5.Location = new Point(735, 830);
                     Hand5.Visible = true;
                     Hand5.Image = Image.FromFile(player_Hand.ShowCard(4));
+                    Hand6.Location = new Point(823, 830);
                     Hand6.Visible = true;
                     Hand6.Image = Image.FromFile(player_Hand.ShowCard(5));
+                    Hand7.Location = new Point(911, 830);
                     Hand7.Visible = true;
                     Hand7.Image = Image.FromFile(player_Hand.ShowCard(6));
+                    Hand8.Location = new Point(999, 830);
                     Hand8.Visible = true;
                     Hand8.Image = Image.FromFile(player_Hand.ShowCard(7));
+                    Hand9.Location = new Point(1087, 830);
                     Hand9.Visible = true;
                     Hand9.Image = Image.FromFile(player_Hand.ShowCard(8));
+                    Hand10.Location = new Point(1175, 830);
                     Hand10.Visible = true;
                     Hand10.Image = Image.FromFile(player_Hand.ShowCard(9));
                     break;
 
+            }
+        }
+
+        public void ShowAIHandView()
+        {
+            int hand_size = ai_Hand.NumberOfCards();
+
+            Hand1.Visible = false;
+            Hand2.Visible = false;
+            Hand3.Visible = false;
+            Hand4.Visible = false;
+            Hand5.Visible = false;
+            Hand6.Visible = false;
+            Hand7.Visible = false;
+            Hand8.Visible = false;
+            Hand9.Visible = false;
+            Hand10.Visible = false;
+            switch (hand_size)
+            {
+                case 0:
+                    break;
+
+                case 1:
+                    Hand1.Location = new Point(384, 440);
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(ai_Hand.ShowCard(0));
+
+                    break;
+
+                case 2:
+                    Hand1.Location = new Point(384, 440);
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(ai_Hand.ShowCard(0));
+                    Hand2.Location = new Point(471, 440);
+                    Hand2.Visible = true;
+                    Hand2.Image = Image.FromFile(ai_Hand.ShowCard(1));
+
+                    break;
+                case 3:
+                    Hand1.Location = new Point(384, 440);
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(ai_Hand.ShowCard(0));
+                    Hand2.Location = new Point(471, 440);
+                    Hand2.Visible = true;
+                    Hand2.Image = Image.FromFile(ai_Hand.ShowCard(1));
+                    Hand3.Location = new Point(559, 440);
+                    Hand3.Visible = true;
+                    Hand3.Image = Image.FromFile(ai_Hand.ShowCard(2));
+
+                    break;
+                case 4:
+                    Hand1.Location = new Point(384, 440);
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(ai_Hand.ShowCard(0));
+                    Hand2.Location = new Point(471, 440);
+                    Hand2.Visible = true;
+                    Hand2.Image = Image.FromFile(ai_Hand.ShowCard(1));
+                    Hand3.Location = new Point(559, 440);
+                    Hand3.Visible = true;
+                    Hand3.Image = Image.FromFile(ai_Hand.ShowCard(2));
+                    Hand4.Location = new Point(647, 440);
+                    Hand4.Visible = true;
+                    Hand4.Image = Image.FromFile(ai_Hand.ShowCard(3));
+
+                    break;
+                case 5:
+                    Hand1.Location = new Point(384, 440);
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(ai_Hand.ShowCard(0));
+                    Hand2.Location = new Point(471, 440);
+                    Hand2.Visible = true;
+                    Hand2.Image = Image.FromFile(ai_Hand.ShowCard(1));
+                    Hand3.Location = new Point(559, 440);
+                    Hand3.Visible = true;
+                    Hand3.Image = Image.FromFile(ai_Hand.ShowCard(2));
+                    Hand4.Location = new Point(647, 440);
+                    Hand4.Visible = true;
+                    Hand4.Image = Image.FromFile(ai_Hand.ShowCard(3));
+                    Hand5.Location = new Point(735, 440);
+                    Hand5.Visible = true;
+                    Hand5.Image = Image.FromFile(ai_Hand.ShowCard(4));
+                    break;
+
+                case 6:
+                    Hand1.Location = new Point(384, 440);
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(ai_Hand.ShowCard(0));
+                    Hand2.Location = new Point(471, 440);
+                    Hand2.Visible = true;
+                    Hand2.Image = Image.FromFile(ai_Hand.ShowCard(1));
+                    Hand3.Location = new Point(559, 440);
+                    Hand3.Visible = true;
+                    Hand3.Image = Image.FromFile(ai_Hand.ShowCard(2));
+                    Hand4.Location = new Point(647, 440);
+                    Hand4.Visible = true;
+                    Hand4.Image = Image.FromFile(ai_Hand.ShowCard(3));
+                    Hand5.Location = new Point(735, 440);
+                    Hand5.Visible = true;
+                    Hand5.Image = Image.FromFile(ai_Hand.ShowCard(4));
+                    Hand6.Location = new Point(823, 440);
+                    Hand6.Visible = true;
+                    Hand6.Image = Image.FromFile(ai_Hand.ShowCard(5));
+                    break;
+
+                case 7:
+                    Hand1.Location = new Point(384, 440);
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(ai_Hand.ShowCard(0));
+                    Hand2.Location = new Point(471, 440);
+                    Hand2.Visible = true;
+                    Hand2.Image = Image.FromFile(ai_Hand.ShowCard(1));
+                    Hand3.Location = new Point(559, 440);
+                    Hand3.Visible = true;
+                    Hand3.Image = Image.FromFile(ai_Hand.ShowCard(2));
+                    Hand4.Location = new Point(647, 440);
+                    Hand4.Visible = true;
+                    Hand4.Image = Image.FromFile(ai_Hand.ShowCard(3));
+                    Hand5.Location = new Point(735, 440);
+                    Hand5.Visible = true;
+                    Hand5.Image = Image.FromFile(ai_Hand.ShowCard(4));
+                    Hand6.Location = new Point(823, 440);
+                    Hand6.Visible = true;
+                    Hand6.Image = Image.FromFile(ai_Hand.ShowCard(5));
+                    Hand7.Location = new Point(911, 440);
+                    Hand7.Visible = true;
+                    Hand7.Image = Image.FromFile(ai_Hand.ShowCard(6));
+                    break;
+
+                case 8:
+                    Hand1.Location = new Point(384, 440);
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(ai_Hand.ShowCard(0));
+                    Hand2.Location = new Point(471, 440);
+                    Hand2.Visible = true;
+                    Hand2.Image = Image.FromFile(ai_Hand.ShowCard(1));
+                    Hand3.Location = new Point(559, 440);
+                    Hand3.Visible = true;
+                    Hand3.Image = Image.FromFile(ai_Hand.ShowCard(2));
+                    Hand4.Location = new Point(647, 440);
+                    Hand4.Visible = true;
+                    Hand4.Image = Image.FromFile(ai_Hand.ShowCard(3));
+                    Hand5.Location = new Point(735, 440);
+                    Hand5.Visible = true;
+                    Hand5.Image = Image.FromFile(ai_Hand.ShowCard(4));
+                    Hand6.Location = new Point(823, 440);
+                    Hand6.Visible = true;
+                    Hand6.Image = Image.FromFile(ai_Hand.ShowCard(5));
+                    Hand7.Location = new Point(911, 440);
+                    Hand7.Visible = true;
+                    Hand7.Image = Image.FromFile(ai_Hand.ShowCard(6));
+                    Hand8.Location = new Point(999, 440);
+                    Hand8.Visible = true;
+                    Hand8.Image = Image.FromFile(ai_Hand.ShowCard(7));
+                    break;
+
+                case 9:
+                    Hand1.Location = new Point(384, 440);
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(ai_Hand.ShowCard(0));
+                    Hand2.Location = new Point(471, 440);
+                    Hand2.Visible = true;
+                    Hand2.Image = Image.FromFile(ai_Hand.ShowCard(1));
+                    Hand3.Location = new Point(559, 440);
+                    Hand3.Visible = true;
+                    Hand3.Image = Image.FromFile(ai_Hand.ShowCard(2));
+                    Hand4.Location = new Point(647, 440);
+                    Hand4.Visible = true;
+                    Hand4.Image = Image.FromFile(ai_Hand.ShowCard(3));
+                    Hand5.Location = new Point(735, 440);
+                    Hand5.Visible = true;
+                    Hand5.Image = Image.FromFile(ai_Hand.ShowCard(4));
+                    Hand6.Location = new Point(823, 440);
+                    Hand6.Visible = true;
+                    Hand6.Image = Image.FromFile(ai_Hand.ShowCard(5));
+                    Hand7.Location = new Point(911, 440);
+                    Hand7.Visible = true;
+                    Hand7.Image = Image.FromFile(ai_Hand.ShowCard(6));
+                    Hand8.Location = new Point(999, 440);
+                    Hand8.Visible = true;
+                    Hand8.Image = Image.FromFile(ai_Hand.ShowCard(7));
+                    Hand9.Location = new Point(1087, 440);
+                    Hand9.Visible = true;
+                    Hand9.Image = Image.FromFile(ai_Hand.ShowCard(8));
+                    break;
+
+                case 10:
+                    Hand1.Location = new Point(384, 440);
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(ai_Hand.ShowCard(0));
+                    Hand2.Location = new Point(471, 440);
+                    Hand2.Visible = true;
+                    Hand2.Image = Image.FromFile(ai_Hand.ShowCard(1));
+                    Hand3.Location = new Point(559, 440);
+                    Hand3.Visible = true;
+                    Hand3.Image = Image.FromFile(ai_Hand.ShowCard(2));
+                    Hand4.Location = new Point(647, 440);
+                    Hand4.Visible = true;
+                    Hand4.Image = Image.FromFile(ai_Hand.ShowCard(3));
+                    Hand5.Location = new Point(735, 440);
+                    Hand5.Visible = true;
+                    Hand5.Image = Image.FromFile(ai_Hand.ShowCard(4));
+                    Hand6.Location = new Point(823, 440);
+                    Hand6.Visible = true;
+                    Hand6.Image = Image.FromFile(ai_Hand.ShowCard(5));
+                    Hand7.Location = new Point(911, 440);
+                    Hand7.Visible = true;
+                    Hand7.Image = Image.FromFile(ai_Hand.ShowCard(6));
+                    Hand8.Location = new Point(999, 440);
+                    Hand8.Visible = true;
+                    Hand8.Image = Image.FromFile(ai_Hand.ShowCard(7));
+                    Hand9.Location = new Point(1087, 440);
+                    Hand9.Visible = true;
+                    Hand9.Image = Image.FromFile(ai_Hand.ShowCard(8));
+                    Hand10.Location = new Point(1175, 440);
+                    Hand10.Visible = true;
+                    Hand10.Image = Image.FromFile(ai_Hand.ShowCard(9));
+                    break;
             }
         }
 
@@ -2209,6 +2489,168 @@ namespace Pokemon
                         Bench5Energy5.Visible = true;
                         Bench5Energy5.Image = Image.FromFile(bench.ReturnEnergyLoadedImg(4, 4));
                     }
+                    break;
+            }
+        }
+
+        public void CreateDiscardView()
+        {
+            int discard_size = discard.TotalNumber();
+
+            Hand1.Visible = false;
+            Hand2.Visible = false;
+            Hand3.Visible = false;
+            Hand4.Visible = false;
+            Hand5.Visible = false;
+            Hand6.Visible = false;
+            Hand7.Visible = false;
+            Hand8.Visible = false;
+            Hand9.Visible = false;
+            Hand10.Visible = false;
+            switch (discard_size)
+            {
+                case 0:
+                    break;
+
+                case 1:
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(discard.ShowCard(0));
+
+                    break;
+
+                case 2:
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(discard.ShowCard(0));
+                    Hand2.Visible = true;
+                    Hand2.Image = Image.FromFile(discard.ShowCard(1));
+
+                    break;
+                case 3:
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(discard.ShowCard(0));
+                    Hand2.Visible = true;
+                    Hand2.Image = Image.FromFile(discard.ShowCard(1));
+                    Hand3.Visible = true;
+                    Hand3.Image = Image.FromFile(discard.ShowCard(2));
+
+                    break;
+                case 4:
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(discard.ShowCard(0));
+                    Hand2.Visible = true;
+                    Hand2.Image = Image.FromFile(discard.ShowCard(1));
+                    Hand3.Visible = true;
+                    Hand3.Image = Image.FromFile(discard.ShowCard(2));
+                    Hand4.Visible = true;
+                    Hand4.Image = Image.FromFile(discard.ShowCard(3));
+
+                    break;
+                case 5:
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(discard.ShowCard(0));
+                    Hand2.Visible = true;
+                    Hand2.Image = Image.FromFile(discard.ShowCard(1));
+                    Hand3.Visible = true;
+                    Hand3.Image = Image.FromFile(discard.ShowCard(2));
+                    Hand4.Visible = true;
+                    Hand4.Image = Image.FromFile(discard.ShowCard(3));
+                    Hand5.Visible = true;
+                    Hand5.Image = Image.FromFile(discard.ShowCard(4));
+                    break;
+
+                case 6:
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(discard.ShowCard(0));
+                    Hand2.Visible = true;
+                    Hand2.Image = Image.FromFile(discard.ShowCard(1));
+                    Hand3.Visible = true;
+                    Hand3.Image = Image.FromFile(discard.ShowCard(2));
+                    Hand4.Visible = true;
+                    Hand4.Image = Image.FromFile(discard.ShowCard(3));
+                    Hand5.Visible = true;
+                    Hand5.Image = Image.FromFile(discard.ShowCard(4));
+                    Hand6.Visible = true;
+                    Hand6.Image = Image.FromFile(discard.ShowCard(5));
+                    break;
+
+                case 7:
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(discard.ShowCard(0));
+                    Hand2.Visible = true;
+                    Hand2.Image = Image.FromFile(discard.ShowCard(1));
+                    Hand3.Visible = true;
+                    Hand3.Image = Image.FromFile(discard.ShowCard(2));
+                    Hand4.Visible = true;
+                    Hand4.Image = Image.FromFile(discard.ShowCard(3));
+                    Hand5.Visible = true;
+                    Hand5.Image = Image.FromFile(discard.ShowCard(4));
+                    Hand6.Visible = true;
+                    Hand6.Image = Image.FromFile(discard.ShowCard(5));
+                    Hand7.Visible = true;
+                    Hand7.Image = Image.FromFile(discard.ShowCard(6));
+                    break;
+
+                case 8:
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(discard.ShowCard(0));
+                    Hand2.Visible = true;
+                    Hand2.Image = Image.FromFile(discard.ShowCard(1));
+                    Hand3.Visible = true;
+                    Hand3.Image = Image.FromFile(discard.ShowCard(2));
+                    Hand4.Visible = true;
+                    Hand4.Image = Image.FromFile(discard.ShowCard(3));
+                    Hand5.Visible = true;
+                    Hand5.Image = Image.FromFile(discard.ShowCard(4));
+                    Hand6.Visible = true;
+                    Hand6.Image = Image.FromFile(discard.ShowCard(5));
+                    Hand7.Visible = true;
+                    Hand7.Image = Image.FromFile(discard.ShowCard(6));
+                    Hand8.Visible = true;
+                    Hand8.Image = Image.FromFile(discard.ShowCard(7));
+                    break;
+
+                case 9:
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(discard.ShowCard(0));
+                    Hand2.Visible = true;
+                    Hand2.Image = Image.FromFile(discard.ShowCard(1));
+                    Hand3.Visible = true;
+                    Hand3.Image = Image.FromFile(discard.ShowCard(2));
+                    Hand4.Visible = true;
+                    Hand4.Image = Image.FromFile(discard.ShowCard(3));
+                    Hand5.Visible = true;
+                    Hand5.Image = Image.FromFile(discard.ShowCard(4));
+                    Hand6.Visible = true;
+                    Hand6.Image = Image.FromFile(discard.ShowCard(5));
+                    Hand7.Visible = true;
+                    Hand7.Image = Image.FromFile(discard.ShowCard(6));
+                    Hand8.Visible = true;
+                    Hand8.Image = Image.FromFile(discard.ShowCard(7));
+                    Hand9.Visible = true;
+                    Hand9.Image = Image.FromFile(discard.ShowCard(8));
+                    break;
+
+                case 10:
+                    Hand1.Visible = true;
+                    Hand1.Image = Image.FromFile(discard.ShowCard(0));
+                    Hand2.Visible = true;
+                    Hand2.Image = Image.FromFile(discard.ShowCard(1));
+                    Hand3.Visible = true;
+                    Hand3.Image = Image.FromFile(discard.ShowCard(2));
+                    Hand4.Visible = true;
+                    Hand4.Image = Image.FromFile(discard.ShowCard(3));
+                    Hand5.Visible = true;
+                    Hand5.Image = Image.FromFile(discard.ShowCard(4));
+                    Hand6.Visible = true;
+                    Hand6.Image = Image.FromFile(discard.ShowCard(5));
+                    Hand7.Visible = true;
+                    Hand7.Image = Image.FromFile(discard.ShowCard(6));
+                    Hand8.Visible = true;
+                    Hand8.Image = Image.FromFile(discard.ShowCard(7));
+                    Hand9.Visible = true;
+                    Hand9.Image = Image.FromFile(discard.ShowCard(8));
+                    Hand10.Visible = true;
+                    Hand10.Image = Image.FromFile(discard.ShowCard(9));
                     break;
             }
         }
@@ -3512,9 +3954,9 @@ namespace Pokemon
                 else if (player_Hand.ShowType(num) == "energy")
                 {
                 }
-                else if (player_Hand.ShowType(num) == "trainer")
+                else if (player_Hand.ShowType(num) == "trainer" && player_Hand.ShowImpact(num) == "global")
                 {
-                    PlayingTrainerCard(num, 0);
+                    PlayingTrainerCardGlobal(num);
                 }
                 else if (player_Hand.ShowType(num) == "second")
                 {
@@ -3555,6 +3997,7 @@ namespace Pokemon
                 if (ai_Hand.NumOfBasicPokemon() == 0)
                 {
                     gameMessage.Text = "Your opponent is thinking.. ";
+                    timer1.Start();
 
                 }
                 while (ai_Hand.NumOfBasicPokemon() > 0 && aibench.NumberOfCards() < 6)
@@ -3567,7 +4010,7 @@ namespace Pokemon
                             aibench.Add(ai_Hand.PlayCard(i));
                             ai_Hand.RemoveFromHand(i);
                             AIUpdateBenchView();
-
+                            timer1.Start();
                             OHandNumber.Text = "X" + ai_Hand.NumberOfCards().ToString();
                         }
                     }
@@ -3576,73 +4019,127 @@ namespace Pokemon
             }
             else
             {
-
+                for (int i = 0; i < ai_Hand.NumberOfCards(); i++)
+                {
+                    if (ai_Hand.ShowType(i) == "basic")
+                    {
+                        gameMessage.Text = "Your opponent plays " + ai_Hand.ShowName(i).ToLower() + " from his hand to his bench.";
+                        aibench.Add(ai_Hand.PlayCard(i));
+                        ai_Hand.RemoveFromHand(i);
+                        AIUpdateBenchView();
+                        OHandNumber.Text = "X" + ai_Hand.NumberOfCards().ToString();
+                        timer1.Start();
+                    }
+                }
             }
         }
 
         private void AIPlaysEnergyCards()
         {
-            if(aiStartsTurn == true)
+            for (int x = 0; x < ai_Hand.NumberOfCards(); x++)
             {
-                if (ai_Hand.NumOfBasicEnergies() > 0)
+                if (ai_Hand.ShowType(x) == "energy" && ai_Hand.ShowEnergy(x) == ai_Active_Pokemon.ShowEnergy())
                 {
-                    int index = 0;
-                    for (int x = 0; x < ai_Hand.NumberOfCards(); x++)
-                    {
-                        if (ai_Hand.ShowType(x) == "energy" && ai_Hand.ShowEnergy(x) == ai_Active_Pokemon.ShowEnergy())
-                        {
-                            index = x;
-                        }
-                    }
-                    if (ai_Hand.ShowName(index) == "Fire Energy")
+                    if (ai_Hand.ShowName(x) == "Fire Energy")
                     {
                         ai_Active_Pokemon.EnergyLoad('f');
                     }
 
-                    else if (ai_Hand.ShowName(index) == "Water Energy")
+                    else if (ai_Hand.ShowName(x) == "Water Energy")
                     {
                         ai_Active_Pokemon.EnergyLoad('w');
                     }
-                    else if (ai_Hand.ShowName(index) == "Fighting Energy")
+                    else if (ai_Hand.ShowName(x) == "Fighting Energy")
                     {
                         ai_Active_Pokemon.EnergyLoad('l');
                     }
-                    else if (ai_Hand.ShowName(index) == "Psychic Energy")
+                    else if (ai_Hand.ShowName(x) == "Psychic Energy")
                     {
                         ai_Active_Pokemon.EnergyLoad('p');
                     }
-                    else if (ai_Hand.ShowName(index) == "Grass Energy")
+                    else if (ai_Hand.ShowName(x) == "Grass Energy")
                     {
                         ai_Active_Pokemon.EnergyLoad('g');
                     }
-                    else if (ai_Hand.ShowName(index) == "Lightning Energy")
+                    else if (ai_Hand.ShowName(x) == "Lightning Energy")
                     {
                         ai_Active_Pokemon.EnergyLoad('e');
                     }
-                    else if (ai_Hand.ShowName(index) == "Metal Energy")
-                    {   
+                    else if (ai_Hand.ShowName(x) == "Metal Energy")
+                    {
                         ai_Active_Pokemon.EnergyLoad('m');
                     }
-                    else if (ai_Hand.ShowName(index) == "Dark Energy")
+                    else if (ai_Hand.ShowName(x) == "Dark Energy")
                     {
                         ai_Active_Pokemon.EnergyLoad('d');
                     }
-                    else if (ai_Hand.ShowName(index) == "Fairy Energy")
+                    else if (ai_Hand.ShowName(x) == "Fairy Energy")
                     {
                         ai_Active_Pokemon.EnergyLoad('a');
                     }
-                    gameMessage.Text = "Your opponent loads one " + ai_Hand.ShowName(index).ToLower() + " to " + ai_Active_Pokemon.ShowName();
-                    ai_used.Add(ai_Hand.PlayCard(index));
-                    ai_Hand.RemoveFromHand(index);
+                    gameMessage.Text = "Your opponent loads one " + ai_Hand.ShowName(x).ToLower() + " to " + ai_Active_Pokemon.ShowName();
+                    ai_used.Add(ai_Hand.PlayCard(x));
+                    ai_Hand.RemoveFromHand(x);
                     OHandNumber.Text = "X" + ai_Hand.NumberOfCards().ToString();
                     UpdateAIActivePokemonView();
+                    timer1.Start();
+                    aiPlayedEnergy = true;
+                    break;
+                }
+                else if(ai_Hand.ShowType(x) == "energy")
+                {
+                    if (ai_Hand.ShowName(x) == "Fire Energy")
+                    {
+                        ai_Active_Pokemon.EnergyLoad('f');
+                    }
+
+                    else if (ai_Hand.ShowName(x) == "Water Energy")
+                    {
+                        ai_Active_Pokemon.EnergyLoad('w');
+                    }
+                    else if (ai_Hand.ShowName(x) == "Fighting Energy")
+                    {
+                        ai_Active_Pokemon.EnergyLoad('l');
+                    }
+                    else if (ai_Hand.ShowName(x) == "Psychic Energy")
+                    {
+                        ai_Active_Pokemon.EnergyLoad('p');
+                    }
+                    else if (ai_Hand.ShowName(x) == "Grass Energy")
+                    {
+                        ai_Active_Pokemon.EnergyLoad('g');
+                    }
+                    else if (ai_Hand.ShowName(x) == "Lightning Energy")
+                    {
+                        ai_Active_Pokemon.EnergyLoad('e');
+                    }
+                    else if (ai_Hand.ShowName(x) == "Metal Energy")
+                    {
+                        ai_Active_Pokemon.EnergyLoad('m');
+                    }
+                    else if (ai_Hand.ShowName(x) == "Dark Energy")
+                    {
+                        ai_Active_Pokemon.EnergyLoad('d');
+                    }
+                    else if (ai_Hand.ShowName(x) == "Fairy Energy")
+                    {
+                        ai_Active_Pokemon.EnergyLoad('a');
+                    }
+                    gameMessage.Text = "Your opponent loads one " + ai_Hand.ShowName(x).ToLower() + " to " + ai_Active_Pokemon.ShowName();
+                    ai_used.Add(ai_Hand.PlayCard(x));
+                    ai_Hand.RemoveFromHand(x);
+                    OHandNumber.Text = "X" + ai_Hand.NumberOfCards().ToString();
+                    UpdateAIActivePokemonView();
+                    timer1.Start();
+                    aiPlayedEnergy = true;
+                    timer1.Start();
+                    break;
                 }
                 else
                 {
-                    gameMessage.Text = "AI is thinking what to do next before the attack..";
+                    timer1.Start();
                 }
             }
-            
         }
 
         private void AIChoosesActivePokemon()
@@ -4034,7 +4531,7 @@ namespace Pokemon
                 }                
             }
 
-            else if (player_Hand.ShowType(num) == "trainer")
+            else if (player_Hand.ShowType(num) == "trainer" && player_Hand.ShowImpact(num) == "directed")
             {
                 if (isPreGameTurn == true)
                 {
@@ -4053,15 +4550,13 @@ namespace Pokemon
 
                         if (index <= (bench.NumberOfCards() - 1))
                         {
-                            
+                            PlayingTrainerCardOn(num, index);
                         }
                         else
                         {
-                            PlayingTrainerCard(num, index);
-                            
+                            PlayingTrainerCardGlobal(num);                            
                         }
-                    }
-                    
+                    }                   
                 }
             }
         }
@@ -4169,13 +4664,13 @@ namespace Pokemon
         }
 
         private void retreatToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PlayerEnd.Visible = false;
-            DisablePlayerActions();
-            if(bench.Count() != 0) {
+        {           
+            if(bench.NumberOfCards() != 0) {
                 energydiscard = active_Pokemon.ShowRetreatCost();
                 if (energydiscard <= active_Pokemon.EnergyLoadedCount())
                 {
+                    PlayerEnd.Visible = false;
+                    DisablePlayerActions();
                     energytodiscard = true;
                     if (energydiscard == 1)
                     {
@@ -4194,8 +4689,7 @@ namespace Pokemon
             else
             {
                 gameMessage.Text = "You do not have any Benched Pokémon to swap your Active one.";
-            }
-           
+            }          
         }
 
         private void PictureBench_Click(object sender, EventArgs e)
@@ -4257,6 +4751,41 @@ namespace Pokemon
                 {
                     gameMessage.Text = "You must first discard as many energy cards attached to " + active_Pokemon.ShowName() + " as the energy cost it requires in order to retreat.";
                 }
+            }
+            else if(trainer_switch == true)
+            {                
+                Pokemon ActivePokemonTemp;
+                PictureBox n = (PictureBox)sender;
+                int num = 0;
+                switch (n.Name)
+                {
+                    case "PictureBench1":
+                        num = 0;
+                        break;
+                    case "PictureBench2":
+                        num = 1;
+                        break;
+                    case "PictureBench3":
+                        num = 2;
+                        break;
+                    case "PictureBench4":
+                        num = 3;
+                        break;
+                    case "PictureBench5":
+                        num = 4;                      
+                        break;
+                    default:
+                        break;
+                }
+                gameMessage.Text = "You replaced " + active_Pokemon.ShowName() + " with " + bench.ShowName(num) + ". Now " + bench.ShowName(num) + " is your new Active Pokémon.";
+                ActivePokemonTemp = active_Pokemon.GetActivePokemon();
+                active_Pokemon.Become(bench.PlayCard(num));
+                bench.PutInto(num, ActivePokemonTemp);
+                trainer_switch = false;
+                UpdateActivePokemonView();
+                UpdateBenchView();
+                PlayerEnd.Visible = true;
+                EnablePlayerActions();
             }
             
         }
@@ -4359,6 +4888,97 @@ namespace Pokemon
                                
             }
             
+        }
+
+        private void AIActiveEnergy_Click(object sender, EventArgs e)
+        {
+            if (aienergytodiscard == true)
+            {
+                int num = 0;
+                PictureBox n = (PictureBox)sender;
+                switch (n.Name)
+                {
+                    case "OActiveEnergy1":
+                        num = 0;
+                        break;
+                    case "OActiveEnergy2":
+                        num = 1;
+                        break;
+                    case "OActiveEnergy3":
+                        num = 2;
+                        break;
+                    case "OActiveEnergy4":
+                        num = 3;
+                        break;
+                    case "OActiveEnergy5":
+                        num = 4;
+                        break;
+                    default:
+                        break;
+                }
+
+                char x = ai_Active_Pokemon.GetEnergyLoadedAt(num);
+
+                int index = 0;
+
+                if (x == 'e')
+                {
+                    while (ai_used.GetName(index) != "Lightning Energy")
+                    {
+                        index++;
+                    }
+                }
+                else if (x == 'p')
+                {
+                    while (ai_used.GetName(index) != "Psychic Energy")
+                    {
+                        index++;
+                    }
+                }
+                else if (x == 'g')
+                {
+                    while (ai_used.GetName(index) != "Grass Energy")
+                    {
+                        index++;
+                    }
+                }
+
+                Pokemon temp = ai_used.GetCard(index);
+                discard.Add(temp);
+
+                int index2 = 0;
+                if (x == 'e')
+                {
+                    while (ai_used.GetName(index2) != "Lightning Energy")
+                    {
+                        index2++;
+                    }
+                }
+                else if (x == 'p')
+                {
+                    while (ai_used.GetName(index2) != "Psychic Energy")
+                    {
+                        index2++;
+                    }
+                }
+                else if (x == 'g')
+                {
+                    while (ai_used.GetName(index2) != "Grass Energy")
+                    {
+                        index2++;
+                    }
+                }
+                ai_used.RemoveAt(index2);
+                ai_Active_Pokemon.DiscardEnergyAt(num);
+                UpdateAIActivePokemonView();
+                UpdateAIDiscardView();
+                gameMessage.Text = "You have succesfully discarded an Energy Card from the Defending Pokémon.";               
+                aienergytodiscard = false;
+                PlayerEnd.Visible = true;
+                UpdateHandView();
+                UpdateDiscardView();
+                GetViewBackToNormal();
+            }
         }
 
         private void FlipCoin_Click(object sender, EventArgs e)
@@ -4508,7 +5128,8 @@ namespace Pokemon
             UpdateHandView();
             EnablePlayerActions();
             Mulligan.Visible = false;
-
+            SoundPlayer mulligan = new SoundPlayer("..\\..\\Sounds\\mulligan.wav");
+            mulligan.Play();
             if (player_Hand.NumOfBasicPokemon() == 0 && ai_Hand.NumOfBasicPokemon() != 0)
             {
                 gameMessage.Text = "As you do not have any Basic Pokémon, you should perform Mulligan and draw another 7 cards.";
@@ -4603,6 +5224,8 @@ namespace Pokemon
             UpdateHandView();
             EnablePlayerActions();
             Mulligan2.Visible = false;
+            SoundPlayer mulligan = new SoundPlayer("..\\..\\Sounds\\mulligan.wav");
+            mulligan.Play();
 
             if (player_Hand.NumOfBasicPokemon() == 0 && ai_Hand.NumOfBasicPokemon() != 0)
             {
@@ -4674,6 +5297,9 @@ namespace Pokemon
 
             EnablePlayerActions();
             Mulligan3.Visible = false;
+            SoundPlayer mulligan = new SoundPlayer("..\\..\\Sounds\\mulligan.wav");
+            mulligan.Play();
+
             if (player_Hand.NumOfBasicPokemon() == 0 && ai_Hand.NumOfBasicPokemon() != 0)
             {
                 gameMessage.Text = "As you do not have any Basic Pokémon, you should perform Mulligan and draw another 7 cards.";
@@ -4715,6 +5341,8 @@ namespace Pokemon
             StartCheck.Visible = false;
             DisablePlayerActions();
             isPreGameTurn = false;
+            SoundPlayer youdone = new SoundPlayer("..\\..\\Sounds\\youdone.wav");
+            youdone.Play();
         }
 
         private void Heads_Click(object sender, EventArgs e)
@@ -4802,6 +5430,8 @@ namespace Pokemon
             UpdateHandView();
             Draw2.Visible = false;
             EnablePlayerActions();
+            SoundPlayer draw_sound = new SoundPlayer("..\\..\\Sounds\\draw.wav");
+            draw_sound.Play();
         }
 
         private void Next1_Click(object sender, EventArgs e)
@@ -4815,40 +5445,43 @@ namespace Pokemon
             Next1.Visible = false;
             //Next2.Location = new Point(683, 957);
             //Next2.Visible = true;
-            EndOpponentsTurn.Location = new Point(683, 957);
-            EndOpponentsTurn.Visible = true;
-            playSimpleSound();      
+            
+            aiPlayedEnergy = false;
+            aiPlayedAttack = false;
+            hasWeakness = false;
+            playSimpleSound();
+            timer1.Start();
         }
 
         private void Next2_Click(object sender, EventArgs e)
         {
-            AIPlaysCards();
-            Next2.Visible = false;
-            Next3.Location = new Point(683, 957);
-            Next3.Visible = true;
-        }
+            if (trainer_lass == true)
+            {
+                //discard all the trainer cards from AI hand
+                for (int i = ai_Hand.NumberOfCards() - 1; i >= 0; i--)
+                {
+                    if (ai_Hand.ShowType(i) == "trainer")
+                    {
+                        ai_discard.Add(ai_Hand.PlayCard(i));
+                        ai_Hand.RemoveFromHand(i);
+                    }
+                }
 
-        private void Next3_Click(object sender, EventArgs e)
-        {
-            AIPlaysEnergyCards();
-            Next3.Visible = false;
-            Next4.Location = new Point(683, 957);
-            Next4.Visible = true;
-        }
-
-        private void Next4_Click(object sender, EventArgs e)
-        {
-            Next4.Visible = false;
-            Next5.Location = new Point(683, 957);
-            Next5.Visible = true;
-        }
-
-        private void Next5_Click(object sender, EventArgs e)
-        {
-            Next5.Visible = false;
-            Next1.Visible = false;
-            EndOpponentsTurn.Location = new Point(683, 957);
-            EndOpponentsTurn.Visible = true;
+                //discard all the trainer cards from player's hand
+                for (int i = player_Hand.NumberOfCards() - 1; i >= 0; i--)
+                {
+                    if (player_Hand.ShowType(i) == "trainer")
+                    {
+                        discard.Add(ai_Hand.PlayCard(i));
+                        player_Hand.RemoveFromHand(i);
+                    }
+                }
+                trainer_lass = false;
+                Next2.Visible = false;
+                PlayerEnd.Visible = false;
+                GetViewBackToNormal();
+                gameMessage.Text = "You discarded all the Trainer cards from both hands.";
+            }
         }
 
         private void EndOpponentsTurn_Click(object sender, EventArgs e)
@@ -5183,9 +5816,99 @@ namespace Pokemon
             }
         }
 
-        private void PlayingTrainerCard(int x, int y)
+        private void AIAttacks(int index)
+        {
+            if (ai_Active_Pokemon.ShowName() == "Abra")
+            {
+                if (ai_Active_Pokemon.ShowAttackName(index) == "Psychock")
+                {
+                    active_Pokemon.DealDamage(10, hasWeakness, PlusPowerDamage);
+                    PlayerHpBar.Value = active_Pokemon.ShowRemHP();
+                    gameMessage.Text = "The AI performs Psychock on " + active_Pokemon.ShowName() + " and deals 10 damage.";
+                }
+            }
+            else if (ai_Active_Pokemon.ShowName() == "Drowzee")
+            {
+                if (ai_Active_Pokemon.ShowAttackName(index) == "Pound")
+                {
+                    active_Pokemon.DealDamage(10, hasWeakness, PlusPowerDamage);
+                    PlayerHpBar.Value = active_Pokemon.ShowRemHP();
+                    gameMessage.Text = "The AI performs Pound on " + active_Pokemon.ShowName() + " and deals 10 damage.";
+                }
+            }
+            else if (ai_Active_Pokemon.ShowName() == "Gastly")
+            {
+                if (ai_Active_Pokemon.ShowAttackName(index) == "Sleeping Gas")
+                {
+                    active_Pokemon.DealDamage(10, hasWeakness, PlusPowerDamage);
+                    PlayerHpBar.Value = active_Pokemon.ShowRemHP();
+                    gameMessage.Text = "The AI performs Sleeping Gas on " + active_Pokemon.ShowName() + " and deals 10 damage.";
+                }
+            }
+            else if (ai_Active_Pokemon.ShowName() == "Jynx")
+            {
+                if (ai_Active_Pokemon.ShowAttackName(index) == "Doubleslap")
+                {
+                    active_Pokemon.DealDamage(10, hasWeakness, PlusPowerDamage);
+                    PlayerHpBar.Value = active_Pokemon.ShowRemHP();
+                    gameMessage.Text = "The AI performs Doubleslap on " + active_Pokemon.ShowName() + " and deals 10 damage.";
+                }
+            }
+            else if (ai_Active_Pokemon.ShowName() == "Magnemite")
+            {
+                if (ai_Active_Pokemon.ShowAttackName(index) == "Thunder Wave")
+                {
+                    active_Pokemon.DealDamage(10, hasWeakness, PlusPowerDamage);
+                    PlayerHpBar.Value = active_Pokemon.ShowRemHP();
+                    gameMessage.Text = "The AI performs Thunder Wave on " + active_Pokemon.ShowName() + " and deals 10 damage.";
+                }
+            }
+            else if (ai_Active_Pokemon.ShowName() == "Mewtwo")
+            {
+                if (ai_Active_Pokemon.ShowAttackName(index) == "Psychic")
+                {
+                    active_Pokemon.DealDamage(10, hasWeakness, PlusPowerDamage);
+                    PlayerHpBar.Value = active_Pokemon.ShowRemHP();
+                    gameMessage.Text = "The AI performs Psychic on " + active_Pokemon.ShowName() + " and deals 10 damage.";
+                }
+            }
+            else if (ai_Active_Pokemon.ShowName() == "Pikachu")
+            {
+                if (ai_Active_Pokemon.ShowAttackName(index) == "Gnaw")
+                {
+                    active_Pokemon.DealDamage(10, hasWeakness, PlusPowerDamage);
+                    PlayerHpBar.Value = active_Pokemon.ShowRemHP();
+                    gameMessage.Text = "The AI performs Gnaw on " + active_Pokemon.ShowName() + " and deals 10 damage.";
+                }
+            }
+            
+            timer1.Start();
+        }
+        private void PlayingTrainerCardOn(int x, int y)
         {
             //x is the card index from the hand and y is the card index on the bench
+            if (player_Hand.ShowName(x) == "Potion")
+            {
+                bench.HealHp(20, y);
+                gameMessage.Text = "You use a Potion and heal 20 damage on " + bench.ShowName(y);
+                discard.Add(player_Hand.PlayCard(x));
+                player_Hand.RemoveFromHand(x);
+                UpdateHandView();
+                UpdateDiscardView();
+            }
+            else if (player_Hand.ShowName(x) == "Super Potion")
+            {
+                bench.HealHp(40, y);
+                gameMessage.Text = "You use a Super Potion and heal 40 damage on " + bench.ShowName(y) + ". You also discard an Energy Card.";
+                discard.Add(player_Hand.PlayCard(x));
+                player_Hand.RemoveFromHand(x);
+                UpdateHandView();
+                UpdateDiscardView();
+            }
+        }
+        private void PlayingTrainerCardGlobal(int x)
+        {
+            //x is the card index from the hand
             if (player_Hand.ShowName(x) == "Potion")
             {
                 active_Pokemon.HealHp(20);
@@ -5198,7 +5921,7 @@ namespace Pokemon
             }
             else if (player_Hand.ShowName(x) == "Super Potion")
             {
-                active_Pokemon.HealHp(20);
+                active_Pokemon.HealHp(40);
                 gameMessage.Text = "You use a Super Potion and heal 40 damage on " + active_Pokemon.ShowName() + ". You also discard an Energy Card.";
                 PlayerHpBar.Value = active_Pokemon.ShowRemHP();
                 discard.Add(player_Hand.PlayCard(x));
@@ -5208,18 +5931,19 @@ namespace Pokemon
             }
             else if (player_Hand.ShowName(x) == "Gust of Wind")
             {
-                if(aibench.NumberOfCards() == 0)
+                if (aibench.NumberOfCards() == 0)
                 {
                     gameMessage.Text = "Your opponent does not have any Benched Pokémon.";
                 }
                 else
                 {
+                    PlayerEnd.Visible = false;
                     ChangeOpponentActivePokemon();
                     discard.Add(player_Hand.PlayCard(x));
                     player_Hand.RemoveFromHand(x);
                     UpdateHandView();
                     UpdateDiscardView();
-                }                
+                }
             }
             else if (player_Hand.ShowName(x) == "PlusPower")
             {
@@ -5230,7 +5954,65 @@ namespace Pokemon
                 UpdateHandView();
                 UpdateDiscardView();
             }
+            else if (player_Hand.ShowName(x) == "Energy Removal")
+            {
+                if(ai_Active_Pokemon.EnergyLoadedCount() != 0)
+                {
+                    DiscardEnergyCardToAI();
+                    discard.Add(player_Hand.PlayCard(x));
+                    player_Hand.RemoveFromHand(x);
+                    PlayerEnd.Visible = false;
+                }
+                else
+                {
+                    gameMessage.Text = "The Defending Pokémon does not have any Energy Cards loaded yet.";
+                }
+            }
+            else if (player_Hand.ShowName(x) == "Energy Retrieval")
+            {
+                if(discard.CountEnergiesInDiscard() != 0 && player_Hand.NumberOfCards() > 0)
+                {
+                    gameMessage.Text = "You play Energy Retrieval, please choose up to two Energy Cards to discard to the Defending Pokémon.";
+                    ChooseCardFromDiscard();
+                    player_Hand.RemoveFromHand(x);
+                    PlayerEnd.Visible = false;
+                }
+                else if(player_Hand.NumberOfCards() == 0)
+                {
+                    gameMessage.Text = "You can't play Energy Removal as you do not have any cards in your hand.";
+                }
+                else
+                {
+                    gameMessage.Text = "You can't play Energy Removal as you do not have any Energy Cards in your discard.";
+                }
+            }
+            else if (player_Hand.ShowName(x) == "Switch")
+            {
+                if (bench.NumberOfCards() != 0)
+                {
+                    gameMessage.Text = "You play Switch. Please choose the Benched Pokémon to swap your Active one.";
+                    PlayerEnd.Visible = false;
+                    player_Hand.RemoveFromHand(x);
+                    trainer_switch = true;
+                }
+                else
+                {
+                    gameMessage.Text = "The Defending Pokémon does not have any Energy Cards loaded yet.";
+                }
+            }
+            else if (player_Hand.ShowName(x) == "Lass")
+            {
+                gameMessage.Text = "You play Lass. You can see your Opponents's hand now, also you show yours.";
+                PlayerEnd.Visible = false;
+                trainer_lass = true;
+                Next2.Visible = true;
+                Next2.Location = new Point(683, 957);
+                player_Hand.RemoveFromHand(x);
+                HideBackground();
+                ShowAIHandView();
+            }
         }
+
         private void ChangeOpponentActivePokemon()
         {
             PictureActive.Visible = false;
@@ -5329,12 +6111,304 @@ namespace Pokemon
             OpponentBench5.Location = new Point(1089, 407);
             PlayerEnd.Visible = false;
             ai_Active_Pokemon_Retreat = true;
-            gameMessage.Text = "Please choose the Pokémon with which you wish to swap " + ai_Active_Pokemon.ShowName();
+            gameMessage.Text = "Please choose the Pokémon with which you wish to swap for " + ai_Active_Pokemon.ShowName();
+        }
+
+        private void DiscardEnergyCardToAI()
+        {
+            PictureActive.Visible = false;
+            ActiveEnergy1.Visible = false;
+            ActiveEnergy2.Visible = false;
+            ActiveEnergy3.Visible = false;
+            ActiveEnergy4.Visible = false;
+            ActiveEnergy5.Visible = false;
+            DiscardBox.Visible = false;
+            OpponentActive.Location = new Point(1319, 237);
+            Deck.Visible = false;
+            DeckSize.Visible = false;
+            OpponentDeck.Visible = false;
+            ODeckSize.Visible = false;
+            HandIcon1.Visible = false;
+            HandIcon2.Visible = false;
+            HandIcon3.Visible = false;
+            OHandNumber.Visible = false;
+            PictureZoom.Visible = false;
+            CardName.Visible = false;
+            PlayerHpBar.Visible = false;
+            MaxHp.Visible = false;
+            RemHp.Visible = false;
+            EnergyBox1.Visible = false;
+            HpLabel1.Visible = false;
+            OpCardName.Visible = false;
+            OpponentHpBar.Visible = false;
+            OMaxHp.Visible = false;
+            EnergyBox2.Visible = false;
+            PictureBench1.Visible = false;
+            PictureBench2.Visible = false;
+            PictureBench3.Visible = false;
+            PictureBench4.Visible = false;
+            PictureBench5.Visible = false;
+            Bench1Energy1.Visible = false;
+            Bench1Energy2.Visible = false;
+            Bench1Energy3.Visible = false;
+            Bench1Energy4.Visible = false;
+            Bench1Energy5.Visible = false;
+            Bench2Energy1.Visible = false;
+            Bench2Energy2.Visible = false;
+            Bench2Energy3.Visible = false;
+            Bench2Energy4.Visible = false;
+            Bench2Energy5.Visible = false;
+            Bench3Energy1.Visible = false;
+            Bench3Energy2.Visible = false;
+            Bench3Energy3.Visible = false;
+            Bench3Energy4.Visible = false;
+            Bench3Energy5.Visible = false;
+            Bench4Energy1.Visible = false;
+            Bench4Energy2.Visible = false;
+            Bench4Energy3.Visible = false;
+            Bench4Energy4.Visible = false;
+            Bench4Energy5.Visible = false;
+            Bench5Energy1.Visible = false;
+            Bench5Energy2.Visible = false;
+            Bench5Energy3.Visible = false;
+            Bench5Energy4.Visible = false;
+            Bench5Energy5.Visible = false;
+
+            OBench1Energy1.Visible = false;
+            OBench1Energy2.Visible = false;
+            OBench1Energy3.Visible = false;
+            OBench1Energy4.Visible = false;
+            OBench1Energy5.Visible = false;
+            OBench2Energy1.Visible = false;
+            OBench2Energy2.Visible = false;
+            OBench2Energy3.Visible = false;
+            OBench2Energy4.Visible = false;
+            OBench2Energy5.Visible = false;
+            OBench3Energy1.Visible = false;
+            OBench3Energy2.Visible = false;
+            OBench3Energy3.Visible = false;
+            OBench3Energy4.Visible = false;
+            OBench3Energy5.Visible = false;
+            OBench4Energy1.Visible = false;
+            OBench4Energy2.Visible = false;
+            OBench4Energy3.Visible = false;
+            OBench4Energy4.Visible = false;
+            OBench4Energy5.Visible = false;
+            OBench5Energy1.Visible = false;
+            OBench5Energy2.Visible = false;
+            OBench5Energy3.Visible = false;
+            OBench5Energy4.Visible = false;
+            OBench5Energy5.Visible = false;
+            OpponentDiscardBox.Visible = false;
+            OpponentBench1.Visible = false;
+            OpponentBench2.Visible = false;
+            OpponentBench3.Visible = false;
+            OpponentBench4.Visible = false;
+            OpponentBench5.Visible = false;
+            PlayerEnd.Visible = false;
+            aienergytodiscard = true;
+            
+            gameMessage.Text = "Please choose the Energy Card which you want to discard ";
+        }
+
+        private void ChooseCardFromDiscard()
+        {
+            PictureActive.Visible = false;
+            ActiveEnergy1.Visible = false;
+            ActiveEnergy2.Visible = false;
+            ActiveEnergy3.Visible = false;
+            ActiveEnergy4.Visible = false;
+            ActiveEnergy5.Visible = false;
+            DiscardBox.Visible = false;
+            OpponentActive.Visible = false;
+            Deck.Visible = false;
+            CardName.Visible = false;
+            DeckSize.Visible = false;
+            OpponentDeck.Visible = false;
+            ODeckSize.Visible = false;
+            HandIcon1.Visible = false;
+            HandIcon2.Visible = false;
+            HandIcon3.Visible = false;
+            OHandNumber.Visible = false;
+            PictureZoom.Visible = false;
+            CardName.Visible = false;
+            PlayerHpBar.Visible = false;
+            MaxHp.Visible = false;
+            RemHp.Visible = false;
+            EnergyBox1.Visible = false;
+            HpLabel1.Visible = false;
+            HpLabel2.Visible = false;
+            OpCardName.Visible = false;
+            OpponentHpBar.Visible = false;
+            OMaxHp.Visible = false;
+            EnergyBox2.Visible = false;
+            PictureBench1.Visible = false;
+            PictureBench2.Visible = false;
+            PictureBench3.Visible = false;
+            PictureBench4.Visible = false;
+            PictureBench5.Visible = false;
+            Bench1Energy1.Visible = false;
+            Bench1Energy2.Visible = false;
+            Bench1Energy3.Visible = false;
+            Bench1Energy4.Visible = false;
+            Bench1Energy5.Visible = false;
+            Bench2Energy1.Visible = false;
+            Bench2Energy2.Visible = false;
+            Bench2Energy3.Visible = false;
+            Bench2Energy4.Visible = false;
+            Bench2Energy5.Visible = false;
+            Bench3Energy1.Visible = false;
+            Bench3Energy2.Visible = false;
+            Bench3Energy3.Visible = false;
+            Bench3Energy4.Visible = false;
+            Bench3Energy5.Visible = false;
+            Bench4Energy1.Visible = false;
+            Bench4Energy2.Visible = false;
+            Bench4Energy3.Visible = false;
+            Bench4Energy4.Visible = false;
+            Bench4Energy5.Visible = false;
+            Bench5Energy1.Visible = false;
+            Bench5Energy2.Visible = false;
+            Bench5Energy3.Visible = false;
+            Bench5Energy4.Visible = false;
+            Bench5Energy5.Visible = false;
+
+            OBench1Energy1.Visible = false;
+            OBench1Energy2.Visible = false;
+            OBench1Energy3.Visible = false;
+            OBench1Energy4.Visible = false;
+            OBench1Energy5.Visible = false;
+            OBench2Energy1.Visible = false;
+            OBench2Energy2.Visible = false;
+            OBench2Energy3.Visible = false;
+            OBench2Energy4.Visible = false;
+            OBench2Energy5.Visible = false;
+            OBench3Energy1.Visible = false;
+            OBench3Energy2.Visible = false;
+            OBench3Energy3.Visible = false;
+            OBench3Energy4.Visible = false;
+            OBench3Energy5.Visible = false;
+            OBench4Energy1.Visible = false;
+            OBench4Energy2.Visible = false;
+            OBench4Energy3.Visible = false;
+            OBench4Energy4.Visible = false;
+            OBench4Energy5.Visible = false;
+            OBench5Energy1.Visible = false;
+            OBench5Energy2.Visible = false;
+            OBench5Energy3.Visible = false;
+            OBench5Energy4.Visible = false;
+            OBench5Energy5.Visible = false;
+            OpponentDiscardBox.Visible = false;
+            OpponentBench1.Visible = false;
+            OpponentBench2.Visible = false;
+            OpponentBench3.Visible = false;
+            OpponentBench4.Visible = false;
+            OpponentBench5.Visible = false;
+            PlayerEnd.Visible = false;
+            aienergytodiscard = true;
+            energy_retrieval = true;
+            gameMessage.Text = "Please choose the Card from your hand which you want to discard ";
+        }
+
+        private void HideBackground()
+        {
+            PictureActive.Visible = false;
+            ActiveEnergy1.Visible = false;
+            ActiveEnergy2.Visible = false;
+            ActiveEnergy3.Visible = false;
+            ActiveEnergy4.Visible = false;
+            ActiveEnergy5.Visible = false;
+            DiscardBox.Visible = false;
+            OpponentActive.Visible = false;
+            Deck.Visible = false;
+            CardName.Visible = false;
+            DeckSize.Visible = false;
+            OpponentDeck.Visible = false;
+            OpponentZoom.Visible = false;
+            ODeckSize.Visible = false;
+            HandIcon1.Visible = false;
+            HandIcon2.Visible = false;
+            HandIcon3.Visible = false;
+            OHandNumber.Visible = false;
+            PictureZoom.Visible = false;
+            CardName.Visible = false;
+            PlayerHpBar.Visible = false;
+            MaxHp.Visible = false;
+            RemHp.Visible = false;
+            EnergyBox1.Visible = false;
+            HpLabel1.Visible = false;
+            HpLabel2.Visible = false;
+            OpCardName.Visible = false;
+            OpponentHpBar.Visible = false;
+            OMaxHp.Visible = false;
+            EnergyBox2.Visible = false;
+            PictureBench1.Visible = false;
+            PictureBench2.Visible = false;
+            PictureBench3.Visible = false;
+            PictureBench4.Visible = false;
+            PictureBench5.Visible = false;
+            Bench1Energy1.Visible = false;
+            Bench1Energy2.Visible = false;
+            Bench1Energy3.Visible = false;
+            Bench1Energy4.Visible = false;
+            Bench1Energy5.Visible = false;
+            Bench2Energy1.Visible = false;
+            Bench2Energy2.Visible = false;
+            Bench2Energy3.Visible = false;
+            Bench2Energy4.Visible = false;
+            Bench2Energy5.Visible = false;
+            Bench3Energy1.Visible = false;
+            Bench3Energy2.Visible = false;
+            Bench3Energy3.Visible = false;
+            Bench3Energy4.Visible = false;
+            Bench3Energy5.Visible = false;
+            Bench4Energy1.Visible = false;
+            Bench4Energy2.Visible = false;
+            Bench4Energy3.Visible = false;
+            Bench4Energy4.Visible = false;
+            Bench4Energy5.Visible = false;
+            Bench5Energy1.Visible = false;
+            Bench5Energy2.Visible = false;
+            Bench5Energy3.Visible = false;
+            Bench5Energy4.Visible = false;
+            Bench5Energy5.Visible = false;
+
+            OBench1Energy1.Visible = false;
+            OBench1Energy2.Visible = false;
+            OBench1Energy3.Visible = false;
+            OBench1Energy4.Visible = false;
+            OBench1Energy5.Visible = false;
+            OBench2Energy1.Visible = false;
+            OBench2Energy2.Visible = false;
+            OBench2Energy3.Visible = false;
+            OBench2Energy4.Visible = false;
+            OBench2Energy5.Visible = false;
+            OBench3Energy1.Visible = false;
+            OBench3Energy2.Visible = false;
+            OBench3Energy3.Visible = false;
+            OBench3Energy4.Visible = false;
+            OBench3Energy5.Visible = false;
+            OBench4Energy1.Visible = false;
+            OBench4Energy2.Visible = false;
+            OBench4Energy3.Visible = false;
+            OBench4Energy4.Visible = false;
+            OBench4Energy5.Visible = false;
+            OBench5Energy1.Visible = false;
+            OBench5Energy2.Visible = false;
+            OBench5Energy3.Visible = false;
+            OBench5Energy4.Visible = false;
+            OBench5Energy5.Visible = false;
+            OpponentDiscardBox.Visible = false;
+            OpponentBench1.Visible = false;
+            OpponentBench2.Visible = false;
+            OpponentBench3.Visible = false;
+            OpponentBench4.Visible = false;
+            OpponentBench5.Visible = false;
+            PlayerEnd.Visible = false;
         }
         private void GetViewBackToNormal()
         {
             PictureActive.Visible = true;
-            UpdateActivePokemonView();
             DiscardBox.Visible = true;
             OpponentActive.Location = new Point(789, 247);
             UpdateAIActivePokemonView();
@@ -5351,14 +6425,26 @@ namespace Pokemon
             PlayerHpBar.Visible = true;
             MaxHp.Visible = true;
             RemHp.Visible = true;
+            OpponentZoom.Visible = true;
             EnergyBox1.Visible = true;
             HpLabel1.Visible = true;
             OpCardName.Visible = true;
             OpponentHpBar.Visible = true;
             OMaxHp.Visible = true;
             EnergyBox2.Visible = true;
+            HpLabel2.Visible = true;
+            ODeckSize.Text = "x" + ai.NumberOfCards().ToString();
+            OHandNumber.Text = "X" + ai_Hand.NumberOfCards().ToString();
+            DeckSize.Text = "x" + player.NumberOfCards().ToString();
+            UpdateHandView();
+            UpdateActivePokemonView();
             UpdateBenchView();
+            UpdateDiscardView();
+            
+            UpdateActivePokemonView();
+            UpdateAIActivePokemonView();
             AIUpdateBenchView();
+            UpdateAIDiscardView();
             
             OpponentDiscardBox.Visible = true;
             OpponentBench1.Location = new Point(789, 48);
@@ -5367,7 +6453,8 @@ namespace Pokemon
             OpponentBench4.Location = new Point(1089, 48);
             OpponentBench5.Location = new Point(480, 48);
             PlayerEnd.Visible = true;
-            ai_Active_Pokemon_Retreat = false;       
+            ai_Active_Pokemon_Retreat = false;
+           
         }
 
         private void AIPictureBench_Click(object sender, EventArgs e)
@@ -5419,7 +6506,6 @@ namespace Pokemon
                 }
                 GetViewBackToNormal();
             }
-
         }
         private void Replace_Click(object sender, EventArgs e)
         {
@@ -5440,8 +6526,244 @@ namespace Pokemon
 
         private void LureTest_Click(object sender, EventArgs e)
         {
-            ChangeOpponentActivePokemon();
+         
+        }
 
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if(ai_Hand.NumOfBasicPokemon() > 0 && aibench.NumberOfCards() < 5)
+            {
+                _ticks++;
+                if (_ticks == 37)
+                {
+                    timer1.Stop();
+                    _ticks = 0;
+                    AIPlaysCards();
+                               
+                }
+            }
+            else if (ai_Hand.NumOfBasicEnergies() > 0 && aiPlayedEnergy == false)
+            {
+                _ticks++;
+                if (_ticks == 20)
+                {
+                    timer1.Stop();
+                    _ticks = 0;
+                    AIPlaysEnergyCards();                  
+                }
+            }
+            else if (ai_Active_Pokemon.CanPerformAttack(1) == true && aiPlayedAttack == false)
+            {
+                _ticks++;
+                if (_ticks == 30)
+                {
+                    timer1.Stop();
+                    _ticks = 0;
+
+                    //checking if the attack includes weakness modifier
+                    if(active_Pokemon.ShowWeakness() == ai_Active_Pokemon.ShowEnergy())
+                    {
+                        hasWeakness = true;
+                    }
+                    AIAttacks(1);
+                    aiPlayedAttack = true;
+                }
+            }
+            else
+            {
+                _ticks++;
+                if (_ticks == 35)
+                {
+                    _ticks = 0;
+                    timer1.Stop();
+                    EndOpponentsTurn.Location = new Point(683, 957);
+                    EndOpponentsTurn.Visible = true;                   
+                    SoundPlayer sound = new SoundPlayer("..\\..\\Sounds\\proceed.wav");
+                    sound.Play();
+                }
+                
+            }            
+            
+        }
+
+        private void Hand1_Click(object sender, EventArgs e)
+        {
+            if(energy_retrieval == true)
+            {
+                int num = 0;
+                Pokemon ActivePokemonTemp;
+                PictureBox n = (PictureBox)sender;
+                switch (n.Name)
+                {
+                    case "Hand1":
+                        num = 0;
+                        break;
+                    case "Hand2":
+                        num = 1;
+                        break;
+                    case "Hand3":
+                        num = 2;
+                        break;
+                    case "Hand4":
+                        num = 3;
+                        break;
+                    case "Hand5":
+                        num = 4;
+                        break;
+                    case "Hand6":
+                        num = 5;
+                        break;
+                    case "Hand7":
+                        num = 6;
+                        break;
+                    case "Hand8":
+                        num = 7;
+                        break;
+                    case "Hand9":
+                        num = 8;
+                        break;
+                    case "Hand10":
+                        num = 9;
+                        break;
+                    default:
+                        break;
+                }
+
+                gameMessage.Text = "You discarded " + player_Hand.ShowName(num) + ", now choose the energy cards from your discard.";
+                ActivePokemonTemp = player_Hand.PlayCard(num);
+                discard.Add(ActivePokemonTemp);
+                player_Hand.RemoveFromHand(num);
+
+                energy_retrieval = false;
+                energy_retrieval_2 = true;
+                CreateDiscardView();
+            }
+            else if (energy_retrieval_2 == true)
+            {
+                int num = 0;
+                Pokemon ActivePokemonTemp;
+                PictureBox n = (PictureBox)sender;
+                switch (n.Name)
+                {
+                    case "Hand1":
+                        num = 0;
+                        break;
+                    case "Hand2":
+                        num = 1;
+                        break;
+                    case "Hand3":
+                        num = 2;
+                        break;
+                    case "Hand4":
+                        num = 3;
+                        break;
+                    case "Hand5":
+                        num = 4;
+                        break;
+                    case "Hand6":
+                        num = 5;
+                        break;
+                    case "Hand7":
+                        num = 6;
+                        break;
+                    case "Hand8":
+                        num = 7;
+                        break;
+                    case "Hand9":
+                        num = 8;
+                        break;
+                    case "Hand10":
+                        num = 9;
+                        break;
+                    default:
+                        break;
+                }
+
+                if (discard.ShowType(num) == "energy" && discard.CountEnergiesInDiscard() > 1)
+                {
+                    gameMessage.Text = "You put " + discard.ShowName(num) + " in your hand. Choose another Energy now.";
+                    ActivePokemonTemp = discard.GetCard(num);
+                    player_Hand.DrawCard(ActivePokemonTemp);
+                    discard.RemoveFromDiscard(num);
+                    energy_retrieval_2 = false;
+                    energy_retrieval_3 = true;
+                    CreateDiscardView();
+                }
+                else if (discard.ShowType(num) == "energy" && discard.CountEnergiesInDiscard() == 1)
+                {
+                    gameMessage.Text = "You put " + discard.ShowName(num) + " in your hand.";
+                    ActivePokemonTemp = discard.GetCard(num);
+                    player_Hand.DrawCard(ActivePokemonTemp);
+                    discard.RemoveFromDiscard(num);
+                    energy_retrieval_2 = false;
+                    UpdateHandView();
+                    GetViewBackToNormal();
+                    UpdateDiscardView();
+                    PlayerEnd.Visible = true;
+                }
+                else
+                {
+                    gameMessage.Text = "Please choose an Energy Card.";
+                }
+            }
+            else if (energy_retrieval_3 == true)
+            {
+                int num = 0;
+                Pokemon ActivePokemonTemp;
+                PictureBox n = (PictureBox)sender;
+                switch (n.Name)
+                {
+                    case "Hand1":
+                        num = 0;
+                        break;
+                    case "Hand2":
+                        num = 1;
+                        break;
+                    case "Hand3":
+                        num = 2;
+                        break;
+                    case "Hand4":
+                        num = 3;
+                        break;
+                    case "Hand5":
+                        num = 4;
+                        break;
+                    case "Hand6":
+                        num = 5;
+                        break;
+                    case "Hand7":
+                        num = 6;
+                        break;
+                    case "Hand8":
+                        num = 7;
+                        break;
+                    case "Hand9":
+                        num = 8;
+                        break;
+                    case "Hand10":
+                        num = 9;
+                        break;
+                    default:
+                        break;
+                }
+
+                if (discard.ShowType(num) == "energy")
+                {
+                    gameMessage.Text = "You put " + discard.ShowName(num) + " in your hand.";
+                    ActivePokemonTemp = discard.GetCard(num);
+                    player_Hand.DrawCard(ActivePokemonTemp);
+                    discard.RemoveFromDiscard(num);
+                    energy_retrieval_3 = false;
+                    UpdateHandView();
+                    UpdateDiscardView();
+                    GetViewBackToNormal();
+                    PlayerEnd.Visible = true;
+                }
+                else
+                {
+                    gameMessage.Text = "Please choose an Energy Card.";
+                }
+            }
         }
     }
 }
