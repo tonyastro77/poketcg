@@ -725,10 +725,7 @@ namespace Pokemon.Game_Zone
         public void HasLoadedEnergies()
         {
             
-            if(NumberOfAttacks() == 1)
-            {
-                Active_Pokemon.attack1.energycost()
-            }
+            
         }
     }
 }

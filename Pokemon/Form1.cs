@@ -83,7 +83,7 @@ namespace Pokemon
         public void Form1_Load(object sender, EventArgs e)
         {
             //function for quick testing only
-            LureTest.Visible = false;
+            LureTest.Visible = Visible;
 
             player.AddToDeck(new Pokemon(46, "Charmander", "basic", 50, 50, 'f', 'w', 'n', 1, "Obviously prefers hot places. If it gets caught in the rain, steam is said to spout from the tip of its tail.", "..\\..\\Img\\BSPainted\\BS_046.jpg", new Attack("Scratch", "offensive", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Ember", "offensive", "Discard 1 Fire Energy card attached to Charmander in order to use this attack.", 30, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>(), false));
             player.AddToDeck(new Pokemon(46, "Charmander", "basic", 50, 50, 'f', 'w', 'n', 1, "Obviously prefers hot places. If it gets caught in the rain, steam is said to spout from the tip of its tail.", "..\\..\\Img\\BSPainted\\BS_046.jpg", new Attack("Scratch", "offensive", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Ember", "offensive", "Discard 1 Fire Energy card attached to Charmander in order to use this attack.", 30, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>(), false));
@@ -4036,112 +4036,312 @@ namespace Pokemon
 
         private void AIPlaysEnergyCards()
         {
-            for (int x = 0; x < ai_Hand.NumberOfCards(); x++)
+            if(ai_Active_Pokemon.ShowName() == "Pikachu")
             {
-                if (ai_Hand.ShowType(x) == "energy" && ai_Hand.ShowEnergy(x) == ai_Active_Pokemon.ShowEnergy())
-                {
-                    if (ai_Hand.ShowName(x) == "Fire Energy")
-                    {
-                        ai_Active_Pokemon.EnergyLoad('f');
-                    }
+                int lightning = 0;
+                int colorless = 0;
 
-                    else if (ai_Hand.ShowName(x) == "Water Energy")
-                    {
-                        ai_Active_Pokemon.EnergyLoad('w');
-                    }
-                    else if (ai_Hand.ShowName(x) == "Fighting Energy")
-                    {
-                        ai_Active_Pokemon.EnergyLoad('l');
-                    }
-                    else if (ai_Hand.ShowName(x) == "Psychic Energy")
-                    {
-                        ai_Active_Pokemon.EnergyLoad('p');
-                    }
-                    else if (ai_Hand.ShowName(x) == "Grass Energy")
-                    {
-                        ai_Active_Pokemon.EnergyLoad('g');
-                    }
-                    else if (ai_Hand.ShowName(x) == "Lightning Energy")
-                    {
-                        ai_Active_Pokemon.EnergyLoad('e');
-                    }
-                    else if (ai_Hand.ShowName(x) == "Metal Energy")
-                    {
-                        ai_Active_Pokemon.EnergyLoad('m');
-                    }
-                    else if (ai_Hand.ShowName(x) == "Dark Energy")
-                    {
-                        ai_Active_Pokemon.EnergyLoad('d');
-                    }
-                    else if (ai_Hand.ShowName(x) == "Fairy Energy")
-                    {
-                        ai_Active_Pokemon.EnergyLoad('a');
-                    }
-                    gameMessage.Text = "Your opponent loads one " + ai_Hand.ShowName(x).ToLower() + " to " + ai_Active_Pokemon.ShowName();
-                    ai_used.Add(ai_Hand.PlayCard(x));
-                    ai_Hand.RemoveFromHand(x);
-                    OHandNumber.Text = "X" + ai_Hand.NumberOfCards().ToString();
-                    UpdateAIActivePokemonView();
-                    timer1.Start();
-                    aiPlayedEnergy = true;
-                    break;
-                }
-                else if(ai_Hand.ShowType(x) == "energy")
+                for (var i = 0; i < ai_Active_Pokemon.EnergyLoadedCount(); ++i)
                 {
-                    if (ai_Hand.ShowName(x) == "Fire Energy")
-                    {
-                        ai_Active_Pokemon.EnergyLoad('f');
-                    }
+                    if (ai_Active_Pokemon.GetEnergyLoadedAt(i) == 'e')
+                        lightning++;
+                    else
+                        colorless++;
+                }
 
-                    else if (ai_Hand.ShowName(x) == "Water Energy")
-                    {
-                        ai_Active_Pokemon.EnergyLoad('w');
-                    }
-                    else if (ai_Hand.ShowName(x) == "Fighting Energy")
-                    {
-                        ai_Active_Pokemon.EnergyLoad('l');
-                    }
-                    else if (ai_Hand.ShowName(x) == "Psychic Energy")
-                    {
-                        ai_Active_Pokemon.EnergyLoad('p');
-                    }
-                    else if (ai_Hand.ShowName(x) == "Grass Energy")
-                    {
-                        ai_Active_Pokemon.EnergyLoad('g');
-                    }
-                    else if (ai_Hand.ShowName(x) == "Lightning Energy")
-                    {
-                        ai_Active_Pokemon.EnergyLoad('e');
-                    }
-                    else if (ai_Hand.ShowName(x) == "Metal Energy")
-                    {
-                        ai_Active_Pokemon.EnergyLoad('m');
-                    }
-                    else if (ai_Hand.ShowName(x) == "Dark Energy")
-                    {
-                        ai_Active_Pokemon.EnergyLoad('d');
-                    }
-                    else if (ai_Hand.ShowName(x) == "Fairy Energy")
-                    {
-                        ai_Active_Pokemon.EnergyLoad('a');
-                    }
-                    gameMessage.Text = "Your opponent loads one " + ai_Hand.ShowName(x).ToLower() + " to " + ai_Active_Pokemon.ShowName();
-                    ai_used.Add(ai_Hand.PlayCard(x));
-                    ai_Hand.RemoveFromHand(x);
-                    OHandNumber.Text = "X" + ai_Hand.NumberOfCards().ToString();
-                    UpdateAIActivePokemonView();
-                    timer1.Start();
-                    aiPlayedEnergy = true;
-                    timer1.Start();
-                    break;
-                }
-                else
+                for (int x = 0; x < ai_Hand.NumberOfCards(); x++)
                 {
-                    timer1.Start();
+                    if (lightning < 1 && ai_Hand.ShowName(x) == "Lightning Energy")
+                    {
+                        AILoadEnergyBasedOnIndexFound(x);
+                        break;
+                    }
+                    else if (colorless < 1 && ai_Hand.ShowType(x) == "energy")
+                    {
+                        AILoadEnergyBasedOnIndexFound(x);
+                        break;
+                    }
+                    else
+                    {
+                        AILoadEnergyToBenchedPokemon();
+                        break;
+                    }
+                }            
+            }
+            else if(ai_Active_Pokemon.ShowName() == "Magnemite")
+            {
+                int lightning = 0;
+                int colorless = 0;
+
+                for (var i = 0; i < ai_Active_Pokemon.EnergyLoadedCount(); ++i)
+                {
+                    if (ai_Active_Pokemon.GetEnergyLoadedAt(i) == 'e')
+                        lightning++;
+                    else
+                        colorless++;
+                }
+                for (int x = 0; x < ai_Hand.NumberOfCards(); x++)
+                {
+                    if (lightning < 1 && ai_Hand.ShowName(x) == "Lightning Energy")
+                    {
+                        AILoadEnergyBasedOnIndexFound(x);
+                        break;
+                    }
+                    else if (colorless < 1 && ai_Hand.ShowType(x) == "energy")
+                    {
+                        AILoadEnergyBasedOnIndexFound(x);
+                        break;
+                    }
+                    else
+                    {
+                        AILoadEnergyToBenchedPokemon();
+                        break;
+                    }
                 }
             }
+            else if (ai_Active_Pokemon.ShowName() == "Abra")
+            {
+                int psychic = 0;
+                int colorless = 0;
+
+                for (var i = 0; i < ai_Active_Pokemon.EnergyLoadedCount(); ++i)
+                {
+                    if (ai_Active_Pokemon.GetEnergyLoadedAt(i) == 'p')
+                        psychic++;
+                    else
+                        colorless++;
+                }
+                for (int x = 0; x < ai_Hand.NumberOfCards(); x++)
+                {
+                    if (psychic < 1 && ai_Hand.ShowName(x) == "Psychic Energy")
+                    {
+                        AILoadEnergyBasedOnIndexFound(x);
+                        break;
+                    }
+                    else
+                    {
+                        AILoadEnergyToBenchedPokemon();
+                        break;
+                    }
+                }
+            }
+            else if (ai_Active_Pokemon.ShowName() == "Kadabra")
+            {
+                int psychic = 0;
+                int colorless = 0;
+
+                for (var i = 0; i < ai_Active_Pokemon.EnergyLoadedCount(); ++i)
+                {
+                    if (ai_Active_Pokemon.GetEnergyLoadedAt(i) == 'p')
+                        psychic++;
+                    else
+                        colorless++;
+                }
+                for (int x = 0; x < ai_Hand.NumberOfCards(); x++)
+                {
+                    if (psychic < 2 && ai_Hand.ShowName(x) == "Psychic Energy")
+                    {
+                        AILoadEnergyBasedOnIndexFound(x);
+                        break;
+                    }
+                    else if (colorless < 1 && ai_Hand.ShowType(x) == "energy")
+                    {
+                        AILoadEnergyBasedOnIndexFound(x);
+                        break;
+                    }
+                    else
+                    {
+                        AILoadEnergyToBenchedPokemon();
+                        break;
+                    }
+                }
+            }
+            else if (ai_Active_Pokemon.ShowName() == "Gastly")
+            {
+                int psychic = 0;
+                int colorless = 0;
+
+                for (var i = 0; i < ai_Active_Pokemon.EnergyLoadedCount(); ++i)
+                {
+                    if (ai_Active_Pokemon.GetEnergyLoadedAt(i) == 'p')
+                        psychic++;
+                    else
+                        colorless++;
+                }
+                for (int x = 0; x < ai_Hand.NumberOfCards(); x++)
+                {
+                    if (psychic < 2 && ai_Hand.ShowName(x) == "Psychic Energy")
+                    {
+                        AILoadEnergyBasedOnIndexFound(x);
+                        break;
+                    }
+                    else
+                    {
+                        AILoadEnergyToBenchedPokemon();
+                        break;
+                    }
+                }
+            }
+            else if (ai_Active_Pokemon.ShowName() == "Haunter")
+            {
+                int psychic = 0;
+                int colorless = 0;
+
+                for (var i = 0; i < ai_Active_Pokemon.EnergyLoadedCount(); ++i)
+                {
+                    if (ai_Active_Pokemon.GetEnergyLoadedAt(i) == 'p')
+                        psychic++;
+                    else
+                        colorless++;
+                }
+                for (int x = 0; x < ai_Hand.NumberOfCards(); x++)
+                {
+                    if (psychic < 2 && ai_Hand.ShowName(x) == "Psychic Energy")
+                    {
+                        AILoadEnergyBasedOnIndexFound(x);
+                        break;
+                    }
+                    else
+                    {
+                        AILoadEnergyToBenchedPokemon();
+                        break;
+                    }
+                }
+            }
+            else if (ai_Active_Pokemon.ShowName() == "Drowzee")
+            {
+                int psychic = 0;
+                int colorless = 0;
+
+                for (var i = 0; i < ai_Active_Pokemon.EnergyLoadedCount(); ++i)
+                {
+                    if (ai_Active_Pokemon.GetEnergyLoadedAt(i) == 'p')
+                        psychic++;
+                    else
+                        colorless++;
+                }
+                for (int x = 0; x < ai_Hand.NumberOfCards(); x++)
+                {
+                    if (psychic < 2 && ai_Hand.ShowName(x) == "Psychic Energy")
+                    {
+                        AILoadEnergyBasedOnIndexFound(x);
+                        break;
+                    }
+                    else
+                    {
+                        AILoadEnergyToBenchedPokemon();
+                        break;
+                    }
+                }
+            }
+            else if (ai_Active_Pokemon.ShowName() == "Jynx")
+            {
+                int psychic = 0;
+                int colorless = 0;
+
+                for (var i = 0; i < ai_Active_Pokemon.EnergyLoadedCount(); ++i)
+                {
+                    if (ai_Active_Pokemon.GetEnergyLoadedAt(i) == 'p')
+                        psychic++;
+                    else
+                        colorless++;
+                }
+                for (int x = 0; x < ai_Hand.NumberOfCards(); x++)
+                {
+                    if (psychic < 3 && ai_Hand.ShowName(x) == "Psychic Energy")
+                    {
+                        AILoadEnergyBasedOnIndexFound(x);
+                        break;
+                    }
+                    else
+                    {
+                        AILoadEnergyToBenchedPokemon();
+                        break;
+                    }
+                }
+            }
+            else if (ai_Active_Pokemon.ShowName() == "Mewtwo")
+            {
+                int psychic = 0;
+                int colorless = 0;
+
+                for (var i = 0; i < ai_Active_Pokemon.EnergyLoadedCount(); ++i)
+                {
+                    if (ai_Active_Pokemon.GetEnergyLoadedAt(i) == 'p')
+                        psychic++;
+                    else
+                        colorless++;
+                }
+                for (int x = 0; x < ai_Hand.NumberOfCards(); x++)
+                {
+                    if (psychic < 2 && ai_Hand.ShowName(x) == "Psychic Energy")
+                    {
+                        AILoadEnergyBasedOnIndexFound(x);
+                        break;
+                    }
+                    else
+                    {
+                        AILoadEnergyToBenchedPokemon();
+                        break;
+                    }
+                }
+            }                     
         }
 
+        private void AILoadEnergyBasedOnIndexFound(int x)
+        {
+            if (ai_Hand.ShowName(x) == "Fire Energy")
+            {
+                ai_Active_Pokemon.EnergyLoad('f');
+            }
+
+            else if (ai_Hand.ShowName(x) == "Water Energy")
+            {
+                ai_Active_Pokemon.EnergyLoad('w');
+            }
+            else if (ai_Hand.ShowName(x) == "Fighting Energy")
+            {
+                ai_Active_Pokemon.EnergyLoad('l');
+            }
+            else if (ai_Hand.ShowName(x) == "Psychic Energy")
+            {
+                ai_Active_Pokemon.EnergyLoad('p');
+            }
+            else if (ai_Hand.ShowName(x) == "Grass Energy")
+            {
+                ai_Active_Pokemon.EnergyLoad('g');
+            }
+            else if (ai_Hand.ShowName(x) == "Lightning Energy")
+            {
+                ai_Active_Pokemon.EnergyLoad('e');
+            }
+            else if (ai_Hand.ShowName(x) == "Metal Energy")
+            {
+                ai_Active_Pokemon.EnergyLoad('m');
+            }
+            else if (ai_Hand.ShowName(x) == "Dark Energy")
+            {
+                ai_Active_Pokemon.EnergyLoad('d');
+            }
+            else if (ai_Hand.ShowName(x) == "Fairy Energy")
+            {
+                ai_Active_Pokemon.EnergyLoad('a');
+            }
+            gameMessage.Text = "Your opponent loads one " + ai_Hand.ShowName(x).ToLower() + " to " + ai_Active_Pokemon.ShowName();
+            ai_used.Add(ai_Hand.PlayCard(x));
+            ai_Hand.RemoveFromHand(x);
+            OHandNumber.Text = "X" + ai_Hand.NumberOfCards().ToString();
+            UpdateAIActivePokemonView();
+            timer1.Start();
+            aiPlayedEnergy = true;
+            
+        }
+
+        private void AILoadEnergyToBenchedPokemon()
+        {
+            aiPlayedEnergy = true;
+            timer1.Start();
+        }
         private void AIChoosesActivePokemon()
         {
                 Random random = new Random();
@@ -5450,7 +5650,9 @@ namespace Pokemon
             aiPlayedAttack = false;
             hasWeakness = false;
             playSimpleSound();
+            _ticks = 0;
             timer1.Start();
+            
         }
 
         private void Next2_Click(object sender, EventArgs e)
@@ -6526,20 +6728,27 @@ namespace Pokemon
 
         private void LureTest_Click(object sender, EventArgs e)
         {
-         
+            gameMessage.Text = "You play Lass. You can see your Opponents's hand now, also you show yours.";
+            PlayerEnd.Visible = false;
+            trainer_lass = true;
+            Next2.Visible = true;
+            Next2.Location = new Point(683, 957);
+
+            HideBackground();
+            ShowAIHandView();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if(ai_Hand.NumOfBasicPokemon() > 0 && aibench.NumberOfCards() < 5)
+            
+            if (ai_Hand.NumOfBasicPokemon() > 0 && aibench.NumberOfCards() < 5)
             {
                 _ticks++;
-                if (_ticks == 37)
+                if (_ticks == 20)
                 {
                     timer1.Stop();
-                    _ticks = 0;
                     AIPlaysCards();
-                               
+                    _ticks = 0;
                 }
             }
             else if (ai_Hand.NumOfBasicEnergies() > 0 && aiPlayedEnergy == false)
@@ -6548,17 +6757,16 @@ namespace Pokemon
                 if (_ticks == 20)
                 {
                     timer1.Stop();
+                    AIPlaysEnergyCards();
                     _ticks = 0;
-                    AIPlaysEnergyCards();                  
                 }
             }
             else if (ai_Active_Pokemon.CanPerformAttack(1) == true && aiPlayedAttack == false)
             {
                 _ticks++;
-                if (_ticks == 30)
+                if (_ticks == 20)
                 {
                     timer1.Stop();
-                    _ticks = 0;
 
                     //checking if the attack includes weakness modifier
                     if(active_Pokemon.ShowWeakness() == ai_Active_Pokemon.ShowEnergy())
@@ -6567,15 +6775,17 @@ namespace Pokemon
                     }
                     AIAttacks(1);
                     aiPlayedAttack = true;
+                    _ticks = 0;
                 }
             }
             else
             {
                 _ticks++;
-                if (_ticks == 35)
+                if (_ticks == 25)
                 {
-                    _ticks = 0;
+                    
                     timer1.Stop();
+                    _ticks = 0;
                     EndOpponentsTurn.Location = new Point(683, 957);
                     EndOpponentsTurn.Visible = true;                   
                     SoundPlayer sound = new SoundPlayer("..\\..\\Sounds\\proceed.wav");
