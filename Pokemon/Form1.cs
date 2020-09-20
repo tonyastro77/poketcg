@@ -83,7 +83,7 @@ namespace Pokemon
         public void Form1_Load(object sender, EventArgs e)
         {
             //function for quick testing only
-            LureTest.Visible = Visible;
+            LureTest.Visible = false;
 
             player.AddToDeck(new Pokemon(46, "Charmander", "basic", 50, 50, 'f', 'w', 'n', 1, "Obviously prefers hot places. If it gets caught in the rain, steam is said to spout from the tip of its tail.", "..\\..\\Img\\BSPainted\\BS_046.jpg", new Attack("Scratch", "offensive", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Ember", "offensive", "Discard 1 Fire Energy card attached to Charmander in order to use this attack.", 30, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>(), false));
             player.AddToDeck(new Pokemon(46, "Charmander", "basic", 50, 50, 'f', 'w', 'n', 1, "Obviously prefers hot places. If it gets caught in the rain, steam is said to spout from the tip of its tail.", "..\\..\\Img\\BSPainted\\BS_046.jpg", new Attack("Scratch", "offensive", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Ember", "offensive", "Discard 1 Fire Energy card attached to Charmander in order to use this attack.", 30, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>(), false));
@@ -4047,26 +4047,34 @@ namespace Pokemon
                         lightning++;
                     else
                         colorless++;
-                }
+                };
 
-                for (int x = 0; x < ai_Hand.NumberOfCards(); x++)
+                if(lightning < 1)
                 {
-                    if (lightning < 1 && ai_Hand.ShowName(x) == "Lightning Energy")
+                    for (int l = 0; l < ai_Hand.NumberOfCards(); l++)
                     {
-                        AILoadEnergyBasedOnIndexFound(x);
-                        break;
+                        if(ai_Hand.ShowName(l) == "Lightning Energy")
+                        {
+                            AILoadEnergyBasedOnIndexFound(l);
+                            break;
+                        }
                     }
-                    else if (colorless < 1 && ai_Hand.ShowType(x) == "energy")
+                }
+                else if(colorless < 1 && lightning != 2)
+                {
+                    for (int c = 0; c <  ai_Hand.NumberOfCards(); c++)
                     {
-                        AILoadEnergyBasedOnIndexFound(x);
-                        break;
+                        if (ai_Hand.ShowType(c) == "energy")
+                        {
+                            AILoadEnergyBasedOnIndexFound(c);
+                            break;
+                        }
                     }
-                    else
-                    {
-                        AILoadEnergyToBenchedPokemon();
-                        break;
-                    }
-                }            
+                }
+                else
+                {
+                    AILoadEnergyToBenchedPokemon();
+                }
             }
             else if(ai_Active_Pokemon.ShowName() == "Magnemite")
             {
@@ -4079,24 +4087,33 @@ namespace Pokemon
                         lightning++;
                     else
                         colorless++;
-                }
-                for (int x = 0; x < ai_Hand.NumberOfCards(); x++)
+                };
+
+                if (lightning < 1)
                 {
-                    if (lightning < 1 && ai_Hand.ShowName(x) == "Lightning Energy")
+                    for (int l = 0; l < ai_Hand.NumberOfCards(); l++)
                     {
-                        AILoadEnergyBasedOnIndexFound(x);
-                        break;
+                        if (ai_Hand.ShowName(l) == "Lightning Energy")
+                        {
+                            AILoadEnergyBasedOnIndexFound(l);
+                            break;
+                        }
                     }
-                    else if (colorless < 1 && ai_Hand.ShowType(x) == "energy")
+                }
+                else if (colorless < 1 && lightning != 2)
+                {
+                    for (int c = 0; c < ai_Hand.NumberOfCards(); c++)
                     {
-                        AILoadEnergyBasedOnIndexFound(x);
-                        break;
+                        if (ai_Hand.ShowType(c) == "energy")
+                        {
+                            AILoadEnergyBasedOnIndexFound(c);
+                            break;
+                        }
                     }
-                    else
-                    {
-                        AILoadEnergyToBenchedPokemon();
-                        break;
-                    }
+                }
+                else
+                {
+                    AILoadEnergyToBenchedPokemon();
                 }
             }
             else if (ai_Active_Pokemon.ShowName() == "Abra")
@@ -4111,18 +4128,20 @@ namespace Pokemon
                     else
                         colorless++;
                 }
-                for (int x = 0; x < ai_Hand.NumberOfCards(); x++)
+                if (psychic < 1)
                 {
-                    if (psychic < 1 && ai_Hand.ShowName(x) == "Psychic Energy")
+                    for (int p = 0; p < ai_Hand.NumberOfCards(); p++)
                     {
-                        AILoadEnergyBasedOnIndexFound(x);
-                        break;
+                        if (ai_Hand.ShowName(p) == "Psychic Energy")
+                        {
+                            AILoadEnergyBasedOnIndexFound(p);
+                            break;
+                        }
                     }
-                    else
-                    {
-                        AILoadEnergyToBenchedPokemon();
-                        break;
-                    }
+                }
+                else
+                {
+                    AILoadEnergyToBenchedPokemon();
                 }
             }
             else if (ai_Active_Pokemon.ShowName() == "Kadabra")
@@ -4137,23 +4156,31 @@ namespace Pokemon
                     else
                         colorless++;
                 }
-                for (int x = 0; x < ai_Hand.NumberOfCards(); x++)
+                if (psychic < 2)
                 {
-                    if (psychic < 2 && ai_Hand.ShowName(x) == "Psychic Energy")
+                    for (int p = 0; p < ai_Hand.NumberOfCards(); p++)
                     {
-                        AILoadEnergyBasedOnIndexFound(x);
-                        break;
+                        if (ai_Hand.ShowName(p) == "Psychic Energy")
+                        {
+                            AILoadEnergyBasedOnIndexFound(p);
+                            break;
+                        }
                     }
-                    else if (colorless < 1 && ai_Hand.ShowType(x) == "energy")
+                }
+                else if (colorless < 1 && psychic != 3)
+                {
+                    for (int c = 0; c < ai_Hand.NumberOfCards(); c++)
                     {
-                        AILoadEnergyBasedOnIndexFound(x);
-                        break;
+                        if (ai_Hand.ShowType(c) == "energy")
+                        {
+                            AILoadEnergyBasedOnIndexFound(c);
+                            break;
+                        }
                     }
-                    else
-                    {
-                        AILoadEnergyToBenchedPokemon();
-                        break;
-                    }
+                }
+                else
+                {
+                    AILoadEnergyToBenchedPokemon();
                 }
             }
             else if (ai_Active_Pokemon.ShowName() == "Gastly")
@@ -4168,18 +4195,20 @@ namespace Pokemon
                     else
                         colorless++;
                 }
-                for (int x = 0; x < ai_Hand.NumberOfCards(); x++)
+                if (psychic < 2)
                 {
-                    if (psychic < 2 && ai_Hand.ShowName(x) == "Psychic Energy")
+                    for (int p = 0; p < ai_Hand.NumberOfCards(); p++)
                     {
-                        AILoadEnergyBasedOnIndexFound(x);
-                        break;
+                        if (ai_Hand.ShowName(p) == "Psychic Energy")
+                        {
+                            AILoadEnergyBasedOnIndexFound(p);
+                            break;
+                        }
                     }
-                    else
-                    {
-                        AILoadEnergyToBenchedPokemon();
-                        break;
-                    }
+                }
+                else
+                {
+                    AILoadEnergyToBenchedPokemon();
                 }
             }
             else if (ai_Active_Pokemon.ShowName() == "Haunter")
@@ -4194,18 +4223,20 @@ namespace Pokemon
                     else
                         colorless++;
                 }
-                for (int x = 0; x < ai_Hand.NumberOfCards(); x++)
+                if (psychic < 2)
                 {
-                    if (psychic < 2 && ai_Hand.ShowName(x) == "Psychic Energy")
+                    for (int p = 0; p < ai_Hand.NumberOfCards(); p++)
                     {
-                        AILoadEnergyBasedOnIndexFound(x);
-                        break;
+                        if (ai_Hand.ShowName(p) == "Psychic Energy")
+                        {
+                            AILoadEnergyBasedOnIndexFound(p);
+                            break;
+                        }
                     }
-                    else
-                    {
-                        AILoadEnergyToBenchedPokemon();
-                        break;
-                    }
+                }
+                else
+                {
+                    AILoadEnergyToBenchedPokemon();
                 }
             }
             else if (ai_Active_Pokemon.ShowName() == "Drowzee")
@@ -4220,24 +4251,27 @@ namespace Pokemon
                     else
                         colorless++;
                 }
-                for (int x = 0; x < ai_Hand.NumberOfCards(); x++)
+
+                if (psychic < 2)
                 {
-                    if (psychic < 2 && ai_Hand.ShowName(x) == "Psychic Energy")
+                    for (int p = 0; p < ai_Hand.NumberOfCards(); p++)
                     {
-                        AILoadEnergyBasedOnIndexFound(x);
-                        break;
+                        if (ai_Hand.ShowName(p) == "Psychic Energy")
+                        {
+                            AILoadEnergyBasedOnIndexFound(p);
+                            break;
+                        }
                     }
-                    else
-                    {
-                        AILoadEnergyToBenchedPokemon();
-                        break;
-                    }
+                }
+                else
+                {
+                    AILoadEnergyToBenchedPokemon();
                 }
             }
             else if (ai_Active_Pokemon.ShowName() == "Jynx")
             {
                 int psychic = 0;
-                int colorless = 0;
+                int colorless = 0;               
 
                 for (var i = 0; i < ai_Active_Pokemon.EnergyLoadedCount(); ++i)
                 {
@@ -4246,18 +4280,20 @@ namespace Pokemon
                     else
                         colorless++;
                 }
-                for (int x = 0; x < ai_Hand.NumberOfCards(); x++)
+                if (psychic < 3)
                 {
-                    if (psychic < 3 && ai_Hand.ShowName(x) == "Psychic Energy")
+                    for (int p = 0; p < ai_Hand.NumberOfCards(); p++)
                     {
-                        AILoadEnergyBasedOnIndexFound(x);
-                        break;
+                        if (ai_Hand.ShowName(p) == "Psychic Energy")
+                        {
+                            AILoadEnergyBasedOnIndexFound(p);
+                            break;
+                        }
                     }
-                    else
-                    {
-                        AILoadEnergyToBenchedPokemon();
-                        break;
-                    }
+                }
+                else
+                {
+                    AILoadEnergyToBenchedPokemon();
                 }
             }
             else if (ai_Active_Pokemon.ShowName() == "Mewtwo")
@@ -4272,18 +4308,20 @@ namespace Pokemon
                     else
                         colorless++;
                 }
-                for (int x = 0; x < ai_Hand.NumberOfCards(); x++)
+                if (psychic < 2)
                 {
-                    if (psychic < 2 && ai_Hand.ShowName(x) == "Psychic Energy")
+                    for (int p = 0; p < ai_Hand.NumberOfCards(); p++)
                     {
-                        AILoadEnergyBasedOnIndexFound(x);
-                        break;
+                        if (ai_Hand.ShowName(p) == "Psychic Energy")
+                        {
+                            AILoadEnergyBasedOnIndexFound(p);
+                            break;
+                        }
                     }
-                    else
-                    {
-                        AILoadEnergyToBenchedPokemon();
-                        break;
-                    }
+                }
+                else
+                {
+                    AILoadEnergyToBenchedPokemon();
                 }
             }                     
         }
@@ -6037,6 +6075,12 @@ namespace Pokemon
                     PlayerHpBar.Value = active_Pokemon.ShowRemHP();
                     gameMessage.Text = "The AI performs Pound on " + active_Pokemon.ShowName() + " and deals 10 damage.";
                 }
+                else if (ai_Active_Pokemon.ShowAttackName(index) == "Confuse Ray")
+                {
+                    active_Pokemon.DealDamage(10, hasWeakness, PlusPowerDamage);
+                    PlayerHpBar.Value = active_Pokemon.ShowRemHP();
+                    gameMessage.Text = "The AI performs Confuse Ray on " + active_Pokemon.ShowName() + " and deals 10 damage.";
+                }
             }
             else if (ai_Active_Pokemon.ShowName() == "Gastly")
             {
@@ -6045,6 +6089,12 @@ namespace Pokemon
                     active_Pokemon.DealDamage(10, hasWeakness, PlusPowerDamage);
                     PlayerHpBar.Value = active_Pokemon.ShowRemHP();
                     gameMessage.Text = "The AI performs Sleeping Gas on " + active_Pokemon.ShowName() + " and deals 10 damage.";
+                }
+                else if(ai_Active_Pokemon.ShowAttackName(index) == "Destiny Bond")
+                {
+                    active_Pokemon.DealDamage(10, hasWeakness, PlusPowerDamage);
+                    PlayerHpBar.Value = active_Pokemon.ShowRemHP();
+                    gameMessage.Text = "The AI performs Destiny Bond on " + active_Pokemon.ShowName() + " and deals 10 damage.";
                 }
             }
             else if (ai_Active_Pokemon.ShowName() == "Jynx")
@@ -6064,6 +6114,12 @@ namespace Pokemon
                     PlayerHpBar.Value = active_Pokemon.ShowRemHP();
                     gameMessage.Text = "The AI performs Thunder Wave on " + active_Pokemon.ShowName() + " and deals 10 damage.";
                 }
+                else if (ai_Active_Pokemon.ShowAttackName(index) == "Self Destruct")
+                {
+                    active_Pokemon.DealDamage(40, hasWeakness, PlusPowerDamage);
+                    PlayerHpBar.Value = active_Pokemon.ShowRemHP();
+                    gameMessage.Text = "The AI performs Self Destruct on " + active_Pokemon.ShowName() + " and deals 40 damage.";
+                }
             }
             else if (ai_Active_Pokemon.ShowName() == "Mewtwo")
             {
@@ -6081,6 +6137,13 @@ namespace Pokemon
                     active_Pokemon.DealDamage(10, hasWeakness, PlusPowerDamage);
                     PlayerHpBar.Value = active_Pokemon.ShowRemHP();
                     gameMessage.Text = "The AI performs Gnaw on " + active_Pokemon.ShowName() + " and deals 10 damage.";
+                }
+                else if (ai_Active_Pokemon.ShowAttackName(index) == "Thunder Jolt")
+                {
+                    active_Pokemon.DealDamage(30, hasWeakness, PlusPowerDamage);
+                    PlayerHpBar.Value = active_Pokemon.ShowRemHP();
+                    ai_Active_Pokemon.DealDamage(10, hasWeakness, PlusPowerDamage);
+                    gameMessage.Text = "The AI performs Thunder Jolt on " + active_Pokemon.ShowName() + " and deals 30 damage and 10 to itself.";
                 }
             }
             
@@ -6758,6 +6821,43 @@ namespace Pokemon
                 {
                     timer1.Stop();
                     AIPlaysEnergyCards();
+                    _ticks = 0;
+                }
+            }
+            else if (ai_Active_Pokemon.CanPerformAttack(2) == true && aiPlayedAttack == false)
+            {
+                _ticks++;
+                if (_ticks == 20)
+                {
+                    timer1.Stop();
+
+                    //checking if the attack includes weakness modifier
+                    if (active_Pokemon.ShowWeakness() == ai_Active_Pokemon.ShowEnergy())
+                    {
+                        hasWeakness = true;
+                    }
+                    AIAttacks(2);
+                    aiPlayedAttack = true;
+                    if (active_Pokemon.ShowRemHP() == 0)
+                    {
+                        EndOpponentsTurn.Visible = false;
+                        active_Pokemon.ClearEverthingFromCard();
+                        gameMessage.Text = active_Pokemon.ShowName() + " is Knocked out. Replace it by a Benched Pokémon.";
+                        for (int i = 0; i < player_used.Count(); i++)
+                        {
+                            discard.Add(player_used.GetCard(i));
+                        }
+                        player_used.DiscardAll();
+
+                        KnockedOut.Location = new Point(683, 957);
+                        KnockedOut.Visible = true;
+                        FlipCoin.Visible = false;
+                        poisonedCheck = false;
+                        confusedCheck = false;
+                        paralyzedCheck = false;
+                        burnedCheck = false;
+                        asleepCheck = false;
+                    }
                     _ticks = 0;
                 }
             }

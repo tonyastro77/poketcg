@@ -721,11 +721,5 @@ namespace Pokemon.Game_Zone
             Active_Pokemon.Rem_Hp = Active_Pokemon.Hp;
             Active_Pokemon.CanEvolve = false;
         }
-
-        public void HasLoadedEnergies()
-        {
-            
-            
-        }
     }
 }
