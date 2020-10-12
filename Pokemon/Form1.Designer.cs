@@ -77,7 +77,6 @@
             this.OpponentDeck = new System.Windows.Forms.PictureBox();
             this.DeckSize = new System.Windows.Forms.Label();
             this.ODeckSize = new System.Windows.Forms.Label();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.Bench1Energy1 = new System.Windows.Forms.PictureBox();
             this.Bench1Energy2 = new System.Windows.Forms.PictureBox();
             this.Bench1Energy3 = new System.Windows.Forms.PictureBox();
@@ -169,7 +168,12 @@
             this.FlipCoin = new System.Windows.Forms.Button();
             this.KnockedOut = new System.Windows.Forms.Button();
             this.Replace = new System.Windows.Forms.Button();
-            this.LureTest = new System.Windows.Forms.Button();
+            this.QuickTest = new System.Windows.Forms.Button();
+            this.menuStrip2 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.playerStatus = new System.Windows.Forms.PictureBox();
+            this.aiStatus = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.PictureZoom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureActive)).BeginInit();
             this.RightClickMenu3.SuspendLayout();
@@ -269,6 +273,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.HandIcon1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.HandIcon2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.HandIcon3)).BeginInit();
+            this.menuStrip2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.playerStatus)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.aiStatus)).BeginInit();
             this.SuspendLayout();
             // 
             // HpLabel2
@@ -281,7 +288,6 @@
             this.HpLabel2.Size = new System.Drawing.Size(47, 27);
             this.HpLabel2.TabIndex = 0;
             this.HpLabel2.Text = "HP";
-            this.HpLabel2.Click += new System.EventHandler(this.label1_Click);
             // 
             // OMaxHp
             // 
@@ -766,14 +772,6 @@
             this.ODeckSize.Size = new System.Drawing.Size(39, 29);
             this.ODeckSize.TabIndex = 60;
             this.ODeckSize.Text = "60";
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1904, 24);
-            this.menuStrip1.TabIndex = 61;
-            this.menuStrip1.Text = "DeckMenu";
             // 
             // Bench1Energy1
             // 
@@ -1731,16 +1729,64 @@
             this.Replace.Visible = false;
             this.Replace.Click += new System.EventHandler(this.Replace_Click);
             // 
-            // LureTest
+            // QuickTest
             // 
-            this.LureTest.Location = new System.Drawing.Point(971, 462);
-            this.LureTest.Name = "LureTest";
-            this.LureTest.Size = new System.Drawing.Size(75, 23);
-            this.LureTest.TabIndex = 152;
-            this.LureTest.Text = "Lure";
-            this.LureTest.UseVisualStyleBackColor = true;
-            this.LureTest.Visible = false;
-            this.LureTest.Click += new System.EventHandler(this.LureTest_Click);
+            this.QuickTest.Location = new System.Drawing.Point(971, 462);
+            this.QuickTest.Name = "QuickTest";
+            this.QuickTest.Size = new System.Drawing.Size(75, 23);
+            this.QuickTest.TabIndex = 152;
+            this.QuickTest.Text = "Quick Test";
+            this.QuickTest.UseVisualStyleBackColor = true;
+            this.QuickTest.Visible = false;
+            this.QuickTest.Click += new System.EventHandler(this.QuickTest_Click);
+            // 
+            // menuStrip2
+            // 
+            this.menuStrip2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.menuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem});
+            this.menuStrip2.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip2.Name = "menuStrip2";
+            this.menuStrip2.Size = new System.Drawing.Size(1904, 24);
+            this.menuStrip2.TabIndex = 153;
+            this.menuStrip2.Text = "menuStrip2";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exitXToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
+            this.fileToolStripMenuItem.Text = "Game";
+            // 
+            // exitXToolStripMenuItem
+            // 
+            this.exitXToolStripMenuItem.Name = "exitXToolStripMenuItem";
+            this.exitXToolStripMenuItem.Size = new System.Drawing.Size(111, 22);
+            this.exitXToolStripMenuItem.Text = "Exit (X)";
+            this.exitXToolStripMenuItem.Click += new System.EventHandler(this.exitXToolStripMenuItem_Click);
+            // 
+            // playerStatus
+            // 
+            this.playerStatus.InitialImage = null;
+            this.playerStatus.Location = new System.Drawing.Point(911, 462);
+            this.playerStatus.Name = "playerStatus";
+            this.playerStatus.Size = new System.Drawing.Size(50, 52);
+            this.playerStatus.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.playerStatus.TabIndex = 154;
+            this.playerStatus.TabStop = false;
+            this.playerStatus.Visible = false;
+            // 
+            // aiStatus
+            // 
+            this.aiStatus.InitialImage = null;
+            this.aiStatus.Location = new System.Drawing.Point(911, 309);
+            this.aiStatus.Name = "aiStatus";
+            this.aiStatus.Size = new System.Drawing.Size(50, 52);
+            this.aiStatus.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.aiStatus.TabIndex = 155;
+            this.aiStatus.TabStop = false;
+            this.aiStatus.Visible = false;
             // 
             // Form1
             // 
@@ -1748,7 +1794,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(222)))), ((int)(((byte)(191)))));
             this.ClientSize = new System.Drawing.Size(1904, 1041);
-            this.Controls.Add(this.LureTest);
+            this.Controls.Add(this.aiStatus);
+            this.Controls.Add(this.playerStatus);
+            this.Controls.Add(this.QuickTest);
             this.Controls.Add(this.Replace);
             this.Controls.Add(this.KnockedOut);
             this.Controls.Add(this.PlayerEnd);
@@ -1836,7 +1884,7 @@
             this.Controls.Add(this.Bench1Energy3);
             this.Controls.Add(this.Bench1Energy2);
             this.Controls.Add(this.Bench1Energy1);
-            this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.menuStrip2);
             this.Controls.Add(this.ODeckSize);
             this.Controls.Add(this.DeckSize);
             this.Controls.Add(this.OpponentDeck);
@@ -1875,7 +1923,6 @@
             this.Controls.Add(this.PictureZoom);
             this.Controls.Add(this.OMaxHp);
             this.Controls.Add(this.HpLabel2);
-            this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "PokemonTCG";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -1978,6 +2025,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.HandIcon1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.HandIcon2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.HandIcon3)).EndInit();
+            this.menuStrip2.ResumeLayout(false);
+            this.menuStrip2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.playerStatus)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.aiStatus)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2027,7 +2078,6 @@
         private System.Windows.Forms.ContextMenuStrip RightClickMenu;
         private System.Windows.Forms.ToolStripMenuItem Play;
         private System.Windows.Forms.ToolStripMenuItem CheckCard;
-        private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.PictureBox Bench1Energy1;
         private System.Windows.Forms.PictureBox Bench1Energy2;
         private System.Windows.Forms.PictureBox Bench1Energy3;
@@ -2125,7 +2175,12 @@
         private System.Windows.Forms.ContextMenuStrip RightClickAIDiscard;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.Button Replace;
-        private System.Windows.Forms.Button LureTest;
+        private System.Windows.Forms.Button QuickTest;
+        private System.Windows.Forms.MenuStrip menuStrip2;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exitXToolStripMenuItem;
+        private System.Windows.Forms.PictureBox playerStatus;
+        private System.Windows.Forms.PictureBox aiStatus;
     }
 }
 

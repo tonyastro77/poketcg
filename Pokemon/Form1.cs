@@ -77,13 +77,16 @@ namespace Pokemon
 
         public Form1()
         {
+            //FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            //WindowState = FormWindowState.Maximized;
+            //TopMost = true;
             InitializeComponent();   
         }
 
         public void Form1_Load(object sender, EventArgs e)
         {
             //function for quick testing only
-            LureTest.Visible = false;
+            QuickTest.Visible = false;
 
             player.AddToDeck(new Pokemon(46, "Charmander", "basic", 50, 50, 'f', 'w', 'n', 1, "Obviously prefers hot places. If it gets caught in the rain, steam is said to spout from the tip of its tail.", "..\\..\\Img\\BSPainted\\BS_046.jpg", new Attack("Scratch", "offensive", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Ember", "offensive", "Discard 1 Fire Energy card attached to Charmander in order to use this attack.", 30, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>(), false));
             player.AddToDeck(new Pokemon(46, "Charmander", "basic", 50, 50, 'f', 'w', 'n', 1, "Obviously prefers hot places. If it gets caught in the rain, steam is said to spout from the tip of its tail.", "..\\..\\Img\\BSPainted\\BS_046.jpg", new Attack("Scratch", "offensive", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Ember", "offensive", "Discard 1 Fire Energy card attached to Charmander in order to use this attack.", 30, new EnergyCost(1, 0, 1, 0, 0, 0, 0)), new List<char>(), false));
@@ -150,7 +153,6 @@ namespace Pokemon
             ai.AddToDeck(new Pokemon(58, "Pikachu", "basic", 40, 40, 'e', 'l', 'n', 1, "When several of these Pokémon gather, their electricity can cause lightning storms.", "..\\..\\Img\\BSPainted\\BS_058.jpg", new Attack("Gnaw", "offensive", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Thunder Jolt", "offensive", "Flip a coin. If tails, Pikachu does 10 damage to itself.", 30, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>(), false));
             ai.AddToDeck(new Pokemon(58, "Pikachu", "basic", 40, 40, 'e', 'l', 'n', 1, "When several of these Pokémon gather, their electricity can cause lightning storms.", "..\\..\\Img\\BSPainted\\BS_058.jpg", new Attack("Gnaw", "offensive", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Thunder Jolt", "offensive", "Flip a coin. If tails, Pikachu does 10 damage to itself.", 30, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>(), false));
             ai.AddToDeck(new Pokemon(58, "Pikachu", "basic", 40, 40, 'e', 'l', 'n', 1, "When several of these Pokémon gather, their electricity can cause lightning storms.", "..\\..\\Img\\BSPainted\\BS_058.jpg", new Attack("Gnaw", "offensive", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Thunder Jolt", "offensive", "Flip a coin. If tails, Pikachu does 10 damage to itself.", 30, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>(), false));
-            ai.AddToDeck(new Pokemon(58, "Pikachu", "basic", 40, 40, 'e', 'l', 'n', 1, "When several of these Pokémon gather, their electricity can cause lightning storms.", "..\\..\\Img\\BSPainted\\BS_058.jpg", new Attack("Gnaw", "offensive", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Thunder Jolt", "offensive", "Flip a coin. If tails, Pikachu does 10 damage to itself.", 30, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>(), false));
             ai.AddToDeck(new Pokemon(53, "Magnemite", "basic", 40, 40, 'e', 'l', 'n', 1, "Uses anti-gravity to stay suspended. Appears without warning and uses attacks like Thunder Wave.", "..\\..\\Img\\BS\\BS_053.jpg", new Attack("Thunder Wave", "offensive", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 10, new EnergyCost(0, 0, 0, 0, 1, 0, 0)), new Attack("Self Destruct", "offensive", "Does 10 damage to each Pokémon on each player's Bench. (Don't apply Weakness and Resistance for Benched Pokémon.) Magnemite does 40 damage to itself.", 40, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>(), false));
             ai.AddToDeck(new Pokemon(53, "Magnemite", "basic", 40, 40, 'e', 'l', 'n', 1, "Uses anti-gravity to stay suspended. Appears without warning and uses attacks like Thunder Wave.", "..\\..\\Img\\BS\\BS_053.jpg", new Attack("Thunder Wave", "offensive", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 10, new EnergyCost(0, 0, 0, 0, 1, 0, 0)), new Attack("Self Destruct", "offensive", "Does 10 damage to each Pokémon on each player's Bench. (Don't apply Weakness and Resistance for Benched Pokémon.) Magnemite does 40 damage to itself.", 40, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>(), false));
             ai.AddToDeck(new Pokemon(53, "Magnemite", "basic", 40, 40, 'e', 'l', 'n', 1, "Uses anti-gravity to stay suspended. Appears without warning and uses attacks like Thunder Wave.", "..\\..\\Img\\BS\\BS_053.jpg", new Attack("Thunder Wave", "offensive", "Flip a coin. If heads, the Defending Pokémon is now Paralyzed.", 10, new EnergyCost(0, 0, 0, 0, 1, 0, 0)), new Attack("Self Destruct", "offensive", "Does 10 damage to each Pokémon on each player's Bench. (Don't apply Weakness and Resistance for Benched Pokémon.) Magnemite does 40 damage to itself.", 40, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>(), false));
@@ -179,6 +181,7 @@ namespace Pokemon
             ai.AddToDeck(new Pokemon(90, "Super Potion", "trainer", "directed", 't', "Discard 1 Energy card attached to 1 of your own Pokémon in order to remove up to 4 damage counters from that Pokémon.", "..\\..\\Img\\BS\\BS_090.jpg"));
             ai.AddToDeck(new Pokemon(95, "Switch", "trainer", "global", 't', "Switch 1 of your Benched Pokémon with your Active Pokémon.", "..\\..\\Img\\BS\\BS_095.jpg"));
             ai.AddToDeck(new Pokemon(95, "Switch", "trainer", "global", 't', "Switch 1 of your Benched Pokémon with your Active Pokémon.", "..\\..\\Img\\BS\\BS_095.jpg"));
+            ai.AddToDeck(new Pokemon(58, "Pikachu", "basic", 40, 40, 'e', 'l', 'n', 1, "When several of these Pokémon gather, their electricity can cause lightning storms.", "..\\..\\Img\\BSPainted\\BS_058.jpg", new Attack("Gnaw", "offensive", "", 10, new EnergyCost(1, 0, 0, 0, 0, 0, 0)), new Attack("Thunder Jolt", "offensive", "Flip a coin. If tails, Pikachu does 10 damage to itself.", 30, new EnergyCost(1, 0, 0, 0, 1, 0, 0)), new List<char>(), false));
             ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", 'e', "..\\..\\Img\\BS\\BS_100.jpg"));
             ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", 'e', "..\\..\\Img\\BS\\BS_100.jpg"));
             ai.AddToDeck(new Pokemon(100, "Lightning Energy", "energy", 'e', "..\\..\\Img\\BS\\BS_100.jpg"));
@@ -234,7 +237,7 @@ namespace Pokemon
             RightClickMenu.Enabled = false;
 
             
-            playBackgroundMusic();
+            //playBackgroundMusic();
             PictureZoom.Image = Image.FromFile("..\\..\\Img\\BS\\CardBack.jpg");
             OpponentZoom.Image = Image.FromFile("..\\..\\Img\\BS\\CardBack.jpg");
 
@@ -269,9 +272,9 @@ namespace Pokemon
             }
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void exitXToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            System.Console.WriteLine("After assignment, myInt: {0}", 3);
+            Application.Exit();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -4471,19 +4474,7 @@ namespace Pokemon
                         {                            
                             AttackingAI(1);
                             playedAttack = true;
-
-                            if (ai_Active_Pokemon.ShowRemHP() == 0)
-                            {
-                                PlayerEnd.Visible = false;
-                                KnockedOut.Location = new Point(683, 957);
-                                KnockedOut.Visible = true;
-                                FlipCoin.Visible = false;
-                                poisonedCheck = false;
-                                confusedCheck = false;
-                                paralyzedCheck = false;
-                                burnedCheck = false;
-                                asleepCheck = false;
-                            }                         
+                            CheckIfKnockedOut();
                         }
                         else
                         {
@@ -4498,18 +4489,7 @@ namespace Pokemon
                         {
                             AttackingAI(2);
                             playedAttack = true;
-                            if (ai_Active_Pokemon.ShowRemHP() == 0)
-                            {
-                                PlayerEnd.Visible = false;
-                                KnockedOut.Location = new Point(683, 957);
-                                KnockedOut.Visible = true;
-                                FlipCoin.Visible = false;
-                                poisonedCheck = false;
-                                confusedCheck = false;
-                                paralyzedCheck = false;
-                                burnedCheck = false;
-                                asleepCheck = false;
-                            }
+                            CheckIfKnockedOut();
                         }
                         else
                         {
@@ -4524,18 +4504,7 @@ namespace Pokemon
                         {
                             AttackingAI(3);
                             playedAttack = true;
-                            if (ai_Active_Pokemon.ShowRemHP() == 0)
-                            {
-                                PlayerEnd.Visible = false;
-                                KnockedOut.Location = new Point(683, 957);
-                                KnockedOut.Visible = true;
-                                FlipCoin.Visible = false;
-                                poisonedCheck = false;
-                                confusedCheck = false;
-                                paralyzedCheck = false;
-                                burnedCheck = false;
-                                asleepCheck = false;
-                            }
+                            CheckIfKnockedOut();
                         }
                         else
                         {
@@ -4890,7 +4859,14 @@ namespace Pokemon
                     gameMessage.Text = active_Pokemon.ShowName() + " is your new Active Pokémon.";
                     bench.RemoveFromBench(num);
                     UpdateBenchView();
-               
+                    if(isOpponentsTurn == true)
+                    {
+                        EndOpponentsTurn.Visible = true;
+                    }
+                    else
+                    {
+                        PlayerEnd.Visible = true;
+                    }
                 }
                 else
                 {
@@ -5219,116 +5195,8 @@ namespace Pokemon
             }
         }
 
-        private void FlipCoin_Click(object sender, EventArgs e)
-        {
-            SoundPlayer simpleSound = new SoundPlayer("..\\..\\Sounds\\flipcoin.wav");
-            simpleSound.Play();
-            gameMessage.Visible = false;
-            CoinResult.Visible = false;
-            FlipCoin.Visible = false;
-            Thread.Sleep(2000);
-            Random random = new Random();
-            int result = random.Next(0,2);
-            if(result == 0)
-            {
-                CoinResult.Image = Image.FromFile("..\\..\\Img\\Coins\\Wizards_Silver_Chansey_Coin.png");
-                CoinResult.Visible = true;              
-                gameMessage.Visible = true;
-                PlayerEnd.Visible = true;
-                
-                if (confusedCheck == true)
-                {
-                    gameMessage.Text = "You flip the coin and get Heads. " + ai_Active_Pokemon.ShowName() + " is now Confused.";
-                    confusedCheck = false;
-                    AIConfused = true;
-                }
-                else if(poisonedCheck == true)
-                {
-                    gameMessage.Text = "You flip the coin and get Heads. " + ai_Active_Pokemon.ShowName() + " is now Poisoned.";
-                    poisonedCheck = false;
-                    AIPoisoned = true;
-                }
-                else if(asleepCheck == true)
-                {
-                    gameMessage.Text = "You flip the coin and get Heads. " + ai_Active_Pokemon.ShowName() + " is now Asleep.";
-                    asleepCheck = false;
-                    AIAsleep = true;
-                }
-                else if (burnedCheck == true)
-                {
-                    gameMessage.Text = "You flip the coin and get Heads. " + ai_Active_Pokemon.ShowName() + " is now Burned.";
-                    burnedCheck = false;
-                    AIBurned = true;
-                }
-                else if (paralyzedCheck == true)
-                {
-                    gameMessage.Text = "You flip the coin and get Heads. " + ai_Active_Pokemon.ShowName() + " is now Paralyzed.";
-                    paralyzedCheck = false;
-                    AIParalyzed = true;
-                }
-                else if (dealsNothingCheck == true)
-                {
-                    ai_Active_Pokemon.DealDamage(30, hasWeakness, PlusPowerDamage);
-                    OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
-                    if (ai_Active_Pokemon.ShowRemHP() == 0)
-                    {
-                        gameMessage.Text = "You flip the coin and get Heads. You deal 30 damage on " + ai_Active_Pokemon.ShowName() + " and gets Knocked out.";
-                        PlayerEnd.Visible = false;
-                        KnockedOut.Location = new Point(683, 957);
-                        KnockedOut.Visible = true;
-                    }
-                    else
-                    {
-                        gameMessage.Text = "You flip the coin and get Heads. You deal 30 damage on " + ai_Active_Pokemon.ShowName() + ".";
-                    }
-                    dealsNothingCheck = false;                  
-                }                         
-            }
-            else
-            {
-                CoinResult.Image = Image.FromFile("..\\..\\Img\\Coins\\tails.gif");
-                CoinResult.Visible = true;
-                gameMessage.Text = "You flip the coin and get Tails, nothing else happens.";
-                gameMessage.Visible = true;
-                PlayerEnd.Visible = true;
-            }
-        }
-        private void KnockedOut_Click(object sender, EventArgs e)
-        {
+       
 
-            gameMessage.Text = ai_Active_Pokemon.ShowName() + " is Knocked out so it is to be replaced by a Benched Pokémon.";
-            //Clear Active Card completely from effects
-
-            ai_Active_Pokemon.ClearEverthingFromCard();
-            AIConfused = false;
-            AIParalyzed = false;
-            AIAsleep = false;
-            AIPoisoned = false;
-            AIBurned = false;
-
-            //Passing all the used cards to the discard
-            for(int i = 0; i < ai_used.Count(); i++)
-            {
-                ai_discard.Add(ai_used.GetCard(i));
-            }
-            ai_used.DiscardAll();
-
-            //Clearing the views
-            ai_discard.Add(ai_Active_Pokemon.GetActivePokemon());
-            OpCardName.Visible = false;
-            EnergyBox2.Visible = false;
-            OpponentZoom.Image = Image.FromFile("..\\..\\Img\\BS\\CardBack.jpg");
-            HpLabel2.Visible = false;
-            OMaxHp.Visible = false;
-            OpponentHpBar.Visible = false;
-            ai_Active_Pokemon.Become(new Pokemon(0, "null", "", 'u', ""));
-            UpdateAIDiscardView();
-            UpdateAIActivePokemonView();
-  
-            KnockedOut.Visible = false;
-            Replace.Location = new Point(683, 957);
-            Replace.Visible = true;
-        }
         private void Mulligan_Click(object sender, EventArgs e)
         {
             player.ShuffleCardFromHandIntoDeck(player_Hand.PlayCard(0));
@@ -6056,6 +5924,106 @@ namespace Pokemon
             }
         }
 
+        private void FlipCoin_Click(object sender, EventArgs e)
+        {
+            SoundPlayer simpleSound = new SoundPlayer("..\\..\\Sounds\\flipcoin.wav");
+            simpleSound.Play();
+            gameMessage.Visible = false;
+            CoinResult.Visible = false;
+            FlipCoin.Visible = false;
+            Thread.Sleep(2000);
+            Random random = new Random();
+            int result = random.Next(0, 2);
+            if (result == 0)
+            {
+                CoinResult.Image = Image.FromFile("..\\..\\Img\\Coins\\Wizards_Silver_Chansey_Coin.png");
+                CoinResult.Visible = true;
+                gameMessage.Visible = true;
+                PlayerEnd.Visible = true;
+
+                if (confusedCheck == true)
+                {
+                    gameMessage.Text = "You flip the coin and get Heads. " + ai_Active_Pokemon.ShowName() + " is now Confused.";
+                    confusedCheck = false;
+                    AIConfused = true;
+                }
+                else if (poisonedCheck == true)
+                {
+                    gameMessage.Text = "You flip the coin and get Heads. " + ai_Active_Pokemon.ShowName() + " is now Poisoned.";
+                    poisonedCheck = false;
+                    AIPoisoned = true;
+                }
+                else if (asleepCheck == true)
+                {
+                    gameMessage.Text = "You flip the coin and get Heads. " + ai_Active_Pokemon.ShowName() + " is now Asleep.";
+                    asleepCheck = false;
+                    AIAsleep = true;
+                }
+                else if (burnedCheck == true)
+                {
+                    gameMessage.Text = "You flip the coin and get Heads. " + ai_Active_Pokemon.ShowName() + " is now Burned.";
+                    burnedCheck = false;
+                    AIBurned = true;
+                }
+                else if (paralyzedCheck == true)
+                {
+                    gameMessage.Text = "You flip the coin and get Heads. " + ai_Active_Pokemon.ShowName() + " is now Paralyzed.";
+                    paralyzedCheck = false;
+                    AIParalyzed = true;
+                }
+                else if (dealsNothingCheck == true)
+                {
+                    ai_Active_Pokemon.DealDamage(30, hasWeakness, PlusPowerDamage);
+                    OpponentHpBar.Value = ai_Active_Pokemon.ShowRemHP();
+                    if (ai_Active_Pokemon.ShowRemHP() == 0)
+                    {
+                        gameMessage.Text = "You flip the coin and get Heads. You deal 30 damage on " + ai_Active_Pokemon.ShowName() + " and gets Knocked out.";
+                        PlayerEnd.Visible = false;
+                        KnockedOut.Location = new Point(683, 957);
+                        KnockedOut.Visible = true;
+                    }
+                    else
+                    {
+                        gameMessage.Text = "You flip the coin and get Heads. You deal 30 damage on " + ai_Active_Pokemon.ShowName() + ".";
+                    }
+                    dealsNothingCheck = false;
+                }
+            }
+            else
+            {
+                CoinResult.Image = Image.FromFile("..\\..\\Img\\Coins\\tails.gif");
+                CoinResult.Visible = true;
+                gameMessage.Text = "You flip the coin and get Tails, nothing else happens.";
+                gameMessage.Visible = true;
+                PlayerEnd.Visible = true;
+            }
+        }
+
+        private void AIFlipsCoin(string type, int reps)
+        {
+            SoundPlayer simpleSound = new SoundPlayer("..\\..\\Sounds\\flipcoin.wav");
+            simpleSound.Play();
+
+            Random random = new Random();
+            int result = random.Next(0, 2);
+
+            if (result == 0)
+            {
+                CoinResult.Image = Image.FromFile("..\\..\\Img\\Coins\\Wizards_Silver_Chansey_Coin.png");
+                CoinResult.Visible = true;
+                if(type == "confusion")
+                {
+                    PlayerConfused = true;
+                    playerStatus.Image = Image.FromFile("..\\..\\Img\\Status\\confusion.png");
+                    playerStatus.Visible = true;                  
+                }
+            }
+            else
+            {
+                CoinResult.Image = Image.FromFile("..\\..\\Img\\Coins\\tails.gif");
+                CoinResult.Visible = true;
+            }
+        }
         private void AIAttacks(int index)
         {
             if (ai_Active_Pokemon.ShowName() == "Abra")
@@ -6064,7 +6032,18 @@ namespace Pokemon
                 {
                     active_Pokemon.DealDamage(10, hasWeakness, PlusPowerDamage);
                     PlayerHpBar.Value = active_Pokemon.ShowRemHP();
-                    gameMessage.Text = "The AI performs Psychock on " + active_Pokemon.ShowName() + " and deals 10 damage.";
+                    if(PlayerConfused != true)
+                    {
+                        AIFlipsCoin("confusion", 1);
+                        if (PlayerConfused == true)
+                        {
+                            gameMessage.Text = "The AI performs Psychock on " + active_Pokemon.ShowName() + " dealing 10 damage and leaving you CONFUSED.";
+                        }
+                    }                 
+                    else
+                    {
+                        gameMessage.Text = "The AI performs Psychock on " + active_Pokemon.ShowName() + " and deals 10 damage.";
+                    }                   
                 }
             }
             else if (ai_Active_Pokemon.ShowName() == "Drowzee")
@@ -6079,7 +6058,15 @@ namespace Pokemon
                 {
                     active_Pokemon.DealDamage(10, hasWeakness, PlusPowerDamage);
                     PlayerHpBar.Value = active_Pokemon.ShowRemHP();
-                    gameMessage.Text = "The AI performs Confuse Ray on " + active_Pokemon.ShowName() + " and deals 10 damage.";
+                    AIFlipsCoin("confusion", 1);
+                    if (PlayerConfused == true)
+                    {
+                        gameMessage.Text = "The AI performs Confuse Ray on " + active_Pokemon.ShowName() + " dealing 10 damage and leaving you CONFUSED.";
+                    }
+                    else
+                    {
+                        gameMessage.Text = "The AI performs Confuse Ray on " + active_Pokemon.ShowName() + " and deals 10 damage.";
+                    }          
                 }
             }
             else if (ai_Active_Pokemon.ShowName() == "Gastly")
@@ -6789,16 +6776,9 @@ namespace Pokemon
             }        
         }
 
-        private void LureTest_Click(object sender, EventArgs e)
+        private void QuickTest_Click(object sender, EventArgs e)
         {
-            gameMessage.Text = "You play Lass. You can see your Opponents's hand now, also you show yours.";
-            PlayerEnd.Visible = false;
-            trainer_lass = true;
-            Next2.Visible = true;
-            Next2.Location = new Point(683, 957);
-
-            HideBackground();
-            ShowAIHandView();
+            AIFlipsCoin("confusion", 1);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -6838,26 +6818,7 @@ namespace Pokemon
                     }
                     AIAttacks(2);
                     aiPlayedAttack = true;
-                    if (active_Pokemon.ShowRemHP() == 0)
-                    {
-                        EndOpponentsTurn.Visible = false;
-                        active_Pokemon.ClearEverthingFromCard();
-                        gameMessage.Text = active_Pokemon.ShowName() + " is Knocked out. Replace it by a Benched Pokémon.";
-                        for (int i = 0; i < player_used.Count(); i++)
-                        {
-                            discard.Add(player_used.GetCard(i));
-                        }
-                        player_used.DiscardAll();
-
-                        KnockedOut.Location = new Point(683, 957);
-                        KnockedOut.Visible = true;
-                        FlipCoin.Visible = false;
-                        poisonedCheck = false;
-                        confusedCheck = false;
-                        paralyzedCheck = false;
-                        burnedCheck = false;
-                        asleepCheck = false;
-                    }
+                    CheckIfKnockedOut();
                     _ticks = 0;
                 }
             }
@@ -6875,6 +6836,7 @@ namespace Pokemon
                     }
                     AIAttacks(1);
                     aiPlayedAttack = true;
+                    CheckIfKnockedOut();
                     _ticks = 0;
                 }
             }
@@ -6887,15 +6849,104 @@ namespace Pokemon
                     timer1.Stop();
                     _ticks = 0;
                     EndOpponentsTurn.Location = new Point(683, 957);
-                    EndOpponentsTurn.Visible = true;                   
-                    SoundPlayer sound = new SoundPlayer("..\\..\\Sounds\\proceed.wav");
-                    sound.Play();
+                    EndOpponentsTurn.Visible = true;
+
                 }
                 
             }            
             
         }
+        private void CheckIfKnockedOut()
+        {
+            if (ai_Active_Pokemon.ShowRemHP() == 0 && active_Pokemon.ShowRemHP() != 0)
+            {
+                PlayerEnd.Visible = false;
+                EndOpponentsTurn.Visible = false;
+                KnockedOut.Location = new Point(683, 957);
+                KnockedOut.Visible = true;
+                FlipCoin.Visible = false;
+                poisonedCheck = false;
+                confusedCheck = false;
+                paralyzedCheck = false;
+                burnedCheck = false;
+                asleepCheck = false;
+            }
+            else if(active_Pokemon.ShowRemHP() == 0 && ai_Active_Pokemon.ShowRemHP() != 0)
+            {
+                PlayerEnd.Visible = false;
+                EndOpponentsTurn.Visible = false;
+                gameMessage.Text = active_Pokemon.ShowName() + " is Knocked out. Choose a Benched Pokémon now.";
+                active_Pokemon.ClearEverthingFromCard();
+                PlayerAsleep = false;
+                PlayerBurned = false;
+                PlayerConfused = false;
+                PlayerParalyzed = false;
+                PlayerPoisoned = false;
 
+                for (int i = 0; i < player_used.Count(); i++)
+                {
+                    discard.Add(player_used.GetCard(i));
+                }
+
+                player_used.DiscardAll();
+                discard.Add(active_Pokemon.GetActivePokemon());
+                CardName.Visible = false;
+                EnergyBox1.Visible = false;
+                PictureZoom.Image = Image.FromFile("..\\..\\Img\\BS\\CardBack.jpg");
+                HpLabel1.Visible = false;
+                MaxHp.Visible = false;
+                PlayerHpBar.Visible = false;
+                active_Pokemon.Become(new Pokemon(0, "null", "", 'u', ""));
+                UpdateDiscardView();
+                UpdateActivePokemonView();               
+            }
+            else if(active_Pokemon.ShowRemHP() == 0 && ai_Active_Pokemon.ShowRemHP() == 0)
+            {
+                PlayerEnd.Visible = false;
+                EndOpponentsTurn.Visible = false;
+            }
+            else
+            {
+                SoundPlayer sound = new SoundPlayer("..\\..\\Sounds\\proceed.wav");
+                sound.Play();
+            }
+        }
+        private void KnockedOut_Click(object sender, EventArgs e)
+        {
+
+            gameMessage.Text = ai_Active_Pokemon.ShowName() + " is Knocked out so it is to be replaced by a Benched Pokémon.";
+            //Clear Active Card completely from effects
+
+            ai_Active_Pokemon.ClearEverthingFromCard();
+            AIConfused = false;
+            AIParalyzed = false;
+            AIAsleep = false;
+            AIPoisoned = false;
+            AIBurned = false;
+
+            //Passing all the used cards to the discard
+            for (int i = 0; i < ai_used.Count(); i++)
+            {
+                ai_discard.Add(ai_used.GetCard(i));
+            }
+            ai_used.DiscardAll();
+
+            //Clearing the views
+            ai_discard.Add(ai_Active_Pokemon.GetActivePokemon());
+            OpCardName.Visible = false;
+            EnergyBox2.Visible = false;
+            OpponentZoom.Image = Image.FromFile("..\\..\\Img\\BS\\CardBack.jpg");
+            HpLabel2.Visible = false;
+            OMaxHp.Visible = false;
+            OpponentHpBar.Visible = false;
+            ai_Active_Pokemon.Become(new Pokemon(0, "null", "", 'u', ""));
+            UpdateAIDiscardView();
+            UpdateAIActivePokemonView();
+
+            KnockedOut.Visible = false;
+            Replace.Location = new Point(683, 957);
+            Replace.Visible = true;
+        }
         private void Hand1_Click(object sender, EventArgs e)
         {
             if(energy_retrieval == true)
@@ -7075,5 +7126,6 @@ namespace Pokemon
                 }
             }
         }
+        
     }
 }

@@ -213,6 +213,11 @@
     <Content Include="Img\EnergyBox\Water.gif" />
     <Content Include="Img\N1\N1_053.jpg" />
     <Content Include="Img\N1\N1_054.jpg" />
+    <Content Include="Img\Status\asleep.png" />
+    <Content Include="Img\Status\burned.jpg" />
+    <Content Include="Img\Status\confusion.png" />
+    <Content Include="Img\Status\paralysis.png" />
+    <Content Include="Img\Status\poison.png" />
     <Content Include="Resources\Fire.gif" />
     <Content Include="Sounds\mulligan.wav" />
     <Content Include="Sounds\youdone.wav" />
