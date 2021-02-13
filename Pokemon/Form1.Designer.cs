@@ -48,7 +48,6 @@
             this.PictureBench2 = new System.Windows.Forms.PictureBox();
             this.PictureBench1 = new System.Windows.Forms.PictureBox();
             this.PictureBench3 = new System.Windows.Forms.PictureBox();
-            this.Draw = new System.Windows.Forms.Button();
             this.PictureBench5 = new System.Windows.Forms.PictureBox();
             this.OpponentZoom = new System.Windows.Forms.PictureBox();
             this.OpponentActive = new System.Windows.Forms.PictureBox();
@@ -57,9 +56,11 @@
             this.OpponentBench1 = new System.Windows.Forms.PictureBox();
             this.OpponentBench3 = new System.Windows.Forms.PictureBox();
             this.OpponentBench5 = new System.Windows.Forms.PictureBox();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.AITurnTimer = new System.Windows.Forms.Timer(this.components);
             this.Hand1 = new System.Windows.Forms.PictureBox();
             this.RightClickMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.PlayAsActiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.PlayPokémonToBenchBeginning = new System.Windows.Forms.ToolStripMenuItem();
             this.Play = new System.Windows.Forms.ToolStripMenuItem();
             this.CheckCard = new System.Windows.Forms.ToolStripMenuItem();
             this.Hand2 = new System.Windows.Forms.PictureBox();
@@ -161,9 +162,6 @@
             this.QuickTest = new System.Windows.Forms.Button();
             this.playerStatus = new System.Windows.Forms.PictureBox();
             this.aiStatus = new System.Windows.Forms.PictureBox();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.ActiveDamage = new System.Windows.Forms.Label();
@@ -177,6 +175,51 @@
             this.AvatarName2 = new System.Windows.Forms.Label();
             this.DeckLabel1 = new System.Windows.Forms.Label();
             this.AvatarName1 = new System.Windows.Forms.Label();
+            this.CheckCardPanel = new System.Windows.Forms.Panel();
+            this.PictureBoxPanel = new System.Windows.Forms.PictureBox();
+            this.CheckCardPanel2 = new System.Windows.Forms.Panel();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.panel7 = new System.Windows.Forms.Panel();
+            this.CheckCardR5 = new System.Windows.Forms.PictureBox();
+            this.CheckCardR4 = new System.Windows.Forms.PictureBox();
+            this.CheckCardR3 = new System.Windows.Forms.PictureBox();
+            this.CheckCardR2 = new System.Windows.Forms.PictureBox();
+            this.CheckCardR1 = new System.Windows.Forms.PictureBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.CheckCardResistance = new System.Windows.Forms.PictureBox();
+            this.CheckCardWeakness = new System.Windows.Forms.PictureBox();
+            this.CheckCardHp = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.CheckCardName = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.panel9 = new System.Windows.Forms.Panel();
+            this.PlayerUsedBox = new System.Windows.Forms.PictureBox();
+            this.PrizePopUp1 = new System.Windows.Forms.Label();
+            this.PrizePlayerNumber = new System.Windows.Forms.Label();
+            this.PrizeBox1 = new System.Windows.Forms.PictureBox();
+            this.PictureActivePanel = new System.Windows.Forms.Panel();
+            this.panel8 = new System.Windows.Forms.Panel();
+            this.OpponentUsedBox = new System.Windows.Forms.PictureBox();
+            this.PrizePopUp2 = new System.Windows.Forms.Label();
+            this.PrizeOpponentNumber = new System.Windows.Forms.Label();
+            this.PrizeBox2 = new System.Windows.Forms.PictureBox();
+            this.CoinRolling = new System.Windows.Forms.PictureBox();
+            this.TimerBeginning = new System.Windows.Forms.Timer(this.components);
+            this.AvatarPanel2 = new System.Windows.Forms.Panel();
+            this.AvatarPanel1 = new System.Windows.Forms.Panel();
+            this.YourTurnTimer = new System.Windows.Forms.Timer(this.components);
+            this.AIStartingTurnTimer = new System.Windows.Forms.Timer(this.components);
+            this.AIFirstTurnTimer = new System.Windows.Forms.Timer(this.components);
+            this.AttackCoinTimer = new System.Windows.Forms.Timer(this.components);
+            this.PlayerEndTimer = new System.Windows.Forms.Timer(this.components);
+            this.CoinBeginningTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.PictureZoom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureActive)).BeginInit();
             this.RightClickMenu3.SuspendLayout();
@@ -276,13 +319,36 @@
             ((System.ComponentModel.ISupportInitialize)(this.HandIcon3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.playerStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.aiStatus)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Avatar2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Avatar1)).BeginInit();
+            this.CheckCardPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PictureBoxPanel)).BeginInit();
+            this.CheckCardPanel2.SuspendLayout();
+            this.panel4.SuspendLayout();
+            this.panel7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.CheckCardR5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CheckCardR4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CheckCardR3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CheckCardR2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CheckCardR1)).BeginInit();
+            this.panel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.CheckCardResistance)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CheckCardWeakness)).BeginInit();
+            this.panel3.SuspendLayout();
+            this.panel6.SuspendLayout();
+            this.panel2.SuspendLayout();
+            this.panel9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PlayerUsedBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PrizeBox1)).BeginInit();
+            this.PictureActivePanel.SuspendLayout();
+            this.panel8.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.OpponentUsedBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PrizeBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CoinRolling)).BeginInit();
+            this.AvatarPanel2.SuspendLayout();
+            this.AvatarPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // PictureZoom
@@ -309,6 +375,8 @@
             this.Mulligan.UseVisualStyleBackColor = false;
             this.Mulligan.Visible = false;
             this.Mulligan.Click += new System.EventHandler(this.Mulligan_Click);
+            this.Mulligan.MouseLeave += new System.EventHandler(this.Button_MouseLeave);
+            this.Mulligan.MouseHover += new System.EventHandler(this.Button_MouseHover);
             // 
             // StartCheck
             // 
@@ -323,6 +391,8 @@
             this.StartCheck.UseVisualStyleBackColor = false;
             this.StartCheck.Visible = false;
             this.StartCheck.Click += new System.EventHandler(this.StartCheck_Click);
+            this.StartCheck.MouseLeave += new System.EventHandler(this.Button_MouseLeave);
+            this.StartCheck.MouseHover += new System.EventHandler(this.Button_MouseHover);
             // 
             // Done
             // 
@@ -336,17 +406,20 @@
             this.Done.Text = "DONE";
             this.Done.UseVisualStyleBackColor = false;
             this.Done.Visible = false;
+            this.Done.MouseLeave += new System.EventHandler(this.Button_MouseLeave);
+            this.Done.MouseHover += new System.EventHandler(this.Button_MouseHover);
             // 
             // PictureActive
             // 
             this.PictureActive.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.PictureActive.ContextMenuStrip = this.RightClickMenu3;
-            this.PictureActive.Location = new System.Drawing.Point(876, 540);
+            this.PictureActive.Location = new System.Drawing.Point(3, 3);
             this.PictureActive.Name = "PictureActive";
             this.PictureActive.Size = new System.Drawing.Size(130, 185);
             this.PictureActive.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.PictureActive.TabIndex = 10;
             this.PictureActive.TabStop = false;
+            this.PictureActive.Click += new System.EventHandler(this.PictureActive_Click);
             this.PictureActive.MouseLeave += new System.EventHandler(this.HoverOff_Click);
             this.PictureActive.MouseHover += new System.EventHandler(this.HoverOnActive_Click);
             // 
@@ -483,19 +556,6 @@
             this.PictureBench3.MouseLeave += new System.EventHandler(this.HoverOff_Click);
             this.PictureBench3.MouseHover += new System.EventHandler(this.HoverOnBench_Click);
             // 
-            // Draw
-            // 
-            this.Draw.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.Draw.Font = new System.Drawing.Font("Gill Sans Ultra Bold", 14.25F);
-            this.Draw.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.Draw.Location = new System.Drawing.Point(1292, 976);
-            this.Draw.Name = "Draw";
-            this.Draw.Size = new System.Drawing.Size(176, 50);
-            this.Draw.TabIndex = 22;
-            this.Draw.Text = "START";
-            this.Draw.UseVisualStyleBackColor = false;
-            this.Draw.Click += new System.EventHandler(this.Draw_Click);
-            // 
             // PictureBench5
             // 
             this.PictureBench5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -531,6 +591,7 @@
             this.OpponentActive.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.OpponentActive.TabIndex = 31;
             this.OpponentActive.TabStop = false;
+            this.OpponentActive.Click += new System.EventHandler(this.OpponentActive_Click);
             this.OpponentActive.MouseHover += new System.EventHandler(this.HoverOnAI_Active_Click);
             // 
             // OpponentBench4
@@ -598,9 +659,9 @@
             this.OpponentBench5.Click += new System.EventHandler(this.AIPictureBench_Click);
             this.OpponentBench5.MouseHover += new System.EventHandler(this.HoverOnAI_Active_Click);
             // 
-            // timer1
+            // AITurnTimer
             // 
-            this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
+            this.AITurnTimer.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
             // Hand1
             // 
@@ -621,23 +682,40 @@
             // 
             this.RightClickMenu.AccessibleName = "";
             this.RightClickMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.PlayAsActiveToolStripMenuItem,
+            this.PlayPokémonToBenchBeginning,
             this.Play,
             this.CheckCard});
             this.RightClickMenu.Name = "RightClickMenu";
-            this.RightClickMenu.Size = new System.Drawing.Size(108, 48);
+            this.RightClickMenu.Size = new System.Drawing.Size(147, 92);
+            // 
+            // PlayAsActiveToolStripMenuItem
+            // 
+            this.PlayAsActiveToolStripMenuItem.Name = "PlayAsActiveToolStripMenuItem";
+            this.PlayAsActiveToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.PlayAsActiveToolStripMenuItem.Text = "Play as Active";
+            this.PlayAsActiveToolStripMenuItem.Click += new System.EventHandler(this.PlayAsActiveToolStripMenuItem_Click);
+            // 
+            // PlayPokémonToBenchBeginning
+            // 
+            this.PlayPokémonToBenchBeginning.Name = "PlayPokémonToBenchBeginning";
+            this.PlayPokémonToBenchBeginning.Size = new System.Drawing.Size(146, 22);
+            this.PlayPokémonToBenchBeginning.Text = "Play";
+            this.PlayPokémonToBenchBeginning.Click += new System.EventHandler(this.PlayPokémonToBenchBeginning_Click);
             // 
             // Play
             // 
             this.Play.Name = "Play";
-            this.Play.Size = new System.Drawing.Size(107, 22);
+            this.Play.Size = new System.Drawing.Size(146, 22);
             this.Play.Text = "Play";
             this.Play.Click += new System.EventHandler(this.Play_Click);
             // 
             // CheckCard
             // 
             this.CheckCard.Name = "CheckCard";
-            this.CheckCard.Size = new System.Drawing.Size(107, 22);
+            this.CheckCard.Size = new System.Drawing.Size(146, 22);
             this.CheckCard.Text = "Check";
+            this.CheckCard.Click += new System.EventHandler(this.CheckCard_Click);
             // 
             // Hand2
             // 
@@ -677,6 +755,7 @@
             this.OpponentDeck.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.OpponentDeck.TabIndex = 58;
             this.OpponentDeck.TabStop = false;
+            this.OpponentDeck.MouseLeave += new System.EventHandler(this.HoverOff_Click);
             this.OpponentDeck.MouseHover += new System.EventHandler(this.OpponentDeck_MouseHover);
             // 
             // DeckSize
@@ -684,7 +763,7 @@
             this.DeckSize.BackColor = System.Drawing.Color.MidnightBlue;
             this.DeckSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold);
             this.DeckSize.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.DeckSize.Location = new System.Drawing.Point(1827, 877);
+            this.DeckSize.Location = new System.Drawing.Point(102, 5);
             this.DeckSize.Name = "DeckSize";
             this.DeckSize.Size = new System.Drawing.Size(58, 23);
             this.DeckSize.TabIndex = 59;
@@ -695,7 +774,7 @@
             this.ODeckSize.BackColor = System.Drawing.Color.MidnightBlue;
             this.ODeckSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ODeckSize.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.ODeckSize.Location = new System.Drawing.Point(115, 14);
+            this.ODeckSize.Location = new System.Drawing.Point(107, 5);
             this.ODeckSize.Name = "ODeckSize";
             this.ODeckSize.Size = new System.Drawing.Size(55, 23);
             this.ODeckSize.TabIndex = 60;
@@ -805,7 +884,7 @@
             // 
             this.ActiveEnergy1.BackColor = System.Drawing.Color.Transparent;
             this.ActiveEnergy1.InitialImage = null;
-            this.ActiveEnergy1.Location = new System.Drawing.Point(875, 694);
+            this.ActiveEnergy1.Location = new System.Drawing.Point(4, 157);
             this.ActiveEnergy1.Name = "ActiveEnergy1";
             this.ActiveEnergy1.Size = new System.Drawing.Size(26, 26);
             this.ActiveEnergy1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -817,7 +896,7 @@
             // 
             this.ActiveEnergy2.BackColor = System.Drawing.Color.Transparent;
             this.ActiveEnergy2.InitialImage = null;
-            this.ActiveEnergy2.Location = new System.Drawing.Point(901, 694);
+            this.ActiveEnergy2.Location = new System.Drawing.Point(30, 157);
             this.ActiveEnergy2.Name = "ActiveEnergy2";
             this.ActiveEnergy2.Size = new System.Drawing.Size(26, 26);
             this.ActiveEnergy2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -829,7 +908,7 @@
             // 
             this.ActiveEnergy3.BackColor = System.Drawing.Color.Transparent;
             this.ActiveEnergy3.InitialImage = null;
-            this.ActiveEnergy3.Location = new System.Drawing.Point(927, 694);
+            this.ActiveEnergy3.Location = new System.Drawing.Point(54, 157);
             this.ActiveEnergy3.Name = "ActiveEnergy3";
             this.ActiveEnergy3.Size = new System.Drawing.Size(26, 26);
             this.ActiveEnergy3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -841,7 +920,7 @@
             // 
             this.ActiveEnergy4.BackColor = System.Drawing.Color.Transparent;
             this.ActiveEnergy4.InitialImage = null;
-            this.ActiveEnergy4.Location = new System.Drawing.Point(953, 694);
+            this.ActiveEnergy4.Location = new System.Drawing.Point(79, 157);
             this.ActiveEnergy4.Name = "ActiveEnergy4";
             this.ActiveEnergy4.Size = new System.Drawing.Size(26, 26);
             this.ActiveEnergy4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -853,7 +932,7 @@
             // 
             this.ActiveEnergy5.BackColor = System.Drawing.Color.Transparent;
             this.ActiveEnergy5.InitialImage = null;
-            this.ActiveEnergy5.Location = new System.Drawing.Point(980, 694);
+            this.ActiveEnergy5.Location = new System.Drawing.Point(106, 157);
             this.ActiveEnergy5.Name = "ActiveEnergy5";
             this.ActiveEnergy5.Size = new System.Drawing.Size(26, 26);
             this.ActiveEnergy5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1513,6 +1592,8 @@
             this.Heads.UseVisualStyleBackColor = false;
             this.Heads.Visible = false;
             this.Heads.Click += new System.EventHandler(this.Heads_Click);
+            this.Heads.MouseLeave += new System.EventHandler(this.Button_MouseLeave);
+            this.Heads.MouseHover += new System.EventHandler(this.Button_MouseHover);
             // 
             // Tails
             // 
@@ -1527,6 +1608,8 @@
             this.Tails.UseVisualStyleBackColor = false;
             this.Tails.Visible = false;
             this.Tails.Click += new System.EventHandler(this.Tails_Click);
+            this.Tails.MouseLeave += new System.EventHandler(this.Button_MouseLeave);
+            this.Tails.MouseHover += new System.EventHandler(this.Button_MouseHover);
             // 
             // Next1
             // 
@@ -1541,6 +1624,8 @@
             this.Next1.UseVisualStyleBackColor = false;
             this.Next1.Visible = false;
             this.Next1.Click += new System.EventHandler(this.Next1_Click);
+            this.Next1.MouseLeave += new System.EventHandler(this.Button_MouseLeave);
+            this.Next1.MouseHover += new System.EventHandler(this.Button_MouseHover);
             // 
             // Draw2
             // 
@@ -1555,6 +1640,8 @@
             this.Draw2.UseVisualStyleBackColor = false;
             this.Draw2.Visible = false;
             this.Draw2.Click += new System.EventHandler(this.Draw2_Click);
+            this.Draw2.MouseLeave += new System.EventHandler(this.Button_MouseLeave);
+            this.Draw2.MouseHover += new System.EventHandler(this.Button_MouseHover);
             // 
             // HandIcon1
             // 
@@ -1620,6 +1707,8 @@
             this.Mulligan2.UseVisualStyleBackColor = false;
             this.Mulligan2.Visible = false;
             this.Mulligan2.Click += new System.EventHandler(this.Mulligan2_Click);
+            this.Mulligan2.MouseLeave += new System.EventHandler(this.Button_MouseLeave);
+            this.Mulligan2.MouseHover += new System.EventHandler(this.Button_MouseHover);
             // 
             // Mulligan3
             // 
@@ -1634,6 +1723,8 @@
             this.Mulligan3.UseVisualStyleBackColor = false;
             this.Mulligan3.Visible = false;
             this.Mulligan3.Click += new System.EventHandler(this.Mulligan3_Click);
+            this.Mulligan3.MouseLeave += new System.EventHandler(this.Button_MouseLeave);
+            this.Mulligan3.MouseHover += new System.EventHandler(this.Button_MouseHover);
             // 
             // EndOpponentsTurn
             // 
@@ -1647,7 +1738,8 @@
             this.EndOpponentsTurn.Text = "END";
             this.EndOpponentsTurn.UseVisualStyleBackColor = false;
             this.EndOpponentsTurn.Visible = false;
-            this.EndOpponentsTurn.Click += new System.EventHandler(this.EndOpponentsTurn_Click);
+            this.EndOpponentsTurn.MouseLeave += new System.EventHandler(this.Button_MouseLeave);
+            this.EndOpponentsTurn.MouseHover += new System.EventHandler(this.Button_MouseHover);
             // 
             // PlayerEnd
             // 
@@ -1658,24 +1750,19 @@
             this.PlayerEnd.Name = "PlayerEnd";
             this.PlayerEnd.Size = new System.Drawing.Size(176, 50);
             this.PlayerEnd.TabIndex = 149;
-            this.PlayerEnd.Text = "END";
+            this.PlayerEnd.Text = "DONE";
             this.PlayerEnd.UseVisualStyleBackColor = false;
             this.PlayerEnd.Visible = false;
             this.PlayerEnd.Click += new System.EventHandler(this.PlayerEnd_Click);
+            this.PlayerEnd.MouseLeave += new System.EventHandler(this.Button_MouseLeave);
+            this.PlayerEnd.MouseHover += new System.EventHandler(this.Button_MouseHover);
             // 
             // FlipCoin
             // 
-            this.FlipCoin.BackColor = System.Drawing.Color.DimGray;
-            this.FlipCoin.Font = new System.Drawing.Font("Gill Sans Ultra Bold", 14.25F);
-            this.FlipCoin.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.FlipCoin.Location = new System.Drawing.Point(1031, 600);
+            this.FlipCoin.Location = new System.Drawing.Point(0, 0);
             this.FlipCoin.Name = "FlipCoin";
-            this.FlipCoin.Size = new System.Drawing.Size(176, 50);
-            this.FlipCoin.TabIndex = 132;
-            this.FlipCoin.Text = "FLIP COIN";
-            this.FlipCoin.UseVisualStyleBackColor = false;
-            this.FlipCoin.Visible = false;
-            this.FlipCoin.Click += new System.EventHandler(this.FlipCoin_Click);
+            this.FlipCoin.Size = new System.Drawing.Size(75, 23);
+            this.FlipCoin.TabIndex = 178;
             // 
             // KnockedOut
             // 
@@ -1690,6 +1777,8 @@
             this.KnockedOut.UseVisualStyleBackColor = false;
             this.KnockedOut.Visible = false;
             this.KnockedOut.Click += new System.EventHandler(this.KnockedOut_Click);
+            this.KnockedOut.MouseLeave += new System.EventHandler(this.Button_MouseLeave);
+            this.KnockedOut.MouseHover += new System.EventHandler(this.Button_MouseHover);
             // 
             // Replace
             // 
@@ -1737,37 +1826,6 @@
             this.aiStatus.TabStop = false;
             this.aiStatus.Visible = false;
             // 
-            // pictureBox3
-            // 
-            this.pictureBox3.BackColor = System.Drawing.Color.Gray;
-            this.pictureBox3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBox3.Location = new System.Drawing.Point(287, 113);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(1331, 814);
-            this.pictureBox3.TabIndex = 156;
-            this.pictureBox3.TabStop = false;
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.BackColor = System.Drawing.Color.Brown;
-            this.pictureBox2.Location = new System.Drawing.Point(296, 118);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(1312, 396);
-            this.pictureBox2.TabIndex = 157;
-            this.pictureBox2.TabStop = false;
-            this.pictureBox2.MouseHover += new System.EventHandler(this.HoverOff_Click);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackColor = System.Drawing.Color.DarkSlateBlue;
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox1.Location = new System.Drawing.Point(296, 124);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1312, 792);
-            this.pictureBox1.TabIndex = 158;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.MouseHover += new System.EventHandler(this.HoverOff_Click);
-            // 
             // pictureBox4
             // 
             this.pictureBox4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
@@ -1795,7 +1853,7 @@
             this.ActiveDamage.BackColor = System.Drawing.Color.Goldenrod;
             this.ActiveDamage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.ActiveDamage.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ActiveDamage.Location = new System.Drawing.Point(988, 564);
+            this.ActiveDamage.Location = new System.Drawing.Point(102, 23);
             this.ActiveDamage.Name = "ActiveDamage";
             this.ActiveDamage.Size = new System.Drawing.Size(31, 30);
             this.ActiveDamage.TabIndex = 161;
@@ -1856,7 +1914,7 @@
             this.Avatar2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("Avatar2.BackgroundImage")));
             this.Avatar2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.Avatar2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.Avatar2.Location = new System.Drawing.Point(12, 12);
+            this.Avatar2.Location = new System.Drawing.Point(3, 3);
             this.Avatar2.Name = "Avatar2";
             this.Avatar2.Size = new System.Drawing.Size(164, 154);
             this.Avatar2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1869,7 +1927,7 @@
             this.Avatar1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("Avatar1.BackgroundImage")));
             this.Avatar1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.Avatar1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.Avatar1.Location = new System.Drawing.Point(1728, 875);
+            this.Avatar1.Location = new System.Drawing.Point(3, 3);
             this.Avatar1.Name = "Avatar1";
             this.Avatar1.Size = new System.Drawing.Size(164, 154);
             this.Avatar1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1881,7 +1939,7 @@
             this.DeckLabel2.BackColor = System.Drawing.Color.MidnightBlue;
             this.DeckLabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DeckLabel2.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.DeckLabel2.Location = new System.Drawing.Point(30, 14);
+            this.DeckLabel2.Location = new System.Drawing.Point(12, 5);
             this.DeckLabel2.Name = "DeckLabel2";
             this.DeckLabel2.Size = new System.Drawing.Size(66, 23);
             this.DeckLabel2.TabIndex = 168;
@@ -1893,7 +1951,7 @@
             this.AvatarName2.BackColor = System.Drawing.Color.MidnightBlue;
             this.AvatarName2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AvatarName2.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.AvatarName2.Location = new System.Drawing.Point(45, 141);
+            this.AvatarName2.Location = new System.Drawing.Point(31, 132);
             this.AvatarName2.Name = "AvatarName2";
             this.AvatarName2.Size = new System.Drawing.Size(102, 23);
             this.AvatarName2.TabIndex = 169;
@@ -1905,7 +1963,7 @@
             this.DeckLabel1.BackColor = System.Drawing.Color.MidnightBlue;
             this.DeckLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DeckLabel1.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.DeckLabel1.Location = new System.Drawing.Point(1744, 878);
+            this.DeckLabel1.Location = new System.Drawing.Point(18, 5);
             this.DeckLabel1.Name = "DeckLabel1";
             this.DeckLabel1.Size = new System.Drawing.Size(66, 23);
             this.DeckLabel1.TabIndex = 170;
@@ -1917,12 +1975,477 @@
             this.AvatarName1.BackColor = System.Drawing.Color.MidnightBlue;
             this.AvatarName1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AvatarName1.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.AvatarName1.Location = new System.Drawing.Point(1753, 1003);
+            this.AvatarName1.Location = new System.Drawing.Point(29, 131);
             this.AvatarName1.Name = "AvatarName1";
             this.AvatarName1.Size = new System.Drawing.Size(115, 23);
             this.AvatarName1.TabIndex = 171;
             this.AvatarName1.Text = "Tonyastro77";
             this.AvatarName1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // CheckCardPanel
+            // 
+            this.CheckCardPanel.BackColor = System.Drawing.Color.MidnightBlue;
+            this.CheckCardPanel.Controls.Add(this.PictureBoxPanel);
+            this.CheckCardPanel.Location = new System.Drawing.Point(194, 1006);
+            this.CheckCardPanel.Name = "CheckCardPanel";
+            this.CheckCardPanel.Size = new System.Drawing.Size(587, 745);
+            this.CheckCardPanel.TabIndex = 172;
+            this.CheckCardPanel.Visible = false;
+            this.CheckCardPanel.Click += new System.EventHandler(this.Left_Click);
+            // 
+            // PictureBoxPanel
+            // 
+            this.PictureBoxPanel.BackColor = System.Drawing.Color.Transparent;
+            this.PictureBoxPanel.Location = new System.Drawing.Point(9, 9);
+            this.PictureBoxPanel.Name = "PictureBoxPanel";
+            this.PictureBoxPanel.Size = new System.Drawing.Size(567, 727);
+            this.PictureBoxPanel.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.PictureBoxPanel.TabIndex = 0;
+            this.PictureBoxPanel.TabStop = false;
+            this.PictureBoxPanel.Click += new System.EventHandler(this.Left_Click);
+            // 
+            // CheckCardPanel2
+            // 
+            this.CheckCardPanel2.BackColor = System.Drawing.Color.DeepSkyBlue;
+            this.CheckCardPanel2.Controls.Add(this.panel4);
+            this.CheckCardPanel2.Controls.Add(this.panel3);
+            this.CheckCardPanel2.Location = new System.Drawing.Point(793, 1006);
+            this.CheckCardPanel2.Name = "CheckCardPanel2";
+            this.CheckCardPanel2.Size = new System.Drawing.Size(466, 202);
+            this.CheckCardPanel2.TabIndex = 173;
+            this.CheckCardPanel2.Visible = false;
+            this.CheckCardPanel2.Click += new System.EventHandler(this.Left_Click);
+            // 
+            // panel4
+            // 
+            this.panel4.BackColor = System.Drawing.Color.SteelBlue;
+            this.panel4.Controls.Add(this.panel7);
+            this.panel4.Controls.Add(this.panel5);
+            this.panel4.Location = new System.Drawing.Point(3, 64);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(460, 135);
+            this.panel4.TabIndex = 1;
+            this.panel4.Click += new System.EventHandler(this.Left_Click);
+            // 
+            // panel7
+            // 
+            this.panel7.BackColor = System.Drawing.Color.DeepSkyBlue;
+            this.panel7.Controls.Add(this.CheckCardR5);
+            this.panel7.Controls.Add(this.CheckCardR4);
+            this.panel7.Controls.Add(this.CheckCardR3);
+            this.panel7.Controls.Add(this.CheckCardR2);
+            this.panel7.Controls.Add(this.CheckCardR1);
+            this.panel7.Controls.Add(this.label4);
+            this.panel7.Location = new System.Drawing.Point(22, 101);
+            this.panel7.Name = "panel7";
+            this.panel7.Size = new System.Drawing.Size(433, 29);
+            this.panel7.TabIndex = 1;
+            this.panel7.Click += new System.EventHandler(this.Left_Click);
+            // 
+            // CheckCardR5
+            // 
+            this.CheckCardR5.Image = ((System.Drawing.Image)(resources.GetObject("CheckCardR5.Image")));
+            this.CheckCardR5.Location = new System.Drawing.Point(315, 4);
+            this.CheckCardR5.Name = "CheckCardR5";
+            this.CheckCardR5.Size = new System.Drawing.Size(20, 20);
+            this.CheckCardR5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.CheckCardR5.TabIndex = 11;
+            this.CheckCardR5.TabStop = false;
+            // 
+            // CheckCardR4
+            // 
+            this.CheckCardR4.Image = ((System.Drawing.Image)(resources.GetObject("CheckCardR4.Image")));
+            this.CheckCardR4.Location = new System.Drawing.Point(337, 4);
+            this.CheckCardR4.Name = "CheckCardR4";
+            this.CheckCardR4.Size = new System.Drawing.Size(20, 20);
+            this.CheckCardR4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.CheckCardR4.TabIndex = 10;
+            this.CheckCardR4.TabStop = false;
+            // 
+            // CheckCardR3
+            // 
+            this.CheckCardR3.Image = ((System.Drawing.Image)(resources.GetObject("CheckCardR3.Image")));
+            this.CheckCardR3.Location = new System.Drawing.Point(359, 4);
+            this.CheckCardR3.Name = "CheckCardR3";
+            this.CheckCardR3.Size = new System.Drawing.Size(20, 20);
+            this.CheckCardR3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.CheckCardR3.TabIndex = 9;
+            this.CheckCardR3.TabStop = false;
+            // 
+            // CheckCardR2
+            // 
+            this.CheckCardR2.Image = ((System.Drawing.Image)(resources.GetObject("CheckCardR2.Image")));
+            this.CheckCardR2.Location = new System.Drawing.Point(381, 4);
+            this.CheckCardR2.Name = "CheckCardR2";
+            this.CheckCardR2.Size = new System.Drawing.Size(20, 20);
+            this.CheckCardR2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.CheckCardR2.TabIndex = 9;
+            this.CheckCardR2.TabStop = false;
+            // 
+            // CheckCardR1
+            // 
+            this.CheckCardR1.Image = ((System.Drawing.Image)(resources.GetObject("CheckCardR1.Image")));
+            this.CheckCardR1.Location = new System.Drawing.Point(403, 4);
+            this.CheckCardR1.Name = "CheckCardR1";
+            this.CheckCardR1.Size = new System.Drawing.Size(20, 20);
+            this.CheckCardR1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.CheckCardR1.TabIndex = 8;
+            this.CheckCardR1.TabStop = false;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.BackColor = System.Drawing.Color.Transparent;
+            this.label4.Font = new System.Drawing.Font("Arial Rounded MT Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.White;
+            this.label4.Location = new System.Drawing.Point(15, 5);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(74, 18);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "Retreat:";
+            // 
+            // panel5
+            // 
+            this.panel5.BackColor = System.Drawing.Color.MidnightBlue;
+            this.panel5.Controls.Add(this.label6);
+            this.panel5.Controls.Add(this.label5);
+            this.panel5.Controls.Add(this.CheckCardResistance);
+            this.panel5.Controls.Add(this.CheckCardWeakness);
+            this.panel5.Controls.Add(this.CheckCardHp);
+            this.panel5.Controls.Add(this.label3);
+            this.panel5.Controls.Add(this.label2);
+            this.panel5.Controls.Add(this.label1);
+            this.panel5.Location = new System.Drawing.Point(22, 3);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(436, 92);
+            this.panel5.TabIndex = 0;
+            this.panel5.Click += new System.EventHandler(this.Left_Click);
+            // 
+            // label6
+            // 
+            this.label6.Font = new System.Drawing.Font("Arial Rounded MT Bold", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.Color.White;
+            this.label6.Location = new System.Drawing.Point(244, 62);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(80, 27);
+            this.label6.TabIndex = 7;
+            this.label6.Text = "-20";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label5
+            // 
+            this.label5.Font = new System.Drawing.Font("Arial Rounded MT Bold", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.Color.White;
+            this.label5.Location = new System.Drawing.Point(246, 35);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(142, 27);
+            this.label5.TabIndex = 6;
+            this.label5.Text = "X2";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // CheckCardResistance
+            // 
+            this.CheckCardResistance.Location = new System.Drawing.Point(221, 63);
+            this.CheckCardResistance.Name = "CheckCardResistance";
+            this.CheckCardResistance.Size = new System.Drawing.Size(24, 24);
+            this.CheckCardResistance.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.CheckCardResistance.TabIndex = 5;
+            this.CheckCardResistance.TabStop = false;
+            // 
+            // CheckCardWeakness
+            // 
+            this.CheckCardWeakness.Location = new System.Drawing.Point(221, 35);
+            this.CheckCardWeakness.Name = "CheckCardWeakness";
+            this.CheckCardWeakness.Size = new System.Drawing.Size(24, 24);
+            this.CheckCardWeakness.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.CheckCardWeakness.TabIndex = 4;
+            this.CheckCardWeakness.TabStop = false;
+            // 
+            // CheckCardHp
+            // 
+            this.CheckCardHp.Font = new System.Drawing.Font("Arial Rounded MT Bold", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CheckCardHp.ForeColor = System.Drawing.Color.White;
+            this.CheckCardHp.Location = new System.Drawing.Point(211, 4);
+            this.CheckCardHp.Name = "CheckCardHp";
+            this.CheckCardHp.Size = new System.Drawing.Size(92, 27);
+            this.CheckCardHp.TabIndex = 3;
+            this.CheckCardHp.Text = "120/120";
+            this.CheckCardHp.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.Color.Transparent;
+            this.label3.Font = new System.Drawing.Font("Arial Rounded MT Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.Gold;
+            this.label3.Location = new System.Drawing.Point(102, 65);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(103, 18);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "Resistance:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.Transparent;
+            this.label2.Font = new System.Drawing.Font("Arial Rounded MT Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.Gold;
+            this.label2.Location = new System.Drawing.Point(109, 36);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(95, 18);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Weakness:";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Font = new System.Drawing.Font("Arial Rounded MT Bold", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.Gold;
+            this.label1.Location = new System.Drawing.Point(116, 8);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(89, 18);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Hit Points:";
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.MidnightBlue;
+            this.panel3.Controls.Add(this.panel6);
+            this.panel3.Location = new System.Drawing.Point(3, 3);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(460, 55);
+            this.panel3.TabIndex = 0;
+            this.panel3.Click += new System.EventHandler(this.Left_Click);
+            // 
+            // panel6
+            // 
+            this.panel6.BackColor = System.Drawing.Color.DeepSkyBlue;
+            this.panel6.Controls.Add(this.CheckCardName);
+            this.panel6.Location = new System.Drawing.Point(3, 3);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(452, 49);
+            this.panel6.TabIndex = 0;
+            // 
+            // CheckCardName
+            // 
+            this.CheckCardName.Font = new System.Drawing.Font("Arial Rounded MT Bold", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CheckCardName.ForeColor = System.Drawing.Color.White;
+            this.CheckCardName.Location = new System.Drawing.Point(16, 10);
+            this.CheckCardName.Name = "CheckCardName";
+            this.CheckCardName.Size = new System.Drawing.Size(425, 27);
+            this.CheckCardName.TabIndex = 0;
+            this.CheckCardName.Text = "label1";
+            this.CheckCardName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.CheckCardName.Click += new System.EventHandler(this.Left_Click);
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.Gray;
+            this.panel2.Controls.Add(this.panel9);
+            this.panel2.Location = new System.Drawing.Point(287, 113);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(1331, 814);
+            this.panel2.TabIndex = 174;
+            // 
+            // panel9
+            // 
+            this.panel9.BackColor = System.Drawing.Color.DarkSlateBlue;
+            this.panel9.Controls.Add(this.PlayerUsedBox);
+            this.panel9.Controls.Add(this.PrizePopUp1);
+            this.panel9.Controls.Add(this.PrizePlayerNumber);
+            this.panel9.Controls.Add(this.PrizeBox1);
+            this.panel9.Controls.Add(this.PictureActivePanel);
+            this.panel9.Location = new System.Drawing.Point(10, 401);
+            this.panel9.Name = "panel9";
+            this.panel9.Size = new System.Drawing.Size(1312, 396);
+            this.panel9.TabIndex = 176;
+            // 
+            // PlayerUsedBox
+            // 
+            this.PlayerUsedBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.PlayerUsedBox.Location = new System.Drawing.Point(838, 62);
+            this.PlayerUsedBox.Name = "PlayerUsedBox";
+            this.PlayerUsedBox.Size = new System.Drawing.Size(84, 120);
+            this.PlayerUsedBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.PlayerUsedBox.TabIndex = 165;
+            this.PlayerUsedBox.TabStop = false;
+            this.PlayerUsedBox.Tag = "";
+            // 
+            // PrizePopUp1
+            // 
+            this.PrizePopUp1.BackColor = System.Drawing.Color.Silver;
+            this.PrizePopUp1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.PrizePopUp1.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PrizePopUp1.Location = new System.Drawing.Point(273, 172);
+            this.PrizePopUp1.Name = "PrizePopUp1";
+            this.PrizePopUp1.Size = new System.Drawing.Size(151, 31);
+            this.PrizePopUp1.TabIndex = 164;
+            this.PrizePopUp1.Text = "Your Prize Cards";
+            this.PrizePopUp1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.PrizePopUp1.MouseHover += new System.EventHandler(this.HoverOff_Click);
+            // 
+            // PrizePlayerNumber
+            // 
+            this.PrizePlayerNumber.AutoSize = true;
+            this.PrizePlayerNumber.Font = new System.Drawing.Font("Felix Titling", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PrizePlayerNumber.ForeColor = System.Drawing.SystemColors.Window;
+            this.PrizePlayerNumber.Location = new System.Drawing.Point(179, 172);
+            this.PrizePlayerNumber.Name = "PrizePlayerNumber";
+            this.PrizePlayerNumber.Size = new System.Drawing.Size(32, 32);
+            this.PrizePlayerNumber.TabIndex = 142;
+            this.PrizePlayerNumber.Text = "6";
+            // 
+            // PrizeBox1
+            // 
+            this.PrizeBox1.BackColor = System.Drawing.Color.DarkSlateBlue;
+            this.PrizeBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.PrizeBox1.Location = new System.Drawing.Point(211, 81);
+            this.PrizeBox1.Name = "PrizeBox1";
+            this.PrizeBox1.Size = new System.Drawing.Size(87, 122);
+            this.PrizeBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.PrizeBox1.TabIndex = 78;
+            this.PrizeBox1.TabStop = false;
+            this.PrizeBox1.MouseLeave += new System.EventHandler(this.HoverOff_Click);
+            this.PrizeBox1.MouseHover += new System.EventHandler(this.PrizeBox1_MouseHover);
+            // 
+            // PictureActivePanel
+            // 
+            this.PictureActivePanel.BackColor = System.Drawing.Color.Transparent;
+            this.PictureActivePanel.Controls.Add(this.ActiveEnergy5);
+            this.PictureActivePanel.Controls.Add(this.ActiveEnergy1);
+            this.PictureActivePanel.Controls.Add(this.ActiveEnergy4);
+            this.PictureActivePanel.Controls.Add(this.ActiveEnergy3);
+            this.PictureActivePanel.Controls.Add(this.ActiveEnergy2);
+            this.PictureActivePanel.Controls.Add(this.ActiveDamage);
+            this.PictureActivePanel.Controls.Add(this.PictureActive);
+            this.PictureActivePanel.Location = new System.Drawing.Point(578, 22);
+            this.PictureActivePanel.Name = "PictureActivePanel";
+            this.PictureActivePanel.Size = new System.Drawing.Size(136, 191);
+            this.PictureActivePanel.TabIndex = 77;
+            // 
+            // panel8
+            // 
+            this.panel8.BackColor = System.Drawing.Color.Brown;
+            this.panel8.Controls.Add(this.OpponentUsedBox);
+            this.panel8.Controls.Add(this.PrizePopUp2);
+            this.panel8.Controls.Add(this.PrizeOpponentNumber);
+            this.panel8.Controls.Add(this.PrizeBox2);
+            this.panel8.Location = new System.Drawing.Point(296, 118);
+            this.panel8.Name = "panel8";
+            this.panel8.Size = new System.Drawing.Size(1312, 396);
+            this.panel8.TabIndex = 175;
+            // 
+            // OpponentUsedBox
+            // 
+            this.OpponentUsedBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.OpponentUsedBox.Location = new System.Drawing.Point(369, 218);
+            this.OpponentUsedBox.Name = "OpponentUsedBox";
+            this.OpponentUsedBox.Size = new System.Drawing.Size(84, 120);
+            this.OpponentUsedBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.OpponentUsedBox.TabIndex = 181;
+            this.OpponentUsedBox.TabStop = false;
+            this.OpponentUsedBox.Tag = "";
+            // 
+            // PrizePopUp2
+            // 
+            this.PrizePopUp2.BackColor = System.Drawing.Color.Silver;
+            this.PrizePopUp2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.PrizePopUp2.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PrizePopUp2.Location = new System.Drawing.Point(1027, 293);
+            this.PrizePopUp2.Name = "PrizePopUp2";
+            this.PrizePopUp2.Size = new System.Drawing.Size(194, 31);
+            this.PrizePopUp2.TabIndex = 180;
+            this.PrizePopUp2.Text = "Opponent\'s Prize Cards";
+            this.PrizePopUp2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.PrizePopUp2.MouseHover += new System.EventHandler(this.HoverOff_Click);
+            // 
+            // PrizeOpponentNumber
+            // 
+            this.PrizeOpponentNumber.AutoSize = true;
+            this.PrizeOpponentNumber.Font = new System.Drawing.Font("Felix Titling", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PrizeOpponentNumber.ForeColor = System.Drawing.SystemColors.Window;
+            this.PrizeOpponentNumber.Location = new System.Drawing.Point(929, 281);
+            this.PrizeOpponentNumber.Name = "PrizeOpponentNumber";
+            this.PrizeOpponentNumber.Size = new System.Drawing.Size(32, 32);
+            this.PrizeOpponentNumber.TabIndex = 179;
+            this.PrizeOpponentNumber.Text = "6";
+            // 
+            // PrizeBox2
+            // 
+            this.PrizeBox2.BackColor = System.Drawing.Color.Brown;
+            this.PrizeBox2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.PrizeBox2.Location = new System.Drawing.Point(965, 191);
+            this.PrizeBox2.Name = "PrizeBox2";
+            this.PrizeBox2.Size = new System.Drawing.Size(87, 122);
+            this.PrizeBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.PrizeBox2.TabIndex = 79;
+            this.PrizeBox2.TabStop = false;
+            this.PrizeBox2.MouseLeave += new System.EventHandler(this.HoverOff_Click);
+            this.PrizeBox2.MouseHover += new System.EventHandler(this.PrizeBox2_MouseHover);
+            // 
+            // CoinRolling
+            // 
+            this.CoinRolling.BackColor = System.Drawing.Color.Peru;
+            this.CoinRolling.Location = new System.Drawing.Point(527, -3);
+            this.CoinRolling.Name = "CoinRolling";
+            this.CoinRolling.Size = new System.Drawing.Size(110, 110);
+            this.CoinRolling.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.CoinRolling.TabIndex = 179;
+            this.CoinRolling.TabStop = false;
+            this.CoinRolling.Visible = false;
+            // 
+            // TimerBeginning
+            // 
+            this.TimerBeginning.Tick += new System.EventHandler(this.TimerBeginning_Tick);
+            // 
+            // AvatarPanel2
+            // 
+            this.AvatarPanel2.BackColor = System.Drawing.Color.Black;
+            this.AvatarPanel2.Controls.Add(this.ODeckSize);
+            this.AvatarPanel2.Controls.Add(this.DeckLabel2);
+            this.AvatarPanel2.Controls.Add(this.AvatarName2);
+            this.AvatarPanel2.Controls.Add(this.Avatar2);
+            this.AvatarPanel2.Location = new System.Drawing.Point(12, 12);
+            this.AvatarPanel2.Name = "AvatarPanel2";
+            this.AvatarPanel2.Size = new System.Drawing.Size(170, 160);
+            this.AvatarPanel2.TabIndex = 176;
+            // 
+            // AvatarPanel1
+            // 
+            this.AvatarPanel1.BackColor = System.Drawing.Color.Black;
+            this.AvatarPanel1.Controls.Add(this.AvatarName1);
+            this.AvatarPanel1.Controls.Add(this.DeckSize);
+            this.AvatarPanel1.Controls.Add(this.DeckLabel1);
+            this.AvatarPanel1.Controls.Add(this.Avatar1);
+            this.AvatarPanel1.Location = new System.Drawing.Point(1731, 878);
+            this.AvatarPanel1.Name = "AvatarPanel1";
+            this.AvatarPanel1.Size = new System.Drawing.Size(170, 160);
+            this.AvatarPanel1.TabIndex = 177;
+            // 
+            // YourTurnTimer
+            // 
+            this.YourTurnTimer.Tick += new System.EventHandler(this.YourTurnTimer_Tick);
+            // 
+            // AIStartingTurnTimer
+            // 
+            this.AIStartingTurnTimer.Tick += new System.EventHandler(this.AIStartingTurnTimer_Tick);
+            // 
+            // AIFirstTurnTimer
+            // 
+            this.AIFirstTurnTimer.Tick += new System.EventHandler(this.AIFirstTurnTimer_Tick);
+            // 
+            // AttackCoinTimer
+            // 
+            this.AttackCoinTimer.Tick += new System.EventHandler(this.AttackCoinTimer_Tick);
+            // 
+            // PlayerEndTimer
+            // 
+            this.PlayerEndTimer.Tick += new System.EventHandler(this.PlayerEndTimer_Tick);
+            // 
+            // CoinBeginningTimer
+            // 
+            this.CoinBeginningTimer.Tick += new System.EventHandler(this.CoinBeginningTimer_Tick);
             // 
             // Form1
             // 
@@ -1931,19 +2454,15 @@
             this.BackColor = System.Drawing.Color.Peru;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(1904, 1041);
-            this.Controls.Add(this.AvatarName1);
-            this.Controls.Add(this.DeckLabel1);
-            this.Controls.Add(this.AvatarName2);
-            this.Controls.Add(this.ODeckSize);
-            this.Controls.Add(this.DeckLabel2);
-            this.Controls.Add(this.DeckSize);
-            this.Controls.Add(this.Avatar1);
-            this.Controls.Add(this.Avatar2);
+            this.Controls.Add(this.CoinRolling);
+            this.Controls.Add(this.AvatarPanel1);
+            this.Controls.Add(this.AvatarPanel2);
+            this.Controls.Add(this.CheckCardPanel2);
+            this.Controls.Add(this.CheckCardPanel);
             this.Controls.Add(this.ExitButton);
             this.Controls.Add(this.Deck1PopUp);
             this.Controls.Add(this.Deck2PopUp);
             this.Controls.Add(this.OpponentDamage);
-            this.Controls.Add(this.ActiveDamage);
             this.Controls.Add(this.aiStatus);
             this.Controls.Add(this.playerStatus);
             this.Controls.Add(this.QuickTest);
@@ -2019,11 +2538,6 @@
             this.Controls.Add(this.Hand4);
             this.Controls.Add(this.Hand3);
             this.Controls.Add(this.DiscardBox);
-            this.Controls.Add(this.ActiveEnergy5);
-            this.Controls.Add(this.ActiveEnergy4);
-            this.Controls.Add(this.ActiveEnergy3);
-            this.Controls.Add(this.ActiveEnergy2);
-            this.Controls.Add(this.ActiveEnergy1);
             this.Controls.Add(this.Bench2Energy5);
             this.Controls.Add(this.Bench2Energy4);
             this.Controls.Add(this.Bench2Energy3);
@@ -2046,7 +2560,6 @@
             this.Controls.Add(this.OpponentActive);
             this.Controls.Add(this.OpponentZoom);
             this.Controls.Add(this.PictureBench5);
-            this.Controls.Add(this.Draw);
             this.Controls.Add(this.PictureBench3);
             this.Controls.Add(this.PictureBench1);
             this.Controls.Add(this.PictureBench2);
@@ -2054,19 +2567,18 @@
             this.Controls.Add(this.gameMessage);
             this.Controls.Add(this.HoverOff);
             this.Controls.Add(this.HoverOnActive);
-            this.Controls.Add(this.PictureActive);
             this.Controls.Add(this.Done);
             this.Controls.Add(this.StartCheck);
             this.Controls.Add(this.Mulligan);
             this.Controls.Add(this.PictureZoom);
             this.Controls.Add(this.pictureBox4);
             this.Controls.Add(this.pictureBox5);
-            this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.pictureBox3);
+            this.Controls.Add(this.panel8);
+            this.Controls.Add(this.panel2);
             this.Name = "Form1";
             this.Text = "PokemonTCG";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Click += new System.EventHandler(this.Left_Click);
             this.MouseHover += new System.EventHandler(this.HoverOff_Click);
             ((System.ComponentModel.ISupportInitialize)(this.PictureZoom)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureActive)).EndInit();
@@ -2167,13 +2679,40 @@
             ((System.ComponentModel.ISupportInitialize)(this.HandIcon3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.playerStatus)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.aiStatus)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Avatar2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Avatar1)).EndInit();
+            this.CheckCardPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.PictureBoxPanel)).EndInit();
+            this.CheckCardPanel2.ResumeLayout(false);
+            this.panel4.ResumeLayout(false);
+            this.panel7.ResumeLayout(false);
+            this.panel7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.CheckCardR5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CheckCardR4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CheckCardR3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CheckCardR2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CheckCardR1)).EndInit();
+            this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.CheckCardResistance)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CheckCardWeakness)).EndInit();
+            this.panel3.ResumeLayout(false);
+            this.panel6.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
+            this.panel9.ResumeLayout(false);
+            this.panel9.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PlayerUsedBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PrizeBox1)).EndInit();
+            this.PictureActivePanel.ResumeLayout(false);
+            this.panel8.ResumeLayout(false);
+            this.panel8.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.OpponentUsedBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PrizeBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CoinRolling)).EndInit();
+            this.AvatarPanel2.ResumeLayout(false);
+            this.AvatarPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2187,12 +2726,11 @@
         private System.Windows.Forms.PictureBox PictureActive;
         private System.Windows.Forms.Button HoverOnActive;
         private System.Windows.Forms.Button HoverOff;
-        private System.Windows.Forms.Label gameMessage;
+        public System.Windows.Forms.Label gameMessage;
         private System.Windows.Forms.PictureBox PictureBench4;
         private System.Windows.Forms.PictureBox PictureBench2;
         private System.Windows.Forms.PictureBox PictureBench1;
         private System.Windows.Forms.PictureBox PictureBench3;
-        private System.Windows.Forms.Button Draw;
         private System.Windows.Forms.PictureBox PictureBench5;
         private System.Windows.Forms.PictureBox OpponentZoom;
         private System.Windows.Forms.PictureBox OpponentActive;
@@ -2201,7 +2739,7 @@
         private System.Windows.Forms.PictureBox OpponentBench1;
         private System.Windows.Forms.PictureBox OpponentBench3;
         private System.Windows.Forms.PictureBox OpponentBench5;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer AITurnTimer;
         private System.Windows.Forms.PictureBox Hand1;
         private System.Windows.Forms.PictureBox Hand2;
         private System.Windows.Forms.PictureBox Deck;
@@ -2311,9 +2849,6 @@
         private System.Windows.Forms.Button QuickTest;
         private System.Windows.Forms.PictureBox playerStatus;
         private System.Windows.Forms.PictureBox aiStatus;
-        private System.Windows.Forms.PictureBox pictureBox3;
-        private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.PictureBox pictureBox5;
         private System.Windows.Forms.Label ActiveDamage;
@@ -2327,6 +2862,53 @@
         private System.Windows.Forms.Label AvatarName2;
         private System.Windows.Forms.Label DeckLabel1;
         private System.Windows.Forms.Label AvatarName1;
+        private System.Windows.Forms.Panel CheckCardPanel;
+        private System.Windows.Forms.PictureBox PictureBoxPanel;
+        private System.Windows.Forms.Panel CheckCardPanel2;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.Panel panel7;
+        private System.Windows.Forms.Panel panel5;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Panel panel6;
+        private System.Windows.Forms.Label CheckCardName;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label CheckCardHp;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.PictureBox CheckCardResistance;
+        private System.Windows.Forms.PictureBox CheckCardWeakness;
+        private System.Windows.Forms.PictureBox CheckCardR1;
+        private System.Windows.Forms.PictureBox CheckCardR5;
+        private System.Windows.Forms.PictureBox CheckCardR4;
+        private System.Windows.Forms.PictureBox CheckCardR3;
+        private System.Windows.Forms.PictureBox CheckCardR2;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panel8;
+        private System.Windows.Forms.Panel panel9;
+        private System.Windows.Forms.Panel PictureActivePanel;
+        private System.Windows.Forms.Timer TimerBeginning;
+        private System.Windows.Forms.Panel AvatarPanel2;
+        private System.Windows.Forms.Panel AvatarPanel1;
+        private System.Windows.Forms.Timer YourTurnTimer;
+        private System.Windows.Forms.Timer AIStartingTurnTimer;
+        private System.Windows.Forms.Timer AIFirstTurnTimer;
+        private System.Windows.Forms.Timer AttackCoinTimer;
+        private System.Windows.Forms.Timer PlayerEndTimer;
+        private System.Windows.Forms.ToolStripMenuItem PlayAsActiveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem PlayPokémonToBenchBeginning;
+        private System.Windows.Forms.PictureBox PrizeBox1;
+        private System.Windows.Forms.PictureBox PrizeBox2;
+        private System.Windows.Forms.Label PrizePlayerNumber;
+        private System.Windows.Forms.Label PrizeOpponentNumber;
+        private System.Windows.Forms.Label PrizePopUp1;
+        private System.Windows.Forms.Label PrizePopUp2;
+        private System.Windows.Forms.Timer CoinBeginningTimer;
+        private System.Windows.Forms.PictureBox CoinRolling;
+        private System.Windows.Forms.PictureBox PlayerUsedBox;
+        private System.Windows.Forms.PictureBox OpponentUsedBox;
     }
 }
 

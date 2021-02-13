@@ -1,48 +1,21 @@
-﻿using Pokemon.Card;
+﻿using System;
 using Pokemon.Game_Zone;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Pokemon
+namespace Pokemon.Card
 {
-    class Attack
+    class AttackEffect
     {
-        public string name;
-        public string type;
-        public string information;
-        public int damage;
-        public int self_damage;
-        public bool afflicted_state;
-        public string check_status;
-        public EnergyCost energycost;
-
-        // Common attack dealing damage
-        public Attack(string name, string information, EnergyCost energycost)
+        public void OnlyDamage(int index, Active character, Active opponent, int damage, Label message)
         {
-            this.name = name;
-            this.information = information;
-            this.energycost = energycost;
+            DealDamage(character, opponent, damage);
+            message.Text = "You perform " + character.ShowAttackName(index) + " and deal " + ResultingDamage(character, opponent, damage).ToString() + " damage on " + opponent.ShowName();
         }
-        // Attack dealing damage and self damage
-        public Attack(string name, string type, string information, int damage, int self_damage, EnergyCost energycost)
-        {
-            this.name = name;
-            this.type = type;
-            this.information = information;
-            this.damage = damage;
-            this.self_damage = self_damage;
-            this.energycost = energycost;
-        }
-        public Attack(string name, string type, string information, int damage, bool afflicted_state, string check_status, EnergyCost energycost)
-        {
-            this.name = name;
-            this.type = type;
-            this.information = information;
-            this.damage = damage;
-            this.afflicted_state = afflicted_state;
-            this.check_status = check_status;
-            this.energycost = energycost;
-        }
-        public delegate void DealDamage(Active character, Active opponent, int damage)
+        public void DealDamage(Active character, Active opponent, int damage)
         {
             //If the opponent played a card that allows it to have no weakeness then
             if (opponent.withoutWeaknessEffect)
@@ -60,7 +33,7 @@ namespace Pokemon
                 //if the opponent has resistance to your character then it takes less damage or zero
                 else if (opponent.Active_Pokemon.Resistance == character.Active_Pokemon.Energy)
                 {
-                    if (damage <= opponent.Active_Pokemon.Resistance_Modifier)
+                    if(damage <= opponent.Active_Pokemon.Resistance_Modifier)
                     {
                         opponent.Active_Pokemon.Rem_Hp -= 0;
                     }

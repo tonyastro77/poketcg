@@ -49,8 +49,7 @@ namespace Pokemon.Game_Zone
 
         public void EnergyLoad(int x, char y)
         {
-            bench[x].LoadEnergy(y);
-          
+            bench[x].LoadEnergy(y);        
         }
 
         public string EnergyLoaded(int x)
@@ -67,6 +66,47 @@ namespace Pokemon.Game_Zone
         public List<char> GetEnergyLoaded(int x)
         {
             return bench[x].EnergyLoaded;
+        }
+        public void AttachCardFromUsed(int x, Used used)
+        {
+            if (used.GetName(0) == "Fire Energy")
+            {
+                bench[x].LoadEnergy('f');
+            }
+            else if (used.GetName(0) == "Water Energy")
+            {
+                bench[x].LoadEnergy('w');
+            }
+            else if (used.GetName(0) == "Fighting Energy")
+            {
+                bench[x].LoadEnergy('l');
+            }
+            else if (used.GetName(0) == "Psychic Energy")
+            {
+                bench[x].LoadEnergy('p');
+            }
+            else if (used.GetName(0) == "Grass Energy")
+            {
+                bench[x].LoadEnergy('g');
+            }
+            else if (used.GetName(0) == "Lightning Energy")
+            {
+                bench[x].LoadEnergy('e');
+            }
+            else if (used.GetName(0) == "Metal Energy")
+            {
+                bench[x].LoadEnergy('m');
+            }
+            else if (used.GetName(0) == "Dark Energy")
+            {
+                bench[x].LoadEnergy('d');
+            }
+            else if (used.GetName(0) == "Fairy Energy")
+            {
+                bench[x].LoadEnergy('a');
+            }
+            bench[x].attached.Add(used.GetCard(0));
+            used.RemoveAt(0);
         }
 
         public bool CanEvolve(int x)

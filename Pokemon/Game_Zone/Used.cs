@@ -28,7 +28,15 @@ namespace Pokemon.Game_Zone
         {
             return used[x];
         }
-
+        public void GetCardFromHand(int x, Hand hand)
+        {
+            used.Add(hand.ThisCard(x));
+            hand.RemoveFromHand(x);
+        }
+        public string ShowCard(int num)
+        {
+            return used[num].Img;
+        }
         public int Count()
         {
             return used.Count;

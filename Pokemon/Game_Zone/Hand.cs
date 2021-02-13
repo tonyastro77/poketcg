@@ -52,7 +52,14 @@ namespace Pokemon.Game_Zone
         {
             return hand[num].Impact;
         }
-
+        public char ShowWeakness(int num)
+        {
+            return hand[num].Weakness;
+        }
+        public char ShowResistance(int num)
+        {
+            return hand[num].Resistance;
+        }
         public int ShowHP(int num)
         {
             return hand[num].Hp;
@@ -81,7 +88,12 @@ namespace Pokemon.Game_Zone
             return hand.Count;
         }
 
-        public Pokemon PlayCard(int x) {
+        public int GetRetreatCost(int num)
+        {
+            return hand[num].Retreat;
+        }
+
+        public Pokemon ThisCard(int x) {
             return hand[x];
         }
 
@@ -120,6 +132,25 @@ namespace Pokemon.Game_Zone
             }
             return count;
         }
-
+        public int ReturnFirstIndexMatchingEnergywithActivePokémon(Active active)
+        {
+            int index = 0;
+            for (int i = 0; i < hand.Count; i++)
+            {
+                if(hand[i].Type == "energy" && hand[i].Energy == active.ShowEnergy())
+                {
+                    index = i;
+                    return index;
+                    break;
+                }
+                else if(hand[i].Type == "energy" && hand[i].Energy != active.ShowEnergy())
+                {
+                    index = i;
+                    return index;
+                    break;
+                }
+            }
+            return index;
+        }
     }
 }

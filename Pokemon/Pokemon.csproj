@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Card\Attack.cs" />
+    <Compile Include="Card\AttackEffect.cs" />
     <Compile Include="Card\EnergyCost.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -55,15 +56,14 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Card\Pokemon.cs" />
+    <Compile Include="GameStage\Stage.cs" />
     <Compile Include="Game_Zone\Active.cs" />
     <Compile Include="Game_Zone\Bench.cs" />
     <Compile Include="Game_Zone\Deck.cs" />
     <Compile Include="Game_Zone\Discard.cs" />
     <Compile Include="Game_Zone\Hand.cs" />
-    <Compile Include="Game_Zone\Prizes.cs" />
+    <Compile Include="Game_Zone\Prize.cs" />
     <Compile Include="Game_Zone\Used.cs" />
-    <Compile Include="Players\AI.cs" />
-    <Compile Include="Players\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
@@ -114,10 +114,26 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Actions\" />
-  </ItemGroup>
-  <ItemGroup>
+    <Content Include="Img\BSMade\BS_010.jpeg" />
+    <Content Include="Img\BSMade\BS_012.jpeg" />
+    <Content Include="Img\BSMade\BS_023.jpeg" />
+    <Content Include="Img\BSMade\BS_024.jpeg" />
+    <Content Include="Img\BSMade\BS_028.jpeg" />
+    <Content Include="Img\BSMade\BS_029.jpeg" />
+    <Content Include="Img\BSMade\BS_031.jpeg" />
+    <Content Include="Img\BSMade\BS_032.bmp" />
+    <Content Include="Img\BSMade\BS_043.jpeg" />
+    <Content Include="Img\BSMade\BS_046.jpeg" />
+    <Content Include="Img\BSMade\BS_049.jpeg" />
+    <Content Include="Img\BSMade\BS_050.jpeg" />
+    <Content Include="Img\BSMade\BS_053.jpeg" />
+    <Content Include="Img\BSMade\BS_055.jpeg" />
+    <Content Include="Img\BSMade\BS_058.jpeg" />
+    <Content Include="Img\BSMade\BS_066.jpeg" />
+    <Content Include="Img\BSMade\BS_068.jpeg" />
+    <Content Include="Img\BSMade\BS_069.jpeg" />
     <Content Include="Img\BSPainted\BS_029.jpg" />
     <Content Include="Img\BSPainted\BS_046.jpg" />
     <Content Include="Img\BS\BS_001.jpg" />
@@ -219,7 +235,10 @@
     <Content Include="Img\Status\paralysis.png" />
     <Content Include="Img\Status\poison.png" />
     <Content Include="Resources\Fire.gif" />
+    <Content Include="Sounds\done.wav" />
     <Content Include="Sounds\mulligan.wav" />
+    <Content Include="Sounds\spawncard.wav" />
+    <Content Include="Sounds\Water_Attack.wav" />
     <Content Include="Sounds\youdone.wav" />
     <None Include="Resources\wooden_surface.bmp" />
     <None Include="Resources\wooden_surface.jpg" />

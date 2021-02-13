@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,10 +12,24 @@ namespace Pokemon.Game_Zone
     class Active
     {
         public Pokemon Active_Pokemon { get; set; }
+        public bool Confused { get; set; }
+        public bool Poisoned { get; set; }
+        public bool Asleep { get; set; }
+        public bool Paralyzed { get; set; }
+        public bool Burned { get; set; }
+        public bool CanRetreat { get; set; }
+        public bool withoutWeaknessEffect { get; set; }
 
         public Active()
         {
-            Active_Pokemon = new Pokemon(0, "null", "", 'u', ""); 
+            Active_Pokemon = new Pokemon(0, "null", "", 'u', "");
+            Confused = false;
+            Poisoned = false;
+            Asleep = false;
+            Paralyzed = false;
+            Burned = false;
+            CanRetreat = true;
+            withoutWeaknessEffect = false;
         }
 
         public bool ThereIsActivePokemon()
@@ -133,11 +148,120 @@ namespace Pokemon.Game_Zone
             return Active_Pokemon.EnergyLoaded;
         }
 
+        public void AttachCardFromUsed(Used used)
+        {
+            if (used.GetName(0) == "Fire Energy")
+            {
+                Active_Pokemon.LoadEnergy('f');
+            }
+            else if (used.GetName(0) == "Water Energy")
+            {
+                Active_Pokemon.LoadEnergy('w');
+            }
+            else if (used.GetName(0) == "Fighting Energy")
+            {
+                Active_Pokemon.LoadEnergy('l');
+            }
+            else if (used.GetName(0) == "Psychic Energy")
+            {
+                Active_Pokemon.LoadEnergy('p');
+            }
+            else if (used.GetName(0) == "Grass Energy")
+            {
+                Active_Pokemon.LoadEnergy('g');
+            }
+            else if (used.GetName(0) == "Lightning Energy")
+            {
+                Active_Pokemon.LoadEnergy('e');
+            }
+            else if (used.GetName(0) == "Metal Energy")
+            {
+                Active_Pokemon.LoadEnergy('m');
+            }
+            else if (used.GetName(0) == "Dark Energy")
+            {
+                Active_Pokemon.LoadEnergy('d');
+            }
+            else if (used.GetName(0) == "Fairy Energy")
+            {
+                Active_Pokemon.LoadEnergy('a');
+            }
+            Active_Pokemon.attached.Add(used.GetCard(0));
+            used.RemoveAt(0);
+        }
         public char GetEnergyLoadedAt(int x)
         {
             return Active_Pokemon.EnergyLoaded[x];
         }
-
+        public void DiscardAttachedEnergyClickedOn(char x, Discard discard)
+        {
+            int index = 0;
+            if (x == 'f')
+            {
+                while (Active_Pokemon.attached[index].Name != "Fire Energy")
+                {
+                    index++;
+                }
+            }
+            else if (x == 'w')
+            {
+                while (Active_Pokemon.attached[index].Name != "Water Energy")
+                {
+                    index++;
+                }
+            }
+            else if (x == 'g')
+            {
+                while (Active_Pokemon.attached[index].Name != "Grass Energy")
+                {
+                    index++;
+                }
+            }
+            else if (x == 'p')
+            {
+                while (Active_Pokemon.attached[index].Name != "Psychic Energy")
+                {
+                    index++;
+                }
+            }
+            else if (x == 'l')
+            {
+                while (Active_Pokemon.attached[index].Name != "Fighting Energy")
+                {
+                    index++;
+                }
+            }
+            else if (x == 'e')
+            {
+                while (Active_Pokemon.attached[index].Name != "Lightning Energy")
+                {
+                    index++;
+                }
+            }
+            else if (x == 'd')
+            {
+                while (Active_Pokemon.attached[index].Name != "Dark Energy")
+                {
+                    index++;
+                }
+            }
+            else if (x == 'a')
+            {
+                while (Active_Pokemon.attached[index].Name != "Fairy Energy")
+                {
+                    index++;
+                }
+            }
+            else if (x == 'm')
+            {
+                while (Active_Pokemon.attached[index].Name != "Metal Energy")
+                {
+                    index++;
+                }
+            }
+            discard.Add(Active_Pokemon.attached[index]);
+            Active_Pokemon.attached.RemoveAt(index);
+        }
         public bool CanEvolve()
         {
             return Active_Pokemon.CanEvolve;
